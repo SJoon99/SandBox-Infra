@@ -1,19 +1,20 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: cluster-config
+  name: root-app
   namespace: argocd
-  annotations:
-    argocd.argoproj.io/sync-wave: "-5" # namespace 생성을 가장 우선순위
 spec:
   project: default
   source:
     repoURL: https://github.com/SJoon99/SandBox-Infra
     targetRevision: main
-    path: argocd/apps/cluster-config
+    path: argocd/template   
+    helm:
+      valueFiles:
+        - argocd/values.yaml   
   destination:
     server: https://kubernetes.default.svc
-    namespace: default
+    namespace: argocd
   syncPolicy:
     automated:
       prune: true
