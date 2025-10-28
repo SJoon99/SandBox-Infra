@@ -3,17 +3,19 @@ kind: Application
 metadata:
   name: rook-ceph-helm
   namespace: argocd
-  annotations:
-    argocd.argoproj.io/sync-wave: "10"
 spec:
   project: default
-  source:
-    repoURL: https://charts.rook.io/release
-    chart: rook-ceph
-    targetRevision: "*"
-    helm:
-      valueFiles:
-      - $VALUES/argocd/apps/rook-ceph/rook-ceph-helm/values.yaml
+  sources:
+    - repoURL: https://charts.rook.io/release
+      chart: rook-ceph
+      targetRevision: "*" # 최신 릴리즈 버전 사용
+      helm:
+        valueFiles:
+          - $values/rook-ceph-values/values.yaml   # 두 번째 소스에서 가져옴
+    - repoURL: https://github.com/SJoon99/SandBox-Infra
+      targetRevision: main
+      ref: values    # 위에서 $values 라고 alias로 참조
+      path: argocd/apps/rook-ceph/rook-ceph-helm
   destination:
     server: https://kubernetes.default.svc
     namespace: rook-ceph
