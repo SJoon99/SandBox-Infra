@@ -10,7 +10,7 @@ spec:
   source:
     repoURL: https://github.com/SJoon99/SandBox-Infra
     targetRevision: main
-    path: argocd/argocd/apps/cilium
+    path: argocd/apps/cillium
   destination:
     server: https://kubernetes.default.svc
     namespace: kube-system

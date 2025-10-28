@@ -10,6 +10,7 @@ spec:
   source:
     repoURL: https://charts.rook.io/release
     chart: rook-ceph
+    targetRevision: "*"
     helm:
       valueFiles:
       - $VALUES/argocd/apps/rook-ceph/rook-ceph-helm/values.yaml
