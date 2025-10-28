@@ -12,7 +12,7 @@ spec:
     chart: rook-ceph
     helm:
       valueFiles:
-      - $VALUES/apps/rook-ceph/rook-ceph-helm/values.yaml
+      - $VALUES/argocd/apps/rook-ceph/rook-ceph-helm/values.yaml
   destination:
     server: https://kubernetes.default.svc
     namespace: rook-ceph

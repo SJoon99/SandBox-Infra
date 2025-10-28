@@ -10,7 +10,7 @@ spec:
   source:
     repoURL: https://github.com/SJoon99/SandBox-Infra
     targetRevision: main
-    path: apps/cluster-config
+    path: argocd/apps/cluster-config
   destination:
     server: https://kubernetes.default.svc
     namespace: default
