@@ -8,14 +8,13 @@ spec:
   sources:
     - repoURL: https://charts.rook.io/release
       chart: rook-ceph
-      targetRevision: "*" # 최신 릴리즈 버전 사용
+      targetRevision: v1.18.2
       helm:
         valueFiles:
-          - $values/rook-ceph-values/values.yaml   # 두 번째 소스에서 가져옴
+          - $values/argocd/apps/rook-ceph/rook-ceph-helm/values.yaml
     - repoURL: https://github.com/SJoon99/SandBox-Infra
       targetRevision: main
-      ref: values    # 위에서 $values 라고 alias로 참조
-      path: argocd/apps/rook-ceph/rook-ceph-helm
+      ref: values   
   destination:
     server: https://kubernetes.default.svc
     namespace: rook-ceph
