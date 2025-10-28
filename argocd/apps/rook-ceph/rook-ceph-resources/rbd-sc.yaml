@@ -1,0 +1,80 @@
+apiVersion: ceph.rook.io/v1
+kind: CephBlockPool
+metadata:
+  name: replicapool
+  namespace: rook-ceph
+spec:
+  failureDomain: host
+  replicated:
+    size: 2 
+    requireSafeReplicaSize: true
+---
+# Hot Storage Pool (SSD)
+apiVersion: ceph.rook.io/v1
+kind: CephBlockPool
+metadata:
+  name: hot-pool-ssd
+  namespace: rook-ceph
+spec:
+  failureDomain: host
+  deviceClass: ssd
+  replicated:
+    size: 2
+    requireSafeReplicaSize: true
+---
+# Cold Storage Pool (HDD)
+apiVersion: ceph.rook.io/v1
+kind: CephBlockPool
+metadata:
+  name: cold-pool-hdd
+  namespace: rook-ceph
+spec:
+  failureDomain: host
+  deviceClass: hdd
+  replicated:
+    size: 2
+    requireSafeReplicaSize: true
+---
+# Hot Storage StorageClass (SSD 전용)
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: rook-ceph-block-hot
+  annotations:
+    storageclass.kubernetes.io/is-default-class: "true"  # 기본 StorageClass로 설정
+provisioner: rook-ceph.rbd.csi.ceph.com
+parameters:
+  clusterID: rook-ceph
+  pool: hot-pool-ssd                    # SSD Pool 사용
+  imageFormat: "2"
+  imageFeatures: layering
+  csi.storage.k8s.io/provisioner-secret-name: rook-csi-rbd-provisioner
+  csi.storage.k8s.io/provisioner-secret-namespace: rook-ceph
+  csi.storage.k8s.io/controller-expand-secret-name: rook-csi-rbd-provisioner
+  csi.storage.k8s.io/controller-expand-secret-namespace: rook-ceph
+  csi.storage.k8s.io/node-stage-secret-name: rook-csi-rbd-node
+  csi.storage.k8s.io/node-stage-secret-namespace: rook-ceph
+  csi.storage.k8s.io/fstype: ext4
+allowVolumeExpansion: true
+reclaimPolicy: Delete
+---
+# Cold Storage StorageClass (HDD 전용)
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: rook-ceph-block-cold
+provisioner: rook-ceph.rbd.csi.ceph.com
+parameters:
+  clusterID: rook-ceph
+  pool: cold-pool-hdd                   # HDD Pool 사용
+  imageFormat: "2"
+  imageFeatures: layering
+  csi.storage.k8s.io/provisioner-secret-name: rook-csi-rbd-provisioner
+  csi.storage.k8s.io/provisioner-secret-namespace: rook-ceph
+  csi.storage.k8s.io/controller-expand-secret-name: rook-csi-rbd-provisioner
+  csi.storage.k8s.io/controller-expand-secret-namespace: rook-ceph
+  csi.storage.k8s.io/node-stage-secret-name: rook-csi-rbd-node
+  csi.storage.k8s.io/node-stage-secret-namespace: rook-ceph
+  csi.storage.k8s.io/fstype: ext4
+allowVolumeExpansion: true
+reclaimPolicy: Delete
