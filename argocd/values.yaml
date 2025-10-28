@@ -1,21 +1,41 @@
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: root-app
+argo:
   namespace: argocd
-spec:
   project: default
-  source:
-    repoURL: https://github.com/SJoon99/SandBox-Infra
-    targetRevision: main
-    path: argocd/template   
-    helm:
-      valueFiles:
-        - argocd/values.yaml   
-  destination:
-    server: https://kubernetes.default.svc
-    namespace: argocd
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
+  server: https://kubernetes.default.svc
+  sourceRepo:
+    url: https://github.com/SJoon99/SandBox-Infra
+    branch: main
+
+applications:
+  cluster-config:
+    enabled: true
+    namespace: default
+    syncWave: "-3"
+    source:
+      path: argocd/apps/00-infra/cluster-config
+
+  cilium:
+    enabled: true
+    namespace: kube-system
+    syncWave: "1"
+    source:
+      path: argocd/apps/00-infra/cilium
+
+  rook-ceph-helm:
+    enabled: true
+    namespace: rook-ceph
+    syncWave: "10"
+    source:
+      chart: rook-ceph
+      repoURL: https://charts.rook.io/release
+      targetRevision: v1.18.2
+      helm:
+        valueFiles:
+          - argocd/apps/01-storage/rook-ceph/rook-ceph-helm/values.yaml
+
+  rook-ceph-resources:
+    enabled: true
+    namespace: rook-ceph
+    syncWave: "20"
+    source:
+      path: argocd/apps/01-storage/rook-ceph/rook-ceph-resources
