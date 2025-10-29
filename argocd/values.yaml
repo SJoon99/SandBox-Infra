@@ -13,7 +13,14 @@ applications:
     syncWave: "-3"
     source:
       path: argocd/apps/00-infra/cluster-config
-  
+
+  argocd:
+    enabled: true
+    namespace: argocd
+    syncWave: "0"
+    source:
+      path: argocd/apps/00-infra/argocd
+
   cilium:
     enabled: true
     namespace: kube-system
