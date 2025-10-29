@@ -13,26 +13,43 @@ applications:
     syncWave: "-3"
     source:
       path: argocd/apps/00-infra/cluster-config
-
+  
   cilium:
     enabled: true
     namespace: kube-system
     syncWave: "1"
     source:
       path: argocd/apps/00-infra/cilium
-
-  rook-ceph-helm:
+  
+  rook-ceph-operator:
     enabled: true
     namespace: rook-ceph
     syncWave: "10"
     source:
-      chart: rook-ceph
+      chart: rook-ceph  
+      repoURL: https://charts.rook.io/release
+      targetRevision: v1.18.2 
+      helm:
+        values: |
+          crds:
+            enabled: true
+          enableDiscoveryDaemon: false
+  
+  rook-ceph-cluster:
+    enabled: true
+    namespace: rook-ceph
+    syncWave: "15"
+    source:
+      chart: rook-ceph-cluster  
       repoURL: https://charts.rook.io/release
       targetRevision: v1.18.2
       helm:
+        parameters:
+          - name: operatorNamespace
+            value: rook-ceph
         valueFiles:
-          - argocd/apps/01-storage/rook-ceph/rook-ceph-helm/values.yaml
-
+          - argocd/apps/01-storage/rook-ceph/rook-ceph-cluster/values.yaml
+  
   rook-ceph-resources:
     enabled: true
     namespace: rook-ceph

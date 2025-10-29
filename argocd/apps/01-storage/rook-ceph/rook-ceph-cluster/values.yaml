@@ -1,72 +1,43 @@
-cluster:
-  enabled: true
-  name: rook-ceph
+# Ceph Cluster 스펙
+cephClusterSpec:
   cephVersion:
-    image: quay.io/ceph/ceph:v18
+    image: quay.io/ceph/ceph:v18 
   dataDirHostPath: /var/lib/rook
   mon:
     count: 3
     allowMultiplePerNode: false
   dashboard:
     enabled: true
-
   storage:
     useAllNodes: false
     useAllDevices: false
     config:
       osdsPerDevice: "1"
-    allowDeviceClassUpdate: false
-    allowOsdCrushWeightUpdate: false
-
     nodes:
       - name: "node1"
         devices:
-          # ssd hot storage
           - name: "/dev/ubuntu-vg/ceph-osd1"
             config:
               deviceClass: "ssd"
-              osdsPerDevice: "1"
-          # hdd cold storage    
           - name: "sdb"
             config:
               deviceClass: "hdd"
-              osdsPerDevice: "1"
-        config:
-          storeType: bluestore
-
       - name: "node2"
         devices:
           - name: "/dev/ubuntu-vg-1/ceph-osd1"
             config:
               deviceClass: "ssd"
-              osdsPerDevice: "1"
           - name: "sdb"
             config:
               deviceClass: "hdd"
-              osdsPerDevice: "1"
-        config:
-          storeType: bluestore
-
       - name: "node4"
         devices:
           - name: "/dev/ubuntu-vg/ceph-osd"
             config:
               deviceClass: "ssd"
-              osdsPerDevice: "1"
-        config:
-          storeType: bluestore
-
       - name: "node5"
         devices:
           - name: "/dev/ubuntu-vg/ceph-osd"
             config:
               deviceClass: "ssd"
-              osdsPerDevice: "1"
-        config:
-          storeType: bluestore
 
-    scheduleAlways: false
-    onlyApplyOSDPlacement: false
-    fullRatio: 0.95
-    backfillFullRatio: 0.90
-    nearFullRatio: 0.85
