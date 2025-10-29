@@ -4,3 +4,4 @@ kind: Kustomization
 resources:
 - cephfs-sc.yaml
 - rbd-sc.yaml
+- toolbox.yaml
