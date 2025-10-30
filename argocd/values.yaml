@@ -62,8 +62,6 @@ applications:
         parameters:
           - name: operatorNamespace
             value: rook-ceph
-          - name: preInstall.sleepSeconds
-            value: "180"  # CRD 생성 대기 시간 설정
         valueFiles:
           - argocd/apps/01-storage/rook-ceph/rook-ceph-operator/values.yaml
   
