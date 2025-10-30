@@ -24,13 +24,13 @@ applications:
   rook-ceph-crds:
     enabled: true
     namespace: rook-ceph
-    syncWave: "0"
+    syncWave: "-1"
     source:
       path: apps/01-storage/rook-ceph/rook-ceph-crds
 
   cilium:
     enabled: true
-    namespace: kube-system
+    namespace: kube-systemQ
     syncWave: "1"
     source:
       path: argocd/apps/00-infra/cilium
