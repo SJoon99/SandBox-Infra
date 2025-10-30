@@ -39,9 +39,10 @@ daemonsets:
     maxUnavailable: "1"
 
 validator:
-  repository: docker.io/nvidia  
-  image: gpu-operator-validator
+  repository: nvcr.io/nvidia/gpu-operator-validator
   tag: v25.3.2
+  imagePullSecrets:
+    - nvcr-secret
   env:
     - name: WITH_WAIT
       value: "true"
