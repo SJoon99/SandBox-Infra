@@ -21,8 +21,15 @@ hostPaths:
   rootFS: "/"
   driverInstallDir: "/run/nvidia/driver"
 
+global:
+  imagePullSecrets:
+    - nvcr-secret
+
+
 daemonsets:
   priorityClassName: system-node-critical
+  imagePullSecrets:
+    - nvcr-secret
   tolerations:
     - key: nvidia.com/gpu
       operator: Exists
