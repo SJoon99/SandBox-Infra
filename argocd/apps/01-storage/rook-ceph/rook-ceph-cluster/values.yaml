@@ -123,16 +123,7 @@ cephClusterSpec:
           - name: "sdb"
             config:
               deviceClass: "hdd"
-      - name: "node4"
-        devices:
-          - name: "/dev/ubuntu-vg/ceph-osd"
-            config:
-              deviceClass: "ssd"
-      - name: "node5"
-        devices:
-          - name: "/dev/ubuntu-vg/ceph-osd"
-            config:
-              deviceClass: "ssd"
+              
   # This cluster spec example is for a converged cluster where all the Ceph daemons are running locally,
   # as in the host-based example (cluster.yaml). For a different configuration such as a
   # PVC-based cluster (cluster-on-pvc.yaml), external cluster (cluster-external.yaml),
