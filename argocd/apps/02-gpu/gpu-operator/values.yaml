@@ -49,18 +49,15 @@ daemonsets:
     maxUnavailable: "1"
 
 validator:
-  repository: nvcr.io/nvidia
-  image: gpu-operator
-  # If version is not specified, then default is to use chart.AppVersion
-  #version: ""
-  imagePullPolicy: IfNotPresent
-  imagePullSecrets: []
-  env: []
-  args: []
-  resources: {}
-  plugin:
-    env: []
-
+  repository: nvcr.io/nvidia/gpu-operator-validator
+  tag: v25.3.2
+  # validator가 너무 일찍 실행되지 않도록 대기 시간 추가
+  env:
+    - name: WITH_WAIT
+      value: "true"
+    - name: WAIT_TIMEOUT
+      value: "120"   # 드라이버 설치 완료까지 2분 기다리기
+      
 operator:
   repository: nvcr.io/nvidia
   image: gpu-operator
