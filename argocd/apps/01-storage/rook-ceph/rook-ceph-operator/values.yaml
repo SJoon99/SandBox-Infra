@@ -11,6 +11,10 @@ image:
   # -- Image pull policy
   pullPolicy: IfNotPresent
 
+env:
+  - name: ROOK_CEPH_ALLOW_DEVICE_LVMS
+    value: "true"
+
 crds:
   # -- Whether the helm chart should create and update the CRDs. If false, the CRDs must be
   # managed independently with deploy/examples/crds.yaml.
