@@ -10,7 +10,8 @@ kind: Namespace
 metadata:
   name: gpu-operator
   labels:
-    type: compute
+    pod-security.kubernetes.io/enforce: privileged
+    type: gpu
 ---
 apiVersion: v1
 kind: Namespace
