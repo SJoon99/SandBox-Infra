@@ -18,7 +18,7 @@ crds:
   # If the CRDs are deleted in this case, see
   # [the disaster recovery guide](https://rook.io/docs/rook/latest/Troubleshooting/disaster-recovery/#restoring-crds-after-deletion)
   # to restore them.
-  enabled: true
+  enabled: false
 
 # -- Pod resource requests & limits
 resources:
