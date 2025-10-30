@@ -19,9 +19,18 @@ spec:
       targetRevision: {{ $app.source.targetRevision }}
       helm:
         releaseName: {{ $name }}
+        {{- if $app.source.helm.parameters }}
+        parameters:
+        {{- range $p := $app.source.helm.parameters }}
+        - name: {{ $p.name }}
+          value: "{{ $p.value }}"
+        {{- end }}
+        {{- end }}
         valueFiles:
+        {{- if $app.source.helm.valueFiles }}
         {{- range $path := $app.source.helm.valueFiles }}
-        - $values/{{ $path }}
+        - {{ $path }}
+        {{- end }}
         {{- end }}
     - repoURL: {{ $.Values.argo.sourceRepo.url }}
       targetRevision: {{ $.Values.argo.sourceRepo.branch }}

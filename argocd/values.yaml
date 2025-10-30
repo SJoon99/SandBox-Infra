@@ -21,16 +21,16 @@ applications:
     source:
       path: argocd/apps/00-infra/argocd
 
-  # rook-ceph-crds:
-  #   enabled: true
-  #   namespace: rook-ceph
-  #   syncWave: "-1"
-  #   source:
-  #     path: apps/01-storage/rook-ceph/rook-ceph-crds
+  rook-ceph-crds:
+    enabled: true
+    namespace: rook-ceph
+    syncWave: "-1"
+    source:
+      path: argocd/apps/01-storage/rook-ceph/rook-ceph-crds
 
   cilium:
     enabled: true
-    namespace: kube-systemQ
+    namespace: kube-system
     syncWave: "1"
     source:
       path: argocd/apps/00-infra/cilium
@@ -62,6 +62,8 @@ applications:
         parameters:
           - name: operatorNamespace
             value: rook-ceph
+          - name: preInstall.sleepSeconds
+            value: "180"  # CRD 생성 대기 시간 설정
         valueFiles:
           - argocd/apps/01-storage/rook-ceph/rook-ceph-operator/values.yaml
   
