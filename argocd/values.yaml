@@ -21,12 +21,12 @@ applications:
     source:
       path: argocd/apps/00-infra/argocd
 
-  rook-ceph-crds:
-    enabled: true
-    namespace: rook-ceph
-    syncWave: "-1"
-    source:
-      path: apps/01-storage/rook-ceph/rook-ceph-crds
+  # rook-ceph-crds:
+  #   enabled: true
+  #   namespace: rook-ceph
+  #   syncWave: "-1"
+  #   source:
+  #     path: apps/01-storage/rook-ceph/rook-ceph-crds
 
   cilium:
     enabled: true
