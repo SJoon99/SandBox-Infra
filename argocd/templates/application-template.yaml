@@ -53,5 +53,15 @@ spec:
       - {{ $opt }}
       {{- end }}
       {{- end }}
+
+  {{- if eq $name "rook-ceph-operator" }}
+  ignoreDifferences:
+    - group: apiextensions.k8s.io
+      kind: CustomResourceDefinition
+      jsonPointers:
+        - /metadata/annotations
+        - /metadata/labels
+  {{- end }}
+
   {{- end }}
 {{- end }}
