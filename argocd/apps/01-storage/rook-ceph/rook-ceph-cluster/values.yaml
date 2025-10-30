@@ -93,14 +93,6 @@ pspEnable: false
 # -- Cluster configuration.
 # @default -- See [below](#ceph-cluster-spec)
 cephClusterSpec:
-  cephVersion:
-    image: quay.io/ceph/ceph:v18 
-  dataDirHostPath: /var/lib/rook
-  mon:
-    count: 3
-    allowMultiplePerNode: false
-  dashboard:
-    enabled: true
   storage:
     useAllNodes: false
     useAllDevices: false
@@ -109,24 +101,20 @@ cephClusterSpec:
     nodes:
       - name: "node1"
         devices:
-          - name: "/dev/ubuntu-vg/ceph-osd1"
+          - name: "/dev/mapper/ubuntu--vg--ceph--osd1"   
             config:
               deviceClass: "ssd"
-              osdsPerDevice: "1"
-          - name: "sdb"
+          - name: "/dev/sdb"
             config:
               deviceClass: "hdd"
-              osdsPerDevice: "1"
       - name: "node2"
         devices:
-          - name: "/dev/ubuntu-vg-1/ceph-osd1"
+          - name: "/dev/mapper/ubuntu--vg--1--ceph--osd1" 
             config:
               deviceClass: "ssd"
-              osdsPerDevice: "1"
-          - name: "sdb"
+          - name: "/dev/sdb"
             config:
               deviceClass: "hdd"
-              osdsPerDevice: "1"
 
   # This cluster spec example is for a converged cluster where all the Ceph daemons are running locally,
   # as in the host-based example (cluster.yaml). For a different configuration such as a
