@@ -19,18 +19,9 @@ spec:
       targetRevision: {{ $app.source.targetRevision }}
       helm:
         releaseName: {{ $name }}
-        {{- if $app.source.helm.parameters }}
-        parameters:
-        {{- range $p := $app.source.helm.parameters }}
-        - name: {{ $p.name }}
-          value: "{{ $p.value }}"
-        {{- end }}
-        {{- end }}
         valueFiles:
-        {{- if $app.source.helm.valueFiles }}
         {{- range $path := $app.source.helm.valueFiles }}
-        - values/{{ $path }}
-        {{- end }}
+        - $values/{{ $path }}
         {{- end }}
     - repoURL: {{ $.Values.argo.sourceRepo.url }}
       targetRevision: {{ $.Values.argo.sourceRepo.branch }}
@@ -62,15 +53,5 @@ spec:
       - {{ $opt }}
       {{- end }}
       {{- end }}
-
-  {{- if eq $name "rook-ceph-operator" }}
-  ignoreDifferences:
-    - group: apiextensions.k8s.io
-      kind: CustomResourceDefinition
-      jsonPointers:
-        - /metadata/annotations
-        - /metadata/labels
-  {{- end }}
-
   {{- end }}
 {{- end }}
