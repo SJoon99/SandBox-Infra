@@ -101,7 +101,7 @@ cephClusterSpec:
     nodes:
       - name: "node1"
         devices:
-          - name: "/dev/mapper/ubuntu--vg--ceph--osd1"   
+          - name: "/dev/mapper/ubuntu--vg-ceph--osd1"   
             config:
               deviceClass: "ssd"
           - name: "/dev/sdb"
@@ -109,7 +109,7 @@ cephClusterSpec:
               deviceClass: "hdd"
       - name: "node2"
         devices:
-          - name: "/dev/mapper/ubuntu--vg--1--ceph--osd1" 
+          - name: "/dev/mapper/ubuntu--vg--1-ceph--osd1" 
             config:
               deviceClass: "ssd"
           - name: "/dev/sdb"
