@@ -35,20 +35,20 @@ applications:
     source:
       path: argocd/apps/00-infra/cilium
 
-  # gpu-operator:
-  #   enabled: true
-  #   namespace: gpu-operator
-  #   syncWave: "5"
-  #   source:
-  #     chart: gpu-operator
-  #     repoURL: https://helm.ngc.nvidia.com/nvidia
-  #     targetRevision: v25.3.2
-  #     helm:
-  #       parameters:
-  #         - name: operatorNamespace
-  #           value: gpu-operator
-  #       valueFiles:
-  #         - argocd/apps/02-gpu/gpu-operator/values.yaml
+  gpu-operator:
+    enabled: true
+    namespace: gpu-operator
+    syncWave: "5"
+    source:
+      chart: gpu-operator
+      repoURL: https://helm.ngc.nvidia.com/nvidia
+      targetRevision: v25.3.2
+      helm:
+        parameters:
+          - name: operatorNamespace
+            value: gpu-operator
+        valueFiles:
+          - argocd/apps/02-gpu/gpu-operator/values.yaml
   
   rook-ceph-operator:
     enabled: true
@@ -64,7 +64,18 @@ applications:
             value: rook-ceph
         valueFiles:
           - argocd/apps/01-storage/rook-ceph/rook-ceph-operator/values.yaml
-  
+    ignoreDifferences:
+      - group: apiextensions.k8s.io
+        kind: CustomResourceDefinition
+        name: operatorconfigs.csi.ceph.io
+        jsonPointers:
+          - /metadata/annotations
+      - group: apiextensions.k8s.io
+        kind: CustomResourceDefinition
+        name: drivers.csi.ceph.io
+        jsonPointers:
+          - /metadata/annotations
+
   rook-ceph-cluster:
     enabled: true
     namespace: rook-ceph
