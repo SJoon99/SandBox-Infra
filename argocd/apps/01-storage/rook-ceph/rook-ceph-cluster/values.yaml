@@ -98,6 +98,7 @@ cephClusterSpec:
     useAllDevices: false
     config:
       osdsPerDevice: "1"
+      osdMode: lvm
     nodes:
       - name: "node1"
         devices:
