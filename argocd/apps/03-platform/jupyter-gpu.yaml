@@ -1,0 +1,53 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tf-notebook
+  labels:
+    app: tf-notebook
+  annotations:
+    # 특정 IP를 고정으로 쓰고 싶으면 풀 범위 내에서 하나 지정 
+    # io.cilium/lb-ipam-ips: "10.34.48.130"
+spec:
+  type: LoadBalancer
+  externalTrafficPolicy: Cluster
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8888
+  selector:
+    app: tf-notebook
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tf-notebook
+  labels:
+    app: tf-notebook
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tf-notebook
+  template:
+    metadata:
+      labels:
+        app: tf-notebook
+    spec:
+      # GPU가 실제 존재하는 노드로만 스케줄 (NFD가 붙인 라벨)
+      nodeSelector:
+        nvidia.com/gpu.present: "true"
+      securityContext:
+        fsGroup: 0
+      containers:
+        - name: tf-notebook
+          image: tensorflow/tensorflow:2.16.1-gpu-jupyter
+          resources:
+            limits:
+              nvidia.com/gpu: 1
+          ports:
+            - containerPort: 8888
+              name: notebook
+          args:
+            - "jupyter notebook --NotebookApp.token='' --ip=0.0.0.0 --port=8888 --no-browser"
+
