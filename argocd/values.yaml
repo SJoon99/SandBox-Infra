@@ -35,20 +35,20 @@ applications:
     source:
       path: argocd/apps/00-infra/cilium
 
-  # gpu-operator:
-  #   enabled: true
-  #   namespace: gpu-operator
-  #   syncWave: "5"
-  #   source:
-  #     chart: gpu-operator
-  #     repoURL: https://helm.ngc.nvidia.com/nvidia
-  #     targetRevision: v25.3.2
-  #     helm:
-  #       parameters:
-  #         - name: operatorNamespace
-  #           value: gpu-operator
-  #       valueFiles:
-  #         - argocd/apps/02-gpu/gpu-operator/values.yaml
+  gpu-operator:
+    enabled: true
+    namespace: gpu-operator
+    syncWave: "5"
+    source:
+      chart: gpu-operator
+      repoURL: https://helm.ngc.nvidia.com/nvidia
+      targetRevision: v25.3.2
+      helm:
+        parameters:
+          - name: operatorNamespace
+            value: gpu-operator
+        valueFiles:
+          - argocd/apps/02-gpu/gpu-operator/values.yaml
   
   rook-ceph-operator:
     enabled: true
