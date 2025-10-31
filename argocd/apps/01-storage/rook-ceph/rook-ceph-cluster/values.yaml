@@ -109,7 +109,7 @@ cephClusterSpec:
               deviceClass: "hdd"
       - name: "node2"
         devices:
-          - name: "/dev/ubuntu-vg/ceph-osd" 
+          - name: "/dev/ubuntu-vg-1/ceph-osd" 
             config:
               deviceClass: "ssd"
           - name: "/dev/sdb"
