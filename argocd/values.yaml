@@ -97,3 +97,10 @@ applications:
     syncWave: "20"
     source:
       path: argocd/apps/01-storage/rook-ceph/rook-ceph-resources
+
+  jupyter-gpu:
+    enabled: true
+    namespace: jupyter
+    syncWave: "30"
+    source:
+      path: argocd/apps/03-platform/jupyter-gpu
