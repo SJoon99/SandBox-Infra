@@ -33,3 +33,18 @@ metadata:
   name: rucio
   labels:
     type: service
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: cert-manager
+  labels:
+    type: service
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: prometheus
+  labels:
+    type: monitoring
+---
