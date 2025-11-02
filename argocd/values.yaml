@@ -104,3 +104,10 @@ applications:
     syncWave: "30"
     source:
       path: argocd/apps/03-platform/jupyter-gpu
+
+  cluster-service:
+    enabled: true
+    namespace: default
+    syncWave: "100"
+    source:
+      path: argocd/apps/00-infra/cluster-service
