@@ -3,3 +3,4 @@ kind: Kustomization
 
 resources:
 - argocd-server-lb.yaml
+- rook-ceph-dashboard-lb.yaml
