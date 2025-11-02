@@ -14,12 +14,12 @@ applications:
     source:
       path: argocd/apps/00-infra/cluster-config
 
-  argocd:
-    enabled: true
-    namespace: argocd
-    syncWave: "0"
-    source:
-      path: argocd/apps/00-infra/argocd
+  # argocd:
+  #   enabled: true
+  #   namespace: argocd
+  #   syncWave: "0"
+  #   source:
+  #     path: argocd/apps/00-infra/argocd
 
   # rook-ceph-crds:
   #   enabled: true
@@ -48,7 +48,7 @@ applications:
           - name: operatorNamespace
             value: gpu-operator
         valueFiles:
-          - argocd/apps/02-gpu/gpu-operator/values.yaml
+          - argocd/apps/02-compute/gpu-operator/values.yaml
   
   rook-ceph-operator:
     enabled: true
