@@ -1,0 +1,22 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: cilium-gateway
+  namespace: default
+spec:
+  gatewayClassName: cilium
+  addresses:
+  - type: IPAddress
+    value: 10.10.0.3   # (wg1 IP)
+  listeners:
+  - name: http
+    protocol: HTTP
+    port: 80
+  - name: https
+    protocol: HTTPS
+    port: 443
+    hostname: "argo.jjooniex.org"  # 사용할 실제 도메인
+    tls:
+      mode: Terminate
+      certificateRefs:
+      - name: argocd-tls     # cert-manager가 발급할 Secret 이름

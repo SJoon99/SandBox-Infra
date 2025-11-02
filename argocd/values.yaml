@@ -105,9 +105,22 @@ applications:
     source:
       path: argocd/apps/03-platform/jupyter-gpu
 
+  # cert-manager:
+  #   enabled: true
+  #   namespace: cert-manager
+  #   syncWave: "40"
+  #   source:
+  #     chart: cert-manager
+  #     repoURL: oci://quay.io/jetstack/charts
+  #     targetRevision: v1.19.1
+  #     helm:
+  #       valueFiles:
+  #         - argocd/apps/00-infra/cert-manager/values.yaml
+
   cluster-service:
     enabled: true
     namespace: default
     syncWave: "100"
     source:
       path: argocd/apps/00-infra/service
+
