@@ -19,6 +19,10 @@ spec:
       targetRevision: {{ $app.source.targetRevision }}
       helm:
         releaseName: {{ $name }}
+        {{- if $app.source.helm.parameters }}
+        parameters:
+        {{- toYaml $app.source.helm.parameters | nindent 8 }}
+        {{- end }}
         valueFiles:
         {{- range $path := $app.source.helm.valueFiles }}
         - $values/{{ $path }}
@@ -26,6 +30,7 @@ spec:
     - repoURL: {{ $.Values.argo.sourceRepo.url }}
       targetRevision: {{ $.Values.argo.sourceRepo.branch }}
       ref: values
+
   {{- else if $app.source.path }}
   # CASE 2: Git 경로를 사용하는 경우
   source:
@@ -41,6 +46,11 @@ spec:
   destination:
     server: {{ $.Values.argo.server }}
     namespace: {{ $app.namespace }}
+
+  {{- if $app.ignoreDifferences }}
+  ignoreDifferences:
+  {{- toYaml $app.ignoreDifferences | nindent 4 }}
+  {{- end }}
 
   syncPolicy:
     automated:
