@@ -110,4 +110,4 @@ applications:
     namespace: default
     syncWave: "100"
     source:
-      path: argocd/apps/00-infra/cluster-service
+      path: argocd/apps/00-infra/service
