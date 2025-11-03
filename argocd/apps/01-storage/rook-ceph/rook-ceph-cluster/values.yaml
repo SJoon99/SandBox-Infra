@@ -564,18 +564,22 @@ cephBlockPools:
 # -- A list of CephFileSystem configurations to deploy
 # @default -- See [below](#ceph-file-systems)
 cephFileSystems:
-  - name: ceph-filesystem
+  - name: ceph-filesystem-hot 
     # see https://github.com/rook/rook/blob/master/Documentation/CRDs/Shared-Filesystem/ceph-filesystem-crd.md#filesystem-settings for available configuration
     spec:
       metadataPool:
+        deviceClass: ssd
         replicated:
           size: 2
       dataPools:
-        - failureDomain: host
+        - name: hot-data
+          failureDomain: host
           replicated:
             size: 2
+          deviceClass: ssd
+          quotas: 
+            maxSize: "400GiB"  # Optional quota for the data pool
           # Optional and highly recommended, 'data0' by default, see https://github.com/rook/rook/blob/master/Documentation/CRDs/Shared-Filesystem/ceph-filesystem-crd.md#pools
-          name: data0
       metadataServer:
         activeCount: 1
         activeStandby: true
@@ -587,11 +591,11 @@ cephFileSystems:
             memory: "4Gi"
         priorityClassName: system-cluster-critical
     storageClass:
-      enabled: false
+      enabled: true
       isDefault: false
-      name: ceph-filesystem
+      name: ceph-filesystem-hot
       # (Optional) specify a data pool to use, must be the name of one of the data pools above, 'data0' by default
-      pool: data0
+      pool: hot-data
       reclaimPolicy: Delete
       allowVolumeExpansion: true
       volumeBindingMode: "Immediate"
