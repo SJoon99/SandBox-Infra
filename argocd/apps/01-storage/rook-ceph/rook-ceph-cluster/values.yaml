@@ -578,7 +578,7 @@ cephFileSystems:
             size: 2
           deviceClass: ssd
           quotas: 
-            maxSize: "400GiB"  # Optional quota for the data pool
+            maxSize: "400Gi"  # Optional quota for the data pool
           # Optional and highly recommended, 'data0' by default, see https://github.com/rook/rook/blob/master/Documentation/CRDs/Shared-Filesystem/ceph-filesystem-crd.md#pools
       metadataServer:
         activeCount: 1
