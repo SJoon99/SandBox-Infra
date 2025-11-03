@@ -19,7 +19,17 @@ applications:
     namespace: argocd
     syncWave: "0"
     source:
-      path: argocd/apps/00-infra/argo
+      chart: argocd
+      repoURL: https://argoproj.github.io/argo-helm
+      targetRevision: 9.0.5
+      helm:
+        parameters:
+          - name: operatorNamespace
+            value: argocd
+        valueFiles:
+          - argocd/apps/00-infra/argo/values.yaml
+
+
 
   # rook-ceph-crds:
   #   enabled: true
