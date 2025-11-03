@@ -14,12 +14,12 @@ applications:
     source:
       path: argocd/apps/00-infra/cluster-config
 
-  # argocd:
-  #   enabled: true
-  #   namespace: argocd
-  #   syncWave: "0"
-  #   source:
-  #     path: argocd/apps/00-infra/argocd
+  argocd:
+    enabled: true
+    namespace: argocd
+    syncWave: "0"
+    source:
+      path: argocd/apps/00-infra/argocd
 
   # rook-ceph-crds:
   #   enabled: true
