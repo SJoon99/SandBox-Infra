@@ -134,9 +134,14 @@ applications:
       targetRevision: v1.19.1
       helm:
         valueFiles:
-          - argocd/apps/00-infra/cert-manager/values.yaml
-      extraPaths:
-        - argocd/apps/00-infra/cert-manager
+          - argocd/apps/00-infra/cert-manager/base/values.yaml
+  
+  cert-manager-certificate:
+    enabled: true
+    namespace: default
+    syncWave: "50"
+    source:
+      path: argocd/apps/00-infra/cert-manager/certificate
 
   cluster-service:
     enabled: true
