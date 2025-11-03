@@ -19,7 +19,7 @@ applications:
     namespace: argocd
     syncWave: "0"
     source:
-      chart: argocd
+      chart: argo-cd
       repoURL: https://argoproj.github.io/argo-helm
       targetRevision: 9.0.1
       helm:
