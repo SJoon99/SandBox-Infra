@@ -1,0 +1,4 @@
+apiVersion: v2
+name: cilium
+description: Cilium sub-apps managed by ArgoCD
+version: 0.1.0
