@@ -1,0 +1,29 @@
+argo:
+  namespace: argocd
+  project: default
+  server: https://kubernetes.default.svc
+  sourceRepo:
+    url: https://github.com/SJoon99/SandBox-Infra.git
+    branch: main
+
+applications:
+  cilium-base:
+    enabled: true
+    namespace: kube-system
+    syncWave: "0"
+    source:
+      path: argocd/apps/00-infra/cilium/base
+
+  cilium-gateway:
+    enabled: true
+    namespace: kube-system
+    syncWave: "1"
+    source:
+      path: argocd/apps/00-infra/cilium/gateway
+
+  cilium-routes:
+    enabled: true
+    namespace: kube-system
+    syncWave: "2"
+    source:
+      path: argocd/apps/00-infra/cilium/routes
