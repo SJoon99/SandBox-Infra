@@ -16,14 +16,14 @@ applications:
 
   cilium-gateway:
     enabled: true
-    namespace: kube-system
+    namespace: default
     syncWave: "1"
     source:
       path: argocd/apps/00-infra/cilium/gateway
 
   cilium-routes:
     enabled: true
-    namespace: kube-system
+    namespace: argocd
     syncWave: "2"
     source:
       path: argocd/apps/00-infra/cilium/routes
