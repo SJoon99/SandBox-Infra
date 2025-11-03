@@ -7,7 +7,7 @@ metadata:
   name: {{ $name }}
   namespace: {{ $.Values.argo.namespace }}
   annotations:
-    argocd.argoproj.io/sync-wave: "{{ $app.syncWave }}"
+    argocd.argoproj.io/sync-wave: "{{ $app.syncWave | default "0" }}"
 spec:
   project: {{ $.Values.argo.project }}
 
@@ -23,9 +23,11 @@ spec:
         parameters:
         {{- toYaml $app.source.helm.parameters | nindent 8 }}
         {{- end }}
+        {{- if $app.source.helm.valueFiles }}
         valueFiles:
         {{- range $path := $app.source.helm.valueFiles }}
         - $values/{{ $path }}
+        {{- end }}
         {{- end }}
     - repoURL: {{ $.Values.argo.sourceRepo.url }}
       targetRevision: {{ $.Values.argo.sourceRepo.branch }}
@@ -53,9 +55,21 @@ spec:
   {{- end }}
 
   syncPolicy:
+    {{- $prune := true }}
+    {{- $selfHeal := true }}
+    {{- if $app.syncPolicy }}
+      {{- if hasKey $app.syncPolicy "automated" }}
+        {{- if hasKey $app.syncPolicy.automated "prune" }}
+          {{- $prune = $app.syncPolicy.automated.prune }}
+        {{- end }}
+        {{- if hasKey $app.syncPolicy.automated "selfHeal" }}
+          {{- $selfHeal = $app.syncPolicy.automated.selfHeal }}
+        {{- end }}
+      {{- end }}
+    {{- end }}
     automated:
-      prune: true
-      selfHeal: true
+      prune: {{ $prune }}
+      selfHeal: {{ $selfHeal }}
     syncOptions:
       - CreateNamespace=true
       {{- if $app.syncOptions }}
