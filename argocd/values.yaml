@@ -135,6 +135,8 @@ applications:
       helm:
         valueFiles:
           - argocd/apps/00-infra/cert-manager/values.yaml
+      extraPaths:
+        - argocd/apps/00-infra/cert-manager
 
   cluster-service:
     enabled: true
