@@ -19,7 +19,7 @@ applications:
     namespace: argocd
     syncWave: "0"
     source:
-      path: argocd/apps/00-infra/argocd
+      path: argocd/apps/00-infra/argo
 
   # rook-ceph-crds:
   #   enabled: true
