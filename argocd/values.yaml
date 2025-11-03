@@ -21,7 +21,7 @@ applications:
     source:
       chart: argo-cd
       repoURL: https://argoproj.github.io/argo-helm
-      targetRevision: 9.0.5
+      targetRevision: 9.0.1
       helm:
         parameters:
           - name: operatorNamespace
@@ -124,17 +124,17 @@ applications:
     source:
       path: argocd/apps/03-platform/jupyter-gpu
 
-  # cert-manager:
-  #   enabled: true
-  #   namespace: cert-manager
-  #   syncWave: "40"
-  #   source:
-  #     chart: cert-manager
-  #     repoURL: oci://quay.io/jetstack/charts
-  #     targetRevision: v1.19.1
-  #     helm:
-  #       valueFiles:
-  #         - argocd/apps/00-infra/cert-manager/values.yaml
+  cert-manager:
+    enabled: true
+    namespace: cert-manager
+    syncWave: "40"
+    source:
+      chart: cert-manager
+      repoURL: oci://quay.io/jetstack/charts
+      targetRevision: v1.19.1
+      helm:
+        valueFiles:
+          - argocd/apps/00-infra/cert-manager/values.yaml
 
   cluster-service:
     enabled: true

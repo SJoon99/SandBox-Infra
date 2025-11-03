@@ -97,7 +97,7 @@ installCRDs: true
 crds:
   # This option decides if the CRDs should be installed
   # as part of the Helm installation.
-  enabled: false
+  enabled: true
 
   # This option makes it so that the "helm.sh/resource-policy": keep
   # annotation is added to the CRD. This will prevent Helm from uninstalling
@@ -234,6 +234,8 @@ serviceAccount:
 # When this flag is enabled, secrets will be automatically removed when the certificate resource is deleted.
 enableCertificateOwnerRef: false
 
+
+
 # This property is used to configure options for the controller pod.
 # This allows setting options that would usually be provided using flags.
 #
@@ -242,14 +244,11 @@ enableCertificateOwnerRef: false
 # the version by specifying the `apiVersion` yourself.
 #
 # For example:
-#  config:
-#    apiVersion: controller.config.cert-manager.io/v1alpha1
-#    kind: ControllerConfiguration
-#    logging:
-#      verbosity: 2
-#      format: text
-#    leaderElectionConfig:
-#      namespace: kube-system
+config:
+  apiVersion: controller.config.cert-manager.io/v1alpha1
+  kind: ControllerConfiguration
+  featureGates:
+    ExperimentalGatewayAPISupport: true
 #    kubernetesAPIQPS: 9000
 #    kubernetesAPIBurst: 9000
 #    numberOfConcurrentWorkers: 200
