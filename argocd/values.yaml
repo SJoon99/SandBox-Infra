@@ -21,7 +21,7 @@ applications:
     source:
       chart: argo-cd
       repoURL: https://argoproj.github.io/argo-helm
-      targetRevision: 9.0.1
+      targetRevision: 9.0.5
       helm:
         parameters:
           - name: operatorNamespace
