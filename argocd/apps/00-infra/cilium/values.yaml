@@ -27,16 +27,16 @@ applications:
       path: argocd/apps/00-infra/cilium/base
 
 
-  cilium-gateway:
-    enabled: true
-    namespace: default
-    syncWave: "1"
-    source:
-      path: argocd/apps/00-infra/cilium/gateway
+  # cilium-gateway:
+  #   enabled: true
+  #   namespace: default
+  #   syncWave: "1"
+  #   source:
+  #     path: argocd/apps/00-infra/cilium/gateway
 
-  cilium-routes:
-    enabled: true
-    namespace: argocd
-    syncWave: "2"
-    source:
-      path: argocd/apps/00-infra/cilium/routes
+  # cilium-routes:
+  #   enabled: true
+  #   namespace: argocd
+  #   syncWave: "2"
+  #   source:
+  #     path: argocd/apps/00-infra/cilium/routes
