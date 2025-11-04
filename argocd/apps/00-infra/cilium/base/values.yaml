@@ -104,6 +104,10 @@ ipv6NativeRoutingCIDR: ""
 k8sServiceHost: auto
 k8sServicePort: auto
 kubeProxyReplacement: true
+nodePort:
+  enabled: true
+  bindProtection: true
+autoProtectNodePortRange: true
 l2announcements:
   enabled: true
 loadBalancer:
