@@ -130,18 +130,11 @@ applications:
     syncWave: "40"
     source:
       chart: cert-manager
-      repoURL: oci://quay.io/jetstack/charts/cert-manager
+      repoURL: https://charts.jetstack.io
       targetRevision: v1.19.1
       helm:
-        values: |
-          crds:
-            enabled: true
-          installCRDs: true
-          prometheus:
-            enabled: false
-          extraArgs:
-            - --feature-gates=GatewayAPISupport=true
-            - --dns01-recursive-nameservers-only
+        valueFiles:
+          - argocd/apps/00-infra/cert-manager/base/values.yaml
   
   cert-manager-certificate:
     enabled: true
