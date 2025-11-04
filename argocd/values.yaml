@@ -134,7 +134,7 @@ applications:
       targetRevision: v1.19.1
       helm:
         valueFiles:
-          - argocd/apps/00-infra/cert-manager/base/values.yaml
+          - apps/00-infra/cert-manager/base/values.yaml
   
   cert-manager-certificate:
     enabled: true
