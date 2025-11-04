@@ -133,8 +133,14 @@ applications:
       repoURL: oci://quay.io/jetstack/charts/cert-manager
       targetRevision: v1.19.1
       helm:
-        valueFiles:
-          - argocd/apps/00-infra/cert-manager/base/values.yaml
+        values: |
+          crds:
+            enabled: true
+          installCRDs: true
+          prometheus:
+            enabled: false
+          extraArgs:
+            - --dns01-recursive-nameservers-only
   
   cert-manager-certificate:
     enabled: true
