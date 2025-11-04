@@ -14,7 +14,7 @@ applications:
     source:
       chart: cilium
       repoURL: https://helm.cilium.io/
-      targetRevision: 1.18.2
+      targetRevision: 1.18.3
       helm:
         valueFiles:
           - argocd/apps/00-infra/cilium/base/values.yaml
