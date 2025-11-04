@@ -103,9 +103,9 @@ ipv6:
 ipv6NativeRoutingCIDR: ""
 k8sServiceHost: auto
 k8sServicePort: auto
-kubeProxyReplacement: false
+kubeProxyReplacement: true
 l2announcements:
-  enabled: false
+  enabled: true
 loadBalancer:
   interface: wg1
 loadbalancer:
