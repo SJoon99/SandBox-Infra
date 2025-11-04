@@ -92,7 +92,6 @@ global:
 
 # This option is equivalent to setting crds.enabled=true and crds.keep=true.
 # Deprecated: use crds.enabled and crds.keep instead.
-installCRDs: true
 
 crds:
   # This option decides if the CRDs should be installed
@@ -319,6 +318,7 @@ approveSignerNames:
 #    - --controllers=*,-certificaterequests-approver
 extraArgs:
   - --feature-gates=GatewayAPISupport=true
+  - --dns01-recursive-nameservers-only
 
 # Additional environment variables to pass to cert-manager controller binary.
 # For example:
