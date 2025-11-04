@@ -130,11 +130,11 @@ applications:
     syncWave: "40"
     source:
       chart: cert-manager
-      repoURL: https://charts.jetstack.io
+      repoURL: oci://quay.io/jetstack/charts/cert-manager
       targetRevision: v1.19.1
       helm:
         valueFiles:
-          - apps/00-infra/cert-manager/base/values.yaml
+          - argocd/apps/00-infra/cert-manager/base/values.yaml
   
   cert-manager-certificate:
     enabled: true
