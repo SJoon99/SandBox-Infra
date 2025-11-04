@@ -10,9 +10,22 @@ applications:
   cilium-base:
     enabled: true
     namespace: kube-system
+    syncWave: "-1"
+    source:
+      chart: cilium
+      repoURL: https://helm.cilium.io/
+      targetRevision: 1.18.2
+      helm:
+        valueFiles:
+          - argocd/apps/00-infra/cilium/base/values.yaml
+
+  cilium-svc:
+    enabled: true
+    namespace: kube-system
     syncWave: "0"
     source:
       path: argocd/apps/00-infra/cilium/base
+
 
   cilium-gateway:
     enabled: true
