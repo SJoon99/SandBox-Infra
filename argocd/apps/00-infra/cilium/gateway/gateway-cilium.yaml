@@ -3,6 +3,8 @@ kind: Gateway
 metadata:
   name: cilium-gateway
   namespace: default
+  labels:
+    use-for-http01: "true"
 spec:
   gatewayClassName: cilium
   addresses:
