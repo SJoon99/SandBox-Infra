@@ -12,4 +12,8 @@ spec:
   - name: http
     protocol: HTTP
     port: 80
-    hostname: "*"  # 모든 호스트 허용 (HTTP-01 챌린지용)
+    # hostname 필드를 아예 제거 (모든 호스트 허용)
+    # 또는 allowedRoutes 사용
+    allowedRoutes:
+      namespaces:
+        from: All
