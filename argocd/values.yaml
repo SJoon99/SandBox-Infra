@@ -121,7 +121,7 @@ applications:
     source:
       chart: rook-ceph-cluster  
       repoURL: https://charts.rook.io/release
-      targetRevision: v1.19.1
+      targetRevision: v1.18.2
       helm:
         parameters:
           - name: operatorNamespace
