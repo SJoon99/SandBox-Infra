@@ -12,7 +12,9 @@ spec:
     - http01:
         gatewayHTTPRoute:
           parentRefs:
-            - group: gateway.networking.k8s.io
-              kind: Gateway
-              name: cilium-gateway
-              namespace: default
+          - name: cilium-gateway
+            namespace: default
+            kind: Gateway
+            group: gateway.networking.k8s.io
+          labels:
+            use-for-http01: "true"
