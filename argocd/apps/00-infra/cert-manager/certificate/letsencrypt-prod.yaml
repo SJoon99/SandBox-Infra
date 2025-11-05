@@ -18,3 +18,6 @@ spec:
             group: gateway.networking.k8s.io
           labels:
             use-for-http01: "true"
+      selector:
+        dnsNames:
+        - argo.jjooniex.org

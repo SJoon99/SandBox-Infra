@@ -38,6 +38,25 @@ applications:
   #   source:
   #     path: apps/01-storage/rook-ceph/rook-ceph-crds
 
+  cert-manager:
+  enabled: true
+  namespace: cert-manager
+  syncWave: "-1"
+  source:
+    chart: cert-manager
+    repoURL: https://charts.jetstack.io
+    targetRevision: v1.18.1
+    helm:
+      valueFiles:
+        - argocd/apps/00-infra/cert-manager/base/values.yaml
+
+  cert-manager-certificate:
+  enabled: true
+  namespace: default
+  syncWave: "0"
+  source:
+    path: argocd/apps/00-infra/cert-manager/certificate
+
   cilium:
     enabled: true
     namespace: kube-system
@@ -123,25 +142,6 @@ applications:
     syncWave: "30"
     source:
       path: argocd/apps/03-platform/jupyter-gpu
-
-  cert-manager:
-    enabled: true
-    namespace: cert-manager
-    syncWave: "40"
-    source:
-      chart: cert-manager
-      repoURL: https://charts.jetstack.io
-      targetRevision: v1.18.1
-      helm:
-        valueFiles:
-          - argocd/apps/00-infra/cert-manager/base/values.yaml
-  
-  cert-manager-certificate:
-    enabled: true
-    namespace: default
-    syncWave: "50"
-    source:
-      path: argocd/apps/00-infra/cert-manager/certificate
 
   cluster-service:
     enabled: true
