@@ -2,9 +2,9 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: argocd-tls
-  namespace: default   # Gateway와 같은 네임스페이스
+  namespace: default   
 spec:
-  secretName: argocd-tls        # Gateway의 certificateRefs.name과 동일해야 함
+  secretName: argocd-tls       
   issuerRef:
     name: letsencrypt-prod
     kind: ClusterIssuer

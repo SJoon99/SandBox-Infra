@@ -317,7 +317,6 @@ approveSignerNames:
 #  extraArgs:
 #    - --controllers=*,-certificaterequests-approver
 extraArgs:
-  - --feature-gates=GatewayAPISupport=true
   - --dns01-recursive-nameservers-only
 
 # Additional environment variables to pass to cert-manager controller binary.
