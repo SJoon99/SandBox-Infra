@@ -2,7 +2,7 @@
 apiVersion: cilium.io/v2alpha1
 kind: CiliumLoadBalancerIPPool
 metadata:
-  name: lb-pool-main
+  name: lb-pool-wireguard
 spec:
   blocks:
   - cidr: 10.10.0.64/26  # 10.10.0.64 ~ 10.10.0.127
