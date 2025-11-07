@@ -5,13 +5,14 @@ metadata:
   name: lb-pool-main
 spec:
   blocks:
-  - cidr: 10.34.48.128/25 # 10.34.48.128 ~ 10.34.48.255
+  - cidr: 10.10.0.64/26  # 10.10.0.64 ~ 10.10.0.127
 ---
 apiVersion: cilium.io/v2alpha1
 kind: CiliumL2AnnouncementPolicy
 metadata:
-  name: l2-lb
+  name: l2-lb-wg
 spec:
   loadBalancerIPs: true
-  externalIPs: true
+  interfaces:
+  - wg1
 
