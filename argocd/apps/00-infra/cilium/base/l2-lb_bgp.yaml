@@ -1,0 +1,31 @@
+---
+apiVersion: cilium.io/v2alpha1
+kind: CiliumLoadBalancerIPPool
+metadata:
+  name: bgp-pool-wireguard
+spec:
+  blocks:
+  - cidr: 10.10.0.64/26  
+---
+apiVersion: cilium.io/v2alpha1
+kind: CiliumBGPPeeringPolicy
+metadata:
+  name: bgp-peering-vps
+spec:
+  nodeSelector:
+    matchLabels:
+      kubernetes.io/hostname: node3
+  virtualRouters:
+  - localASN: 64512
+    exportPodCIDR: false
+    serviceSelector:
+      matchExpressions:
+      - key: somekey
+        operator: NotIn
+        values: ['never-used-value'] # 모든 서비스 선택
+    neighbors:
+    - peerAddress: 10.10.0.1/32
+      peerASN: 64513
+      connectRetryTimeSeconds: 120
+      holdTimeSeconds: 90
+      keepAliveTimeSeconds: 30

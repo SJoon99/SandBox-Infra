@@ -5,7 +5,7 @@ bandwidthManager:
   bbr: false
   enabled: false
 bgpControlPlane:
-  enabled: false
+  enabled: true
 bpf:
   hostLegacyRouting: false
   mapDynamicSizeRatio: 0.0025

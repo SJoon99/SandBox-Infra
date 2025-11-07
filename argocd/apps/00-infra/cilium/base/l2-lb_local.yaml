@@ -2,17 +2,15 @@
 apiVersion: cilium.io/v2alpha1
 kind: CiliumLoadBalancerIPPool
 metadata:
-  name: lb-pool-wireguard
+  name: lb-pool-local
 spec:
   blocks:
-  - cidr: 10.10.0.64/26  # 10.10.0.64 ~ 10.10.0.127
+  - cidr: 10.34.48.128/25 # 10.34.48.128 ~ 10.34.48.255
 ---
 apiVersion: cilium.io/v2alpha1
 kind: CiliumL2AnnouncementPolicy
 metadata:
-  name: l2-lb-wg
+  name: l2-lb
 spec:
   loadBalancerIPs: true
-  interfaces:
-  - wg1
-
+  externalIPs: true

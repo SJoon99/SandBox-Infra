@@ -6,8 +6,8 @@ metadata:
   labels:
     app: tf-notebook
   annotations:
-    # 특정 IP를 고정으로 쓰고 싶으면 풀 범위 내에서 하나 지정 
-    # io.cilium/lb-ipam-ips: "10.34.48.130"
+    # local LoadBalancer 사용
+    io.cilium/lb-ipam-pool: "lb-pool-local"
 spec:
   type: LoadBalancer
   externalTrafficPolicy: Cluster
