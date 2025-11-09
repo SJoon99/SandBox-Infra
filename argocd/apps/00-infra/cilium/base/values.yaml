@@ -134,6 +134,7 @@ policyAuditMode: false
 routingMode: tunnel
 tunnelProtocol: vxlan
 securityContext:
+  privileged: true
   capabilities:
     ciliumAgent:
       - NET_BIND_SERVICE
