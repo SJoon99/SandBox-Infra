@@ -42,8 +42,6 @@ spec:
       peerConfigRef:
         name: vps-peer
     serviceAdvertisements:
-    - selector:
-        matchExpressions:
-        - key: io.kubernetes.service.type
-          operator: In
-          values: ["LoadBalancer"]
+    - selector: {} # 전체 서비스 광고
+      ipPools:
+      - bgp-pool-wireguard
