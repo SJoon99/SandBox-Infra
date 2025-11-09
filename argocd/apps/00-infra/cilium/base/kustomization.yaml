@@ -3,4 +3,3 @@ kind: Kustomization
 
 resources:
 - l2-lb_local.yaml
-- l2-lb_bgp.yaml
