@@ -18,6 +18,7 @@ spec:
     holdTimeSeconds: 90
     keepAliveTimeSeconds: 30
   transport:
+    peerAddress: 10.10.0.1
     peerPort: 179
 
 ---
