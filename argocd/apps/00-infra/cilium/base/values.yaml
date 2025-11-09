@@ -12,6 +12,7 @@ bpf:
   masquerade: false
   monitorAggregation: medium
   preallocateMaps: false
+  enableTCX: false
 certgen:
   image: 
     repository: quay.io/cilium/certgen
