@@ -44,6 +44,12 @@ extraVolumeMounts: []
 extraVolumes: []
 gatewayAPI:
   enabled: true
+  hostNetwork:
+    enabled: true
+    nodes:
+      matchLabels:
+        role: gateway-api
+        componet: gateway-api
   gatewayClass:
     controllerName: io.cilium/gateway-controller
     create: "true"
