@@ -43,5 +43,4 @@ spec:
         name: vps-peer
     serviceAdvertisements:
     - selector: {} # 전체 서비스 광고
-      ipPools:
-      - bgp-pool-wireguard
+
