@@ -14,15 +14,11 @@ kind: CiliumBGPPeerConfig
 metadata:
   name: vps-peer
 spec:
-  peerASN: 64513
-  transport:
-    peerAddress: 10.10.0.1
-    port: 179
   timers:
     holdTimeSeconds: 90
     keepAliveTimeSeconds: 30
-  # eBGP multi-hop이 필요하면 다음 줄 추가
-  # ebgpMultihop: true
+  transport:
+    peerPort: 179
 
 ---
 # 3) BGP v2: 클러스터(노드 선택) + 어떤 것을 광고할지
@@ -33,14 +29,14 @@ metadata:
 spec:
   nodeSelector:
     matchLabels:
-      kubernetes.io/hostname: node3   # node3에서만 BGP 스피커
+      kubernetes.io/hostname: node3 # node3 에서만 BGP 실행
   bgpInstances:
   - name: to-vps
     localASN: 64512
     peers:
     - name: vps
       peerASN: 64513
-      peerAddress: 10.10.0.1
+      peerAddress: 10.10.0.1   # VPS FRR의 WG IP
       peerConfigRef:
         name: vps-peer
     serviceAdvertisements:
@@ -48,4 +44,4 @@ spec:
         matchExpressions:
         - key: io.kubernetes.service.type
           operator: In
-          values: ["LoadBalancer"]    # LB 서비스 전부 광고
+          values: ["LoadBalancer"]
