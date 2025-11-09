@@ -13,7 +13,7 @@ bpf:
   monitorAggregation: medium
   preallocateMaps: false
 certgen:
-  image:
+  image: 
     repository: quay.io/cilium/certgen
     tag: v0.2.4
 cgroup:
@@ -28,6 +28,7 @@ cni:
   logFile: /var/run/cilium/cilium-cni.log
 debug:
   enabled: false
+devices: "en+,eth+,wg+"
 enableIPv4Masquerade: true
 enableIPv6Masquerade: true
 encryption:
@@ -42,6 +43,10 @@ extraVolumeMounts: []
 extraVolumes: []
 gatewayAPI:
   enabled: true
+  gatewayClass:
+    controllerName: io.cilium/gateway-controller
+    create: "true"
+    name: cilium
 healthPort: 9879
 hostFirewall:
   enabled: false
@@ -101,20 +106,18 @@ ipv4NativeRoutingCIDR: 10.233.64.0/18
 ipv6:
   enabled: false
 ipv6NativeRoutingCIDR: ""
-k8sServiceHost: auto
-k8sServicePort: auto
-kubeProxyReplacement: false
-nodePort:
-  enabled: true
-  bindProtection: true
-  autoProtectPortRange: true
-autoProtectNodePortRange: true
+k8sServiceHost: 10.34.48.50
+k8sServicePort: 6443
+kubeProxyReplacement: true
 l2announcements:
-  enabled: true
+  enabled: false
 loadBalancer:
   interface: wg1
 loadbalancer:
   mode: snat
+nodePort:
+  enabled: true
+  directRoutingDevice: "en+"
 operator:
   enabled: true
   extraArgs: []
