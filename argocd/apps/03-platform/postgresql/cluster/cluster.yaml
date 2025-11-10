@@ -4,7 +4,7 @@ metadata:
   name: rucio-db
   namespace: postgresql
 spec:
-  instances: 2
+  instances: 1
 
   imageName: ghcr.io/cloudnative-pg/postgresql:16
 
