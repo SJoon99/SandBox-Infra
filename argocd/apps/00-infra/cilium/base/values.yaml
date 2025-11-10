@@ -29,7 +29,7 @@ cni:
   logFile: /var/run/cilium/cilium-cni.log
 debug:
   enabled: false
-devices: "en+,eth+,wg+"
+devices: "en+,eth+"
 enableIPv4Masquerade: true
 enableIPv6Masquerade: true
 encryption:
@@ -53,13 +53,6 @@ gatewayAPI:
     nodes:
       matchLabels:
         role: gateway-api  
-  tolerations:
-    - key: "node-role.kubernetes.io/control-plane"
-      operator: "Exists"
-      effect: "NoSchedule"
-    - key: "node-role.kubernetes.io/master"  
-      operator: "Exists" 
-      effect: "NoSchedule"
 healthPort: 9879
 hostFirewall:
   enabled: false
@@ -121,16 +114,15 @@ ipv6:
 ipv6NativeRoutingCIDR: ""
 k8sServiceHost: 10.34.48.50
 k8sServicePort: 6443
-kubeProxyReplacement: true
+kubeProxyReplacement: false
 l2announcements:
   enabled: false
 loadBalancer:
-  interface: wg1
+  interface: eno8
 loadbalancer:
   mode: snat
 nodePort:
   enabled: true
-  directRoutingDevice: "en+"
 operator:
   enabled: true
   extraArgs: []

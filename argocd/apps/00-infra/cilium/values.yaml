@@ -6,18 +6,18 @@ argo:
     url: https://github.com/SJoon99/SandBox-Infra.git
     branch: main
 
-# applications:
-#   cilium-base:
-#     enabled: true
-#     namespace: kube-system
-#     syncWave: "-1"
-#     source:
-#       chart: cilium
-#       repoURL: https://helm.cilium.io/
-#       targetRevision: 1.18.3
-#       helm:
-#         valueFiles:
-#           - argocd/apps/00-infra/cilium/base/values.yaml
+applications:
+  cilium-base:
+    enabled: true
+    namespace: kube-system
+    syncWave: "-1"
+    source:
+      chart: cilium
+      repoURL: https://helm.cilium.io/
+      targetRevision: 1.18.3
+      helm:
+        valueFiles:
+          - argocd/apps/00-infra/cilium/base/values.yaml
 
   cilium-svc:
     enabled: true

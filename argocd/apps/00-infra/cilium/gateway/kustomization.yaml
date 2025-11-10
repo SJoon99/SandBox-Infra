@@ -3,4 +3,4 @@ kind: Kustomization
 
 resources:
 - gateway-cilium.yaml
-- gateway-bgp.yaml
+# - gateway-bgp.yaml
