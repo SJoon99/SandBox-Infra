@@ -1,0 +1,38 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: rucio-db
+  namespace: postgresql
+spec:
+  instances: 3
+
+  imageName: ghcr.io/cloudnative-pg/postgresql:16
+
+  # PostgreSQL storage 설정
+  storage:
+    size: 500Gi
+    storageClass: rook-ceph-block-hot  
+
+  # 초기 데이터베이스와 사용자 자동 생성
+  bootstrap:
+    initdb:
+      database: rucio
+      owner: joon
+      secret:
+        name: rucio-db-secret 
+  
+  resources:
+    requests:
+      cpu: 500m
+      memory: 1Gi
+    limits:
+      cpu: 1
+      memory: 2Gi
+
+  # Connection service 생성
+  service:
+    type: ClusterIP
+
+  # Monitoring 설정
+  monitoring:
+    enablePodMonitor: true
