@@ -17,3 +17,7 @@ spec:
   interfaces:
   - ^en.*
   - ^eth.*
+  nodeSelector:
+  matchExpressions:
+  - key: node-role.kubernetes.io/control-plane
+    operator: DoesNotExist  # worker 노드만
