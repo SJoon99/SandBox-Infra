@@ -48,3 +48,10 @@ metadata:
   labels:
     type: monitoring
 ---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: postgresql
+  labels:
+    type: database
+---

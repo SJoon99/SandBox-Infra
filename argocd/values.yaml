@@ -143,6 +143,31 @@ applications:
     source:
       path: argocd/apps/03-platform/jupyter-gpu
 
+  postgresql-operator:
+    enabled: true
+    namespace: postgresql
+    syncWave: "35"
+    source:
+      chart: cloudnative-pg
+      repoURL: https://cloudnative-pg.github.io/charts
+      targetRevision: 0.26.1
+      helm:
+        valueFiles:
+          - argocd/apps/03-platform/postgresql/operator/values.yaml
+
+  
+  # Rucio:
+  #   enabled: true
+  #   namespace: rucio
+  #   syncWave: "40"
+  #   source:
+  #     chart: rucio
+  #     repoURL: https://rucio.github.io/helm-charts/
+  #     targetRevision: 0.5.3
+  #     helm:
+  #       valueFiles:
+  #         - argocd/apps/03-platform/rucio/values.yaml
+
   cluster-service:
     enabled: true
     namespace: default
