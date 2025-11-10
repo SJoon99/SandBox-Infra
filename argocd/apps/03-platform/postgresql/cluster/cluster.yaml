@@ -4,7 +4,7 @@ metadata:
   name: rucio-db
   namespace: postgresql
 spec:
-  instances: 3
+  instances: 2
 
   imageName: ghcr.io/cloudnative-pg/postgresql:16
 
@@ -26,13 +26,9 @@ spec:
       cpu: 500m
       memory: 1Gi
     limits:
-      cpu: 1
+      cpu: '1'
       memory: 2Gi
-
-  # Connection service 생성
-  service:
-    type: ClusterIP
 
   # Monitoring 설정
   monitoring:
-    enablePodMonitor: true
+    enablePodMonitor: false
