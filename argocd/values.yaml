@@ -163,6 +163,13 @@ applications:
         name: poolers.postgresql.cnpg.io
         jsonPointers:
           - /metadata/annotations
+  
+  postgresql-cluster:
+    enabled: true
+    namespace: postgresql
+    syncWave: "36"
+    source:
+      path: argocd/apps/03-platform/postgresql/cluster
 
 
   
