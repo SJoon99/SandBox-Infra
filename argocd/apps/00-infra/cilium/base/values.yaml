@@ -114,7 +114,7 @@ ipv6:
 ipv6NativeRoutingCIDR: ""
 k8sServiceHost: 10.34.48.50
 k8sServicePort: 6443
-kubeProxyReplacement: strict
+kubeProxyReplacement: false
 l2announcements:
   enabled: true
 loadBalancer:
