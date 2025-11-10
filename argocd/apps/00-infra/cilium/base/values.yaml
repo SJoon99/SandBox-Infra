@@ -117,10 +117,6 @@ k8sServicePort: 6443
 kubeProxyReplacement: false
 l2announcements:
   enabled: true
-loadBalancer:
-  interface: eno8
-loadbalancer:
-  mode: snat
 nodePort:
   enabled: true
 operator:
