@@ -49,10 +49,10 @@ extraVolumes: []
 gatewayAPI:
   enabled: true
   hostNetwork:
-    enabled: true  
-    nodes:
-      matchLabels:
-        role: gateway-api  
+    enabled: false  
+    # nodes:
+    #   matchLabels:
+    #     role: gateway-api  
 healthPort: 9879
 hostFirewall:
   enabled: false
