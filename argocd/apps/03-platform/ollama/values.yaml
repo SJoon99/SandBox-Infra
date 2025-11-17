@@ -184,7 +184,7 @@ service:
 
   # -- Annotations to add to the service
   annotations:
-    - io.cilium/lb-ipam-pool: "lb-pool-local"
+    io.cilium/lb-ipam-pool: "lb-pool-local"
 
   # -- Labels to add to the service
   labels: {}
