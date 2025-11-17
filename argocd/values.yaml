@@ -209,7 +209,7 @@ applications:
     namespace: ollama
     syncWave: "120"
     source:
-      chart: openwebui
+      chart: open-webui
       repoURL: https://helm.openwebui.com/
       targetRevision: 8.14.0
       helm:
