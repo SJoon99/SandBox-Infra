@@ -55,14 +55,14 @@ spec:
           image: tensorflow/tensorflow:2.16.1-gpu-jupyter
           resources:
             limits:
-              nvidia.com/gpu: 1
+              nvidia.com/gpu: '1'
           ports:
             - containerPort: 8888
               name: notebook
           env:
            - name: JUPYTER_TOKEN
              value: ""
-          voluemMounts:
+          volumeMounts:
             - name: notebook-storage
               mountPath: /home/cephfs
       volumes:
