@@ -202,7 +202,8 @@ applications:
       targetRevision: 1.34.0
       helm:
         valueFiles:
-          - argocd/apps/03-platform/ollama/values.yaml
+          - argocd/apps/03-platform/intelligent-agent/ollama/values.yaml
+
 
   # # ollama-gpu1:
   # ollama-gpu1:
@@ -212,7 +213,7 @@ applications:
   #   source:
   #     chart: ollama
   #     repoURL: https://helm.otwld.com/
-  #     targetRevision: 0.30.1 # 차트 버전을 명시하는 것이 좋습니다.
+  #     targetRevision: 0.30.1 
   #     helm:
   #       valueFiles:
   #         # GPU1용 values 파일을 지정
@@ -229,5 +230,5 @@ applications:
   #     targetRevision: 0.30.1
   #     helm:
   #       valueFiles:
-  #         # GPU2용 values 파일을 지정
+  #         
   #         - argocd/apps/03-platform/ollama/values-gpu2.yaml
