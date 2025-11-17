@@ -191,4 +191,43 @@ applications:
     syncWave: "100"
     source:
       path: argocd/apps/00-infra/service
+  
+  ollama:
+    enabled: true
+    namespace: ollama
+    syncWave: "110"
+    source:
+      chart: ollama
+      repoURL: https://helm.otwld.com/
+      targetRevision: 1.34.0
+      helm:
+        valueFiles:
+          - argocd/apps/03-platform/ollama/values.yaml
 
+  # # ollama-gpu1:
+  # ollama-gpu1:
+  #   enabled: true
+  #   namespace: ollama  # 두 인스턴스를 같은 네임스페이스에 배포
+  #   syncWave: "110"
+  #   source:
+  #     chart: ollama
+  #     repoURL: https://helm.otwld.com/
+  #     targetRevision: 0.30.1 # 차트 버전을 명시하는 것이 좋습니다.
+  #     helm:
+  #       valueFiles:
+  #         # GPU1용 values 파일을 지정
+  #         - argocd/apps/03-platform/ollama/values-gpu1.yaml
+
+  # # ollama-gpu2:
+  # ollama-gpu2:
+  #   enabled: true
+  #   namespace: ollama # 같은 네임스페이스에 배포
+  #   syncWave: "110" # 동일한 syncWave로 동시에 배포 시도
+  #   source:
+  #     chart: ollama
+  #     repoURL: https://helm.otwld.com/
+  #     targetRevision: 0.30.1
+  #     helm:
+  #       valueFiles:
+  #         # GPU2용 values 파일을 지정
+  #         - argocd/apps/03-platform/ollama/values-gpu2.yaml
