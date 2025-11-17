@@ -7,7 +7,7 @@ namespaceOverride: ""
 ollama:
   # -- Automatically install Ollama Helm chart from https://otwld.github.io/ollama-helm/. Use [Helm Values](https://github.com/otwld/ollama-helm/#helm-values) to configure
   # @section -- External Tools configuration
-  enabled: false
+  enabled: true
   # -- If enabling embedded Ollama, update fullnameOverride to your desired Ollama name value, or else it will use the default ollama.name value from the Ollama chart
   # @section -- External Tools configuration
   fullnameOverride: "open-webui-ollama"
@@ -29,8 +29,7 @@ ollama:
 
 # -- A list of Ollama API endpoints. These can be added in lieu of automatically installing the Ollama Helm chart, or in addition to it.
 # @section -- External Tools configuration
-ollamaUrls: 
-  - "http://ollama:11434"
+ollamaUrls: []
 
 # -- Disables taking Ollama Urls from `ollamaUrls`  list
 # @section -- External Tools configuration
@@ -126,6 +125,7 @@ websocket:
     # -- Redis tolerations for pod assignment
     # @section -- Websocket configuration
     tolerations: []
+    # -- Redis affinity for pod assignment
     # @section -- Websocket configuration
     affinity: {}
     # -- Redis container security context (certain specs are not allowed on a pod level), if readOnlyRootFilesystem is true, an emtpyDir will be mounted on the redis container
@@ -310,7 +310,7 @@ persistence:
   enabled: true
   # -- Size of the Open WebUI PVC
   # @section -- Persistence configuration
-  size: 20Gi
+  size: 2Gi
   # -- Use existingClaim if you want to re-use an existing Open WebUI PVC instead of creating a new one
   # @section -- Persistence configuration
   existingClaim: ""
@@ -323,7 +323,7 @@ persistence:
     - ReadWriteOnce
   # -- Storage class of the Open WebUI PVC
   # @section -- Persistence configuration
-  storageClass: "rook-ceph-block-hot"
+  storageClass: ""
   # -- Selector to match to get the volume bound to the claim
   # @section -- Persistence configuration
   selector: {}
@@ -412,11 +412,10 @@ hostAliases: []
 service:
   # -- Service type to expose Open WebUI pods to cluster. Options are ClusterIP, NodePort, LoadBalancer, or ExternalName
   # @section -- Service configuration
-  type: LoadBalancer
+  type: ClusterIP
   # -- Additional annotations to add to the Service
   # @section -- Service configuration
-  annotations: 
-    io.cilium/lb-ipam-pool: "lb-pool-local"
+  annotations: {}
   # -- Port to expose Open WebUI service on
   # @section -- Service configuration
   port: 80
