@@ -64,7 +64,7 @@ spec:
              value: ""
           volumeMounts:
             - name: notebook-storage
-              mountPath: /home/cephfs
+              mountPath: /tf/cephfs
       volumes:
         - name: notebook-storage
           persistentVolumeClaim:
