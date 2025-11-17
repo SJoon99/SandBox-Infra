@@ -1,3 +1,14 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: tf-notebook-pvc
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 100Gi
+  storageClassName: ceph-filesystem-hot
 ---
 apiVersion: v1
 kind: Service
@@ -51,4 +62,11 @@ spec:
           env:
            - name: JUPYTER_TOKEN
              value: ""
+          voluemMounts:
+            - name: notebook-storage
+              mountPath: /home/cephfs
+      volumes:
+        - name: notebook-storage
+          persistentVolumeClaim:
+            claimName: tf-notebook-pvc
 
