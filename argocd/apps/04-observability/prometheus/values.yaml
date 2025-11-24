@@ -692,7 +692,7 @@ server:
   ## Ref: http://kubernetes.io/docs/user-guide/compute-resources/
   ##
   # 리소스는 어느정도 사용하게 제한해야할지 아직 감이 안 옴 (일단 보류)
-  resources: {}
+  resources: 
     limits:
       cpu: 500m
       memory: 8Gi
