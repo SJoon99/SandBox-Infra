@@ -679,8 +679,8 @@ datasources:
     #   jsonData:
     #     authType: default
     #     defaultRegion: us-east-1
-    deleteDatasources: []
-    - name: Prometheus
+    # deleteDatasources: []
+    # - name: Prometheus
 
 ## Configure grafana alerting (can be templated)
 ## ref: https://docs.grafana.com/alerting/set-up/provision-alerting-resources/file-provisioning/
