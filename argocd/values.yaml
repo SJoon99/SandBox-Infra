@@ -215,6 +215,18 @@ applications:
       helm:
         valueFiles:
           - argocd/apps/03-platform/intelligent-agent/openwebui/values.yaml
+  
+  prometheus:
+    enabled: true
+    namespace: monitoring
+    syncWave: "200"
+    source:
+      chart: prometheus
+      repoURL: https://prometheus-community.github.io/helm-charts
+      targetRevision: 27.26.0
+      helm:
+        valueFiles:
+          - argocd/apps/04-observability/prometheus/values.yaml
 
 
   # # ollama-gpu1:
