@@ -136,12 +136,12 @@ applications:
     source:
       path: argocd/apps/01-storage/rook-ceph/rook-ceph-resources
 
-  # jupyter-gpu:
-  #   enabled: true
-  #   namespace: jupyter
-  #   syncWave: "30"
-  #   source:
-  #     path: argocd/apps/03-platform/jupyter-gpu
+  jupyter-gpu:
+    enabled: true
+    namespace: jupyter
+    syncWave: "30"
+    source:
+      path: argocd/apps/03-platform/jupyter-gpu
 
   postgresql-operator:
     enabled: true
@@ -252,7 +252,6 @@ applications:
   #     targetRevision: 0.30.1 
   #     helm:
   #       valueFiles:
-  #         # GPU1용 values 파일을 지정
   #         - argocd/apps/03-platform/ollama/values-gpu1.yaml
 
   # # ollama-gpu2:
@@ -266,5 +265,4 @@ applications:
   #     targetRevision: 0.30.1
   #     helm:
   #       valueFiles:
-  #         
   #         - argocd/apps/03-platform/ollama/values-gpu2.yaml
