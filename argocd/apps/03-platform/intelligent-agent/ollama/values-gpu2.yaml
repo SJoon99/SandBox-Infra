@@ -95,14 +95,14 @@ ollama:
     #  - llama2
     #  - mistral
     pull: 
-      - mistral:7b-instruct-q4_K_M
+      - mistral:v0.3
 
     # -- List of models to load in memory at container startup
     # run:
     #  - llama2
     #  - mistral
     run: 
-      - mistral:7b-instruct-q4_K_M
+      - mistral:v0.3
 
     # -- List of models to create at container startup, there are two options
     # 1. Create a raw model
