@@ -30,7 +30,8 @@ ollama:
 # -- A list of Ollama API endpoints. These can be added in lieu of automatically installing the Ollama Helm chart, or in addition to it.
 # @section -- External Tools configuration
 ollamaUrls: 
-  - "http://ollama:11434"
+  - "http://ollama-gpu1:11434"
+  - "http://ollama-gpu2:11434"
 
 # -- Disables taking Ollama Urls from `ollamaUrls`  list
 # @section -- External Tools configuration
