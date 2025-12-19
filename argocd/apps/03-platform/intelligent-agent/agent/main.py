@@ -30,7 +30,6 @@ except Exception as e:
 # --- [2] 모델 설정 (kubectl 결과 반영) ---
 
 # GPU 1: 실행용 (Llama) - Service 이름: ollama-gpu1
-# llama3:8b-instruct... -> llama3.1:8b 로 변경 (Tool Calling 공식 지원)
 llm_llama = ChatOpenAI(
     base_url="http://ollama-gpu1.ollama.svc.cluster.local:11434/v1",
     api_key="ollama",
@@ -39,7 +38,6 @@ llm_llama = ChatOpenAI(
 )
 
 # GPU 2: 실행용 (Mistral) - Service 이름: ollama-gpu2
-# mistral:7b-instruct... -> mistral:v0.3 로 변경 (Tool Calling 공식 지원)
 llm_mistral = ChatOpenAI(
     base_url="http://ollama-gpu2.ollama.svc.cluster.local:11434/v1",
     api_key="ollama",
@@ -159,10 +157,13 @@ tools = [k8s_scale_deployment, k8s_get_resources, ask_expert_analyst, get_promet
 
 # --- [4] 에이전트 생성 ---
 system_prompt = """
-You are 'SRE-Master', an intelligent Kubernetes Operations Agent.
-Your responsibilities:
-1. Direct Execution: Use tools like 'k8s_scale_deployment' or 'get_prometheus_metrics' for direct tasks.
-2. Analysis: If the user asks for root cause analysis or "Why" something failed, YOU MUST USE 'ask_expert_analyst'.
+You are SRE-Master.
+If the user requests metrics (cpu/memory/gpu/unhealthy pods), you MUST call the tool.
+Do NOT explain what you will do.
+Your response must be either:
+1) a tool call, OR
+2) final answer after tool output.
+Never write code blocks like get_prometheus_metrics(...).
 """
 
 prompt = ChatPromptTemplate.from_messages([

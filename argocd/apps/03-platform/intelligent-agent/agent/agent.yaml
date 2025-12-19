@@ -50,7 +50,7 @@ spec:
       serviceAccountName: sre-agent-sa  # 위에서 만든 SA 사용
       containers:
         - name: agent
-          image: jinkernel/agent:v10  # 빌드한 이미지 주소 
+          image: jinkernel/agent:v11  # 빌드한 이미지 주소 
           imagePullPolicy: Always
           ports:
             - containerPort: 8000
