@@ -29,25 +29,25 @@ except Exception as e:
 
 # --- [2] 모델 설정 (kubectl 결과 반영) ---
 
-# GPU 1: 분석용 (Llama) - Service 이름: ollama-gpu1
-# FQDN: 서비스명.네임스페이스.svc.cluster.local
+# GPU 1: 실행용 (Llama) - Service 이름: ollama-gpu1
+# llama3:8b-instruct... -> llama3.1:8b 로 변경 (Tool Calling 공식 지원)
 llm_llama = ChatOpenAI(
     base_url="http://ollama-gpu1.ollama.svc.cluster.local:11434/v1",
     api_key="ollama",
-    model="llama3:8b-instruct-q4_K_M",  
+    model="llama3.1:8b",  
     temperature=0
 )
 
 # GPU 2: 실행용 (Mistral) - Service 이름: ollama-gpu2
+# mistral:7b-instruct... -> mistral:v0.3 로 변경 (Tool Calling 공식 지원)
 llm_mistral = ChatOpenAI(
     base_url="http://ollama-gpu2.ollama.svc.cluster.local:11434/v1",
     api_key="ollama",
-    model="mistral:7b-instruct-q4_K_M", 
+    model="mistral:v0.3", 
     temperature=0
 )
 
 # --- [3] 도구(Tools) 정의 ---
-
 @tool
 def k8s_scale_deployment(namespace: str, deployment_name: str, replicas: int):
     """
