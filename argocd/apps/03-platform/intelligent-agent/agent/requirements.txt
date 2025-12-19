@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+pydantic
+kubernetes
+langchain
+langchain-openai
+langchain-community
+requests

@@ -143,6 +143,18 @@ applications:
   #   source:
   #     path: argocd/apps/03-platform/jupyter-gpu
 
+  # harbor:
+  #   enabled: true
+  #   namespace: harbor
+  #   syncWave: "30"
+  #   source:
+  #     chart: harbor
+  #     repoURL: https://helm.goharbor.io
+  #     targetRevision: 1.18.1
+  #     helm:
+  #       valueFiles:
+  #         - argocd/apps/03-platform/harbor/values.yaml
+
   postgresql-operator:
     enabled: true
     namespace: postgresql
@@ -250,3 +262,9 @@ applications:
         valueFiles:
           - argocd/apps/04-observability/grafana/values.yaml
 
+  agent:
+    enabled: true
+    namespace: default
+    syncWave: "300"
+    source:
+      path: argocd/apps/03-platform/intelligent-agent/agent
