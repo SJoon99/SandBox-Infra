@@ -32,7 +32,7 @@ except Exception as e:
 # GPU 1: 실행용 (Mistral) - Service 이름: ollama-gpu1
 # FQDN: 서비스명.네임스페이스.svc.cluster.local
 llm_mistral = ChatOpenAI(
-    base_url="http://ollama-gpu1.ollama.svc.cluster.local:11434/v1",
+    base_url="http://ollama-gpu2.ollama.svc.cluster.local:11434/v1",
     api_key="ollama",
     model="llama3:8b-instruct-q4_K_M",  
     temperature=0
@@ -40,7 +40,7 @@ llm_mistral = ChatOpenAI(
 
 # GPU 2: 분석용 (Llama) - Service 이름: ollama-gpu2
 llm_llama = ChatOpenAI(
-    base_url="http://ollama-gpu2.ollama.svc.cluster.local:11434/v1",
+    base_url="http://ollama-gpu1.ollama.svc.cluster.local:11434/v1",
     api_key="ollama",
     model="mistral:7b-instruct-q4_K_M", 
     temperature=0.1
