@@ -252,22 +252,22 @@ cephClusterSpec:
   # To control where various services will be scheduled by kubernetes, use the placement configuration sections below.
   # The example under 'all' would have all services scheduled on kubernetes nodes labeled with 'role=storage-node' and
   # tolerate taints with a key of 'storage-node'.
-  # placement:
-  #   all:
-  #     nodeAffinity:
-  #       requiredDuringSchedulingIgnoredDuringExecution:
-  #         nodeSelectorTerms:
-  #           - matchExpressions:
-  #             - key: role
-  #               operator: In
-  #               values:
-  #               - storage-node
-  #     podAffinity:
-  #     podAntiAffinity:
-  #     topologySpreadConstraints:
-  #     tolerations:
-  #     - key: storage-node
-  #       operator: Exists
+  placement:
+    all:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+              - key: role
+                operator: In
+                values:
+                - storage-node
+      podAffinity:
+      podAntiAffinity:
+      topologySpreadConstraints:
+      tolerations:
+      - key: storage-node
+        operator: Exists
   #   # The above placement information can also be specified for mon, osd, and mgr components
   #   mon:
   #   # Monitor deployments may contain an anti-affinity rule for avoiding monitor
@@ -373,7 +373,7 @@ cephClusterSpec:
 
   storage: # cluster level storage configuration and selection
       useAllNodes: false
-      useAllDevices: false
+      useAllDevices: true
       #deviceFilter:
       config:
         # crushRoot: "default" # using default CRUSH root
@@ -386,38 +386,7 @@ cephClusterSpec:
       allowOsdCrushWeightUpdate: false # whether to allow resizing the OSD crush weight after osd pvc is increased
       
       # Individual nodes and their config specification
-      nodes:
-        - name: "node1"  # match with 'kubectl get nodes' hostname
-          devices:
-            # SSD Hot Storage (LVM)
-            - name: "/dev/ubuntu-vg/ceph-osd1"
-              config:
-                deviceClass: "ssd"
-                osdsPerDevice: "1"
-            # HDD Cold Storage (Raw Device)  
-            - name: "sdb"
-              config:
-                deviceClass: "hdd"
-                osdsPerDevice: "1"
-          config:
-            # Node-specific tuning for mixed storage
-            storeType: bluestore
-            
-        - name: "node2"  # match with 'kubectl get nodes' hostname  
-          devices:
-            # SSD Hot Storage (LVM)
-            - name: "/dev/ubuntu-vg-1/ceph-osd1"
-              config:
-                deviceClass: "ssd"
-                osdsPerDevice: "1"
-            # HDD Cold Storage (Raw Device)
-            - name: "sdb"  
-              config:
-                deviceClass: "hdd"
-                osdsPerDevice: "1"
-          config:
-            # Node-specific tuning for mixed storage
-            storeType: bluestore
+      nodes: []
 
   # The section for configuring management of daemon disruptions during upgrade or fencing.
   disruptionManagement:
@@ -497,57 +466,28 @@ route:
 # -- A list of CephBlockPool configurations to deploy
 # @default -- See [below](#ceph-block-pools)
 cephBlockPools:
-  - name: ceph-blockpool
-    # see https://github.com/rook/rook/blob/master/Documentation/CRDs/Block-Storage/ceph-block-pool-crd.md#spec for available configuration
+  # -------------------------------------------------------------------
+  # 1. Hot Storage (SSD)
+  # -------------------------------------------------------------------
+  - name: hot-pool-ssd
     spec:
       failureDomain: host
       replicated:
         size: 2
-      # Enables collecting RBD per-image IO statistics by enabling dynamic OSD performance counters. Defaults to false.
-      # For reference: https://docs.ceph.com/docs/latest/mgr/prometheus/#rbd-io-statistics
-      # enableRBDStats: true
+      # 자동으로 감지된 SSD 디스크만 사용하도록 강제
+      deviceClass: ssd
+      
     storageClass:
-      enabled: false
-      name: ceph-block
-      annotations: {}
-      labels: {}
-      isDefault: true
+      enabled: true
+      name: rook-ceph-block-hot   
+      isDefault: true             # 이것을 기본 스토리지 클래스로 지정
       reclaimPolicy: Delete
       allowVolumeExpansion: true
       volumeBindingMode: "Immediate"
       mountOptions: []
-      # see https://kubernetes.io/docs/concepts/storage/storage-classes/#allowed-topologies
-      allowedTopologies: []
-      #        - matchLabelExpressions:
-      #            - key: rook-ceph-role
-      #              values:
-      #                - storage-node
-      # see https://github.com/rook/rook/blob/master/Documentation/Storage-Configuration/Block-Storage-RBD/block-storage.md#provision-storage for available configuration
       parameters:
-        # (optional) mapOptions is a comma-separated list of map options.
-        # For krbd options refer
-        # https://docs.ceph.com/docs/latest/man/8/rbd/#kernel-rbd-krbd-options
-        # For nbd options refer
-        # https://docs.ceph.com/docs/latest/man/8/rbd-nbd/#options
-        # mapOptions: lock_on_read,queue_depth=1024
-
-        # (optional) unmapOptions is a comma-separated list of unmap options.
-        # For krbd options refer
-        # https://docs.ceph.com/docs/latest/man/8/rbd/#kernel-rbd-krbd-options
-        # For nbd options refer
-        # https://docs.ceph.com/docs/latest/man/8/rbd-nbd/#options
-        # unmapOptions: force
-
-        # RBD image format. Defaults to "2".
         imageFormat: "2"
-
-        # RBD image features, equivalent to OR'd bitfield value: 63
-        # Available for imageFormat: "2". Older releases of CSI RBD
-        # support only the `layering` feature. The Linux kernel (KRBD) supports the
-        # full feature complement as of 5.4
         imageFeatures: layering
-
-        # These secrets contain Ceph admin credentials.
         csi.storage.k8s.io/provisioner-secret-name: rook-csi-rbd-provisioner
         csi.storage.k8s.io/provisioner-secret-namespace: "{{ .Release.Namespace }}"
         csi.storage.k8s.io/controller-expand-secret-name: rook-csi-rbd-provisioner
@@ -556,9 +496,38 @@ cephBlockPools:
         csi.storage.k8s.io/controller-publish-secret-namespace: "{{ .Release.Namespace }}"
         csi.storage.k8s.io/node-stage-secret-name: rook-csi-rbd-node
         csi.storage.k8s.io/node-stage-secret-namespace: "{{ .Release.Namespace }}"
-        # Specify the filesystem type of the volume. If not specified, csi-provisioner
-        # will set default as `ext4`. Note that `xfs` is not recommended due to potential deadlock
-        # in hyperconverged settings where the volume is mounted on the same node as the osds.
+        csi.storage.k8s.io/fstype: ext4
+
+  # -------------------------------------------------------------------
+  # 2. Cold Storage (HDD)
+  # -------------------------------------------------------------------
+  - name: cold-pool-hdd
+    spec:
+      failureDomain: host
+      replicated:
+        size: 2
+      # 자동으로 감지된 HDD 디스크만 사용하도록 강제
+      deviceClass: hdd
+      
+    storageClass:
+      enabled: true
+      name: rook-ceph-block-cold  
+      isDefault: false            
+      reclaimPolicy: Delete
+      allowVolumeExpansion: true
+      volumeBindingMode: "Immediate"
+      mountOptions: []
+      parameters:
+        imageFormat: "2"
+        imageFeatures: layering
+        csi.storage.k8s.io/provisioner-secret-name: rook-csi-rbd-provisioner
+        csi.storage.k8s.io/provisioner-secret-namespace: "{{ .Release.Namespace }}"
+        csi.storage.k8s.io/controller-expand-secret-name: rook-csi-rbd-provisioner
+        csi.storage.k8s.io/controller-expand-secret-namespace: "{{ .Release.Namespace }}"
+        csi.storage.k8s.io/controller-publish-secret-name: rook-csi-rbd-provisioner
+        csi.storage.k8s.io/controller-publish-secret-namespace: "{{ .Release.Namespace }}"
+        csi.storage.k8s.io/node-stage-secret-name: rook-csi-rbd-node
+        csi.storage.k8s.io/node-stage-secret-namespace: "{{ .Release.Namespace }}"
         csi.storage.k8s.io/fstype: ext4
 
 # -- A list of CephFileSystem configurations to deploy
@@ -578,7 +547,7 @@ cephFileSystems:
             size: 2
           deviceClass: ssd
           quotas: 
-            maxSize: "400Gi"  # Optional quota for the data pool
+            maxSize: "3Ti"  # Optional quota for the data pool
           # Optional and highly recommended, 'data0' by default, see https://github.com/rook/rook/blob/master/Documentation/CRDs/Shared-Filesystem/ceph-filesystem-crd.md#pools
       metadataServer:
         activeCount: 1
@@ -593,7 +562,7 @@ cephFileSystems:
     storageClass:
       enabled: true
       isDefault: false
-      name: ceph-filesystem-hot
+      name: rook-ceph-filesystem-hot
       # (Optional) specify a data pool to use, must be the name of one of the data pools above, 'data0' by default
       pool: hot-data
       reclaimPolicy: Delete
@@ -652,11 +621,13 @@ cephObjectStores:
         failureDomain: host
         replicated:
           size: 2
+        deviceClass: ssd
       dataPool:
         failureDomain: host
         erasureCoded:
           dataChunks: 2
           codingChunks: 1
+        deviceClass: hdd
         parameters:
           bulk: "true"
       preservePoolsOnDelete: true
@@ -680,7 +651,7 @@ cephObjectStores:
         #       cpu: "100m"
         #       memory: "40Mi"
     storageClass:
-      enabled: false
+      enabled: true
       name: ceph-bucket
       reclaimPolicy: Delete
       volumeBindingMode: "Immediate"

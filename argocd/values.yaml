@@ -29,8 +29,6 @@ applications:
         valueFiles:
           - argocd/apps/00-infra/argo/values.yaml
 
-
-
   # rook-ceph-crds:
   #   enabled: true
   #   namespace: rook-ceph
@@ -38,24 +36,24 @@ applications:
   #   source:
   #     path: apps/01-storage/rook-ceph/rook-ceph-crds
 
-  cert-manager:
-    enabled: true
-    namespace: cert-manager
-    syncWave: "-1"
-    source:
-      chart: cert-manager
-      repoURL: https://charts.jetstack.io
-      targetRevision: v1.19.1
-      helm:
-        valueFiles:
-          - argocd/apps/00-infra/cert-manager/base/values.yaml
+  # cert-manager:
+  #   enabled: true
+  #   namespace: cert-manager
+  #   syncWave: "-1"
+  #   source:
+  #     chart: cert-manager
+  #     repoURL: https://charts.jetstack.io
+  #     targetRevision: v1.19.1
+  #     helm:
+  #       valueFiles:
+  #         - argocd/apps/00-infra/cert-manager/base/values.yaml
 
-  cert-manager-certificate:
-    enabled: true
-    namespace: default
-    syncWave: "0"
-    source:
-      path: argocd/apps/00-infra/cert-manager/certificate
+  # cert-manager-certificate:
+  #   enabled: true
+  #   namespace: default
+  #   syncWave: "0"
+  #   source:
+  #     path: argocd/apps/00-infra/cert-manager/certificate
 
   cilium:
     enabled: true
@@ -64,20 +62,20 @@ applications:
     source:
       path: argocd/apps/00-infra/cilium
 
-  gpu-operator:
-    enabled: true
-    namespace: gpu-operator
-    syncWave: "5"
-    source:
-      chart: gpu-operator
-      repoURL: https://helm.ngc.nvidia.com/nvidia
-      targetRevision: v25.3.2
-      helm:
-        parameters:
-          - name: operatorNamespace
-            value: gpu-operator
-        valueFiles:
-          - argocd/apps/02-compute/gpu-operator/values.yaml
+  # gpu-operator:
+  #   enabled: true
+  #   namespace: gpu-operator
+  #   syncWave: "5"
+  #   source:
+  #     chart: gpu-operator
+  #     repoURL: https://helm.ngc.nvidia.com/nvidia
+  #     targetRevision: v25.3.2
+  #     helm:
+  #       parameters:
+  #         - name: operatorNamespace
+  #           value: gpu-operator
+  #       valueFiles:
+  #         - argocd/apps/02-compute/gpu-operator/values.yaml
   
   rook-ceph-operator:
     enabled: true
@@ -155,33 +153,33 @@ applications:
   #       valueFiles:
   #         - argocd/apps/03-platform/harbor/values.yaml
 
-  postgresql-operator:
-    enabled: true
-    namespace: postgresql
-    syncWave: "35"
-    source:
-      chart: cloudnative-pg
-      repoURL: https://cloudnative-pg.github.io/charts
-      targetRevision: 0.26.1
-      helm:
-        valueFiles:
-          - argocd/apps/03-platform/postgresql/operator/values.yaml
-    syncOptions: 
-      - ServerSideApply=true
-      - Replace=true
-    ignoreDifferences:
-      - group: apiextensions.k8s.io
-        kind: CustomResourceDefinition
-        name: poolers.postgresql.cnpg.io
-        jsonPointers:
-          - /metadata/annotations
+  # postgresql-operator:
+  #   enabled: true
+  #   namespace: postgresql
+  #   syncWave: "35"
+  #   source:
+  #     chart: cloudnative-pg
+  #     repoURL: https://cloudnative-pg.github.io/charts
+  #     targetRevision: 0.26.1
+  #     helm:
+  #       valueFiles:
+  #         - argocd/apps/03-platform/postgresql/operator/values.yaml
+  #   syncOptions: 
+  #     - ServerSideApply=true
+  #     - Replace=true
+  #   ignoreDifferences:
+  #     - group: apiextensions.k8s.io
+  #       kind: CustomResourceDefinition
+  #       name: poolers.postgresql.cnpg.io
+  #       jsonPointers:
+  #         - /metadata/annotations
   
-  postgresql-cluster:
-    enabled: true
-    namespace: postgresql
-    syncWave: "36"
-    source:
-      path: argocd/apps/03-platform/postgresql/cluster
+  # postgresql-cluster:
+  #   enabled: true
+  #   namespace: postgresql
+  #   syncWave: "36"
+  #   source:
+  #     path: argocd/apps/03-platform/postgresql/cluster
   
   # Rucio:
   #   enabled: true
@@ -202,69 +200,69 @@ applications:
     source:
       path: argocd/apps/00-infra/service
   
-  ollama-gpu1:
-    enabled: true
-    namespace: ollama
-    syncWave: "110"
-    source:
-      chart: ollama
-      repoURL: https://helm.otwld.com/
-      targetRevision: 1.34.0
-      helm:
-        valueFiles:
-          - argocd/apps/03-platform/intelligent-agent/ollama/values-gpu1.yaml
+  # ollama-gpu1:
+  #   enabled: true
+  #   namespace: ollama
+  #   syncWave: "110"
+  #   source:
+  #     chart: ollama
+  #     repoURL: https://helm.otwld.com/
+  #     targetRevision: 1.34.0
+  #     helm:
+  #       valueFiles:
+  #         - argocd/apps/03-platform/intelligent-agent/ollama/values-gpu1.yaml
 
-  ollama-gpu2:
-    enabled: true
-    namespace: ollama
-    syncWave: "110"
-    source:
-      chart: ollama
-      repoURL: https://helm.otwld.com/
-      targetRevision: 1.34.0
-      helm:
-        valueFiles:
-          - argocd/apps/03-platform/intelligent-agent/ollama/values-gpu2.yaml 
+  # ollama-gpu2:
+  #   enabled: true
+  #   namespace: ollama
+  #   syncWave: "110"
+  #   source:
+  #     chart: ollama
+  #     repoURL: https://helm.otwld.com/
+  #     targetRevision: 1.34.0
+  #     helm:
+  #       valueFiles:
+  #         - argocd/apps/03-platform/intelligent-agent/ollama/values-gpu2.yaml 
 
-  openwebui:
-    enabled: true
-    namespace: ollama
-    syncWave: "120"
-    source:
-      chart: open-webui
-      repoURL: https://helm.openwebui.com/
-      targetRevision: 8.14.0
-      helm:
-        valueFiles:
-          - argocd/apps/03-platform/intelligent-agent/openwebui/values.yaml
+  # openwebui:
+  #   enabled: true
+  #   namespace: ollama
+  #   syncWave: "120"
+  #   source:
+  #     chart: open-webui
+  #     repoURL: https://helm.openwebui.com/
+  #     targetRevision: 8.14.0
+  #     helm:
+  #       valueFiles:
+  #         - argocd/apps/03-platform/intelligent-agent/openwebui/values.yaml
   
-  prometheus:
-    enabled: true
-    namespace: prometheus
-    syncWave: "200"
-    source:
-      chart: prometheus
-      repoURL: https://prometheus-community.github.io/helm-charts
-      targetRevision: 27.26.0
-      helm:
-        valueFiles:
-          - argocd/apps/04-observability/prometheus/values.yaml
+  # prometheus:
+  #   enabled: true
+  #   namespace: prometheus
+  #   syncWave: "200"
+  #   source:
+  #     chart: prometheus
+  #     repoURL: https://prometheus-community.github.io/helm-charts
+  #     targetRevision: 27.26.0
+  #     helm:
+  #       valueFiles:
+  #         - argocd/apps/04-observability/prometheus/values.yaml
   
-  grafana:
-    enabled: true
-    namespace: prometheus
-    syncWave: "210"
-    source:
-      chart: grafana
-      repoURL: https://grafana.github.io/helm-charts
-      targetRevision: 10.2.0
-      helm:
-        valueFiles:
-          - argocd/apps/04-observability/grafana/values.yaml
+  # grafana:
+  #   enabled: true
+  #   namespace: prometheus
+  #   syncWave: "210"
+  #   source:
+  #     chart: grafana
+  #     repoURL: https://grafana.github.io/helm-charts
+  #     targetRevision: 10.2.0
+  #     helm:
+  #       valueFiles:
+  #         - argocd/apps/04-observability/grafana/values.yaml
 
-  agent:
-    enabled: true
-    namespace: default
-    syncWave: "300"
-    source:
-      path: argocd/apps/03-platform/intelligent-agent/agent
+  # agent:
+  #   enabled: true
+  #   namespace: default
+  #   syncWave: "300"
+  #   source:
+  #     path: argocd/apps/03-platform/intelligent-agent/agent
