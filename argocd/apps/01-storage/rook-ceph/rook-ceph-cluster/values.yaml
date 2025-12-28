@@ -384,10 +384,14 @@ cephClusterSpec:
         # deviceClass: "myclass" # device class will be specified per device below
       allowDeviceClassUpdate: false # whether to allow changing the device class of an OSD after it is created
       allowOsdCrushWeightUpdate: false # whether to allow resizing the OSD crush weight after osd pvc is increased
+      deviceFilter: "^(sd[a-z]|nvme[0-9]+n1)$"
       
       # Individual nodes and their config specification
-      nodes: []
-
+      nodes:
+        - name: "sandbox-1"
+        - name: "sandbox-2"
+        - name: "sandbox-4"
+        - name: "tempnode-bf3"
   # The section for configuring management of daemon disruptions during upgrade or fencing.
   disruptionManagement:
     # If true, the operator will create and manage PodDisruptionBudgets for OSD, Mon, RGW, and MDS daemons. OSD PDBs are managed dynamically
