@@ -29,13 +29,6 @@ applications:
         valueFiles:
           - argocd/apps/00-infra/argo/values.yaml
 
-  # rook-ceph-crds:
-  #   enabled: true
-  #   namespace: rook-ceph
-  #   syncWave: "-1"
-  #   source:
-  #     path: apps/01-storage/rook-ceph/rook-ceph-crds
-
   # cert-manager:
   #   enabled: true
   #   namespace: cert-manager
@@ -153,33 +146,33 @@ applications:
   #       valueFiles:
   #         - argocd/apps/03-platform/harbor/values.yaml
 
-  # postgresql-operator:
-  #   enabled: true
-  #   namespace: postgresql
-  #   syncWave: "35"
-  #   source:
-  #     chart: cloudnative-pg
-  #     repoURL: https://cloudnative-pg.github.io/charts
-  #     targetRevision: 0.26.1
-  #     helm:
-  #       valueFiles:
-  #         - argocd/apps/03-platform/postgresql/operator/values.yaml
-  #   syncOptions: 
-  #     - ServerSideApply=true
-  #     - Replace=true
-  #   ignoreDifferences:
-  #     - group: apiextensions.k8s.io
-  #       kind: CustomResourceDefinition
-  #       name: poolers.postgresql.cnpg.io
-  #       jsonPointers:
-  #         - /metadata/annotations
+  postgresql-operator:
+    enabled: true
+    namespace: postgresql
+    syncWave: "35"
+    source:
+      chart: cloudnative-pg
+      repoURL: https://cloudnative-pg.github.io/charts
+      targetRevision: 0.26.1
+      helm:
+        valueFiles:
+          - argocd/apps/03-platform/postgresql/operator/values.yaml
+    syncOptions: 
+      - ServerSideApply=true
+      - Replace=true
+    ignoreDifferences:
+      - group: apiextensions.k8s.io
+        kind: CustomResourceDefinition
+        name: poolers.postgresql.cnpg.io
+        jsonPointers:
+          - /metadata/annotations
   
-  # postgresql-cluster:
-  #   enabled: true
-  #   namespace: postgresql
-  #   syncWave: "36"
-  #   source:
-  #     path: argocd/apps/03-platform/postgresql/cluster
+  postgresql-cluster:
+    enabled: true
+    namespace: postgresql
+    syncWave: "36"
+    source:
+      path: argocd/apps/03-platform/postgresql/cluster
   
   # Rucio:
   #   enabled: true
@@ -236,29 +229,29 @@ applications:
   #       valueFiles:
   #         - argocd/apps/03-platform/intelligent-agent/openwebui/values.yaml
   
-  # prometheus:
-  #   enabled: true
-  #   namespace: prometheus
-  #   syncWave: "200"
-  #   source:
-  #     chart: prometheus
-  #     repoURL: https://prometheus-community.github.io/helm-charts
-  #     targetRevision: 27.26.0
-  #     helm:
-  #       valueFiles:
-  #         - argocd/apps/04-observability/prometheus/values.yaml
+  prometheus:
+    enabled: true
+    namespace: prometheus
+    syncWave: "200"
+    source:
+      chart: prometheus
+      repoURL: https://prometheus-community.github.io/helm-charts
+      targetRevision: 27.26.0
+      helm:
+        valueFiles:
+          - argocd/apps/04-observability/prometheus/values.yaml
   
-  # grafana:
-  #   enabled: true
-  #   namespace: prometheus
-  #   syncWave: "210"
-  #   source:
-  #     chart: grafana
-  #     repoURL: https://grafana.github.io/helm-charts
-  #     targetRevision: 10.2.0
-  #     helm:
-  #       valueFiles:
-  #         - argocd/apps/04-observability/grafana/values.yaml
+  grafana:
+    enabled: true
+    namespace: prometheus
+    syncWave: "210"
+    source:
+      chart: grafana
+      repoURL: https://grafana.github.io/helm-charts
+      targetRevision: 10.2.0
+      helm:
+        valueFiles:
+          - argocd/apps/04-observability/grafana/values.yaml
 
   # agent:
   #   enabled: true
