@@ -556,7 +556,7 @@ csi:
 
   nfs:
     # -- Enable the nfs csi driver
-    enabled: false
+    enabled: true
 
   topology:
     # -- Enable topology based provisioning
