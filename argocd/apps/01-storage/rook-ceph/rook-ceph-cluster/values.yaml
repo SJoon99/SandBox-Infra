@@ -759,12 +759,12 @@ cephNFSs:
     spec:
       rados:
         pool: ceph-filesystem-hot-hot-data
-        namespace: nfs-ns 
+        namespace: nfs-ns   
       server:
-        active: 1 # Number of active NFS servers
+        active: 1
         service:
           type: LoadBalancer
-          annotations: 
+          annotations:
             io.cilium/lb-ipam-pool: "lb-pool-local"
           ports:
             - name: nfs
