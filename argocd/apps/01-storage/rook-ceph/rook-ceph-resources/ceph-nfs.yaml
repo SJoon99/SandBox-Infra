@@ -21,7 +21,7 @@ provisioner: rook-ceph.nfs.csi.ceph.com
 parameters:
   nfsCluster: ceph-nfs-server
   clusterID: rook-ceph
-  sourceName: ceph-filesystem-hot
+  fsName: ceph-filesystem-hot
 
   csi.storage.k8s.io/provisioner-secret-name: "rook-csi-nfs-provisioner"
   csi.storage.k8s.io/provisioner-secret-namespace: "rook-ceph"
