@@ -20,8 +20,15 @@ metadata:
 provisioner: rook-ceph.nfs.csi.ceph.com 
 parameters:
   nfsCluster: ceph-nfs-server
-  sourceName: ceph-filesystem-hot
-  clusterID: rook-ceph  
+  clusterID: rook-ceph
+
+  csi.storage.k8s.io/provisioner-secret-name: "rook-csi-nfs-provisioner"
+  csi.storage.k8s.io/provisioner-secret-namespace: "rook-ceph"
+  csi.storage.k8s.io/controller-expand-secret-name: "rook-csi-nfs-provisioner"
+  csi.storage.k8s.io/controller-expand-secret-namespace: "rook-ceph"
+  csi.storage.k8s.io/node-stage-secret-name: "rook-csi-nfs-node"
+  csi.storage.k8s.io/node-stage-secret-namespace: "rook-ceph"
+
 reclaimPolicy: Delete
 allowVolumeExpansion: true
 volumeBindingMode: Immediate
