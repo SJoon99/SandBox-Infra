@@ -21,6 +21,7 @@ provisioner: rook-ceph.nfs.csi.ceph.com
 parameters:
   nfsCluster: ceph-nfs-server
   clusterID: rook-ceph
+  sourceName: ceph-filesystem-hot
 
   csi.storage.k8s.io/provisioner-secret-name: "rook-csi-nfs-provisioner"
   csi.storage.k8s.io/provisioner-secret-namespace: "rook-ceph"
@@ -63,3 +64,27 @@ spec:
     requests:
       storage: 1Ti
   storageClassName: rook-ceph-nfs  
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: rook-csi-nfs-provisioner
+  namespace: rook-ceph
+type: kubernetes.io/rook
+stringData:
+  adminID: admin
+  adminKey: AQCgKVFpbMiMBhAAFidfkx2qeyD7kn7nhL1YbQ==
+  userID: admin
+  userKey: AQCgKVFpbMiMBhAAFidfkx2qeyD7kn7nhL1YbQ==
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: rook-csi-nfs-node
+  namespace: rook-ceph
+type: kubernetes.io/rook
+stringData:
+  adminID: admin
+  adminKey: AQCgKVFpbMiMBhAAFidfkx2qeyD7kn7nhL1YbQ==
+  userID: admin
+  userKey: AQCgKVFpbMiMBhAAFidfkx2qeyD7kn7nhL1YbQ==
