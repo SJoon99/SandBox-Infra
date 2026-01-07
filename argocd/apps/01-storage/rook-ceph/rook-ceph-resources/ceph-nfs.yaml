@@ -1,0 +1,32 @@
+apiVersion: ceph.rook.io/v1
+kind: CephNFS
+metadata:
+  name: ceph-nfs-server
+  namespace: rook-ceph
+spec:
+  rados:
+    pool: ceph-filesystem-hot-hot-data
+    namespace: nfs-ns
+  server:
+    active: 1
+    service:
+      type: LoadBalancer
+      annotations:
+        io.cilium/lb-ipam-pool: "lb-pool-local"
+      ports:
+        - name: nfs
+          port: 2049
+          protocol: TCP
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: rook-ceph-nfs
+provisioner: rook-ceph.cephfs.csi.ceph.com
+parameters:
+  nfsCluster: ceph-nfs-server
+  sourceType: cephfs
+  sourceName: ceph-filesystem-hot
+reclaimPolicy: Delete
+allowVolumeExpansion: true
+volumeBindingMode: Immediate

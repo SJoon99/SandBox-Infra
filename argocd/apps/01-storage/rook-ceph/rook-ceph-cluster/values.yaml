@@ -754,30 +754,5 @@ cephObjectStores:
 # @default -- `namespace name where rook-ceph operator is deployed`
 csiDriverNamePrefix:
 
-cephNFSs:
-  - name: ceph-nfs-server
-    spec:
-      rados:
-        pool: ceph-filesystem-hot-hot-data
-        namespace: nfs-ns   
-      server:
-        active: 1
-        service:
-          type: LoadBalancer
-          annotations:
-            io.cilium/lb-ipam-pool: "lb-pool-local"
-          ports:
-            - name: nfs
-              port: 2049
-              targetPort: 2049
-              protocol: TCP
-    storageClass:
-      enabled: true
-      name: rook-ceph-nfs
-      isDefault: false
-      reclaimPolicy: Delete
-      allowVolumeExpansion: true
-      volumeBindingMode: "Immediate"
-      parameters:
-        sourceName: ceph-filesystem-hot
+
   
