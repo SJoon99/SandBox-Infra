@@ -62,7 +62,7 @@ spec:
     - ReadWriteMany  
   resources:
     requests:
-      storage: 1Ti
+      storage: 10Ti
   storageClassName: rook-ceph-nfs  
 ---
 apiVersion: v1
