@@ -259,3 +259,15 @@ applications:
   #   syncWave: "300"
   #   source:
   #     path: argocd/apps/03-platform/intelligent-agent/agent
+
+  multus-cni:
+    enabled: true
+    namespace: kube-system
+    syncWave: "400"
+    source:
+      chart: multus-cni
+      repoURL: https://startechnica.github.io/apps
+      targetRevision: 0.1.4
+      helm:
+        valueFiles:
+          - argocd/apps/00-infra/multus-cni/values.yaml
