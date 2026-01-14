@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: iperf-client-pod
+  namespace: default
+  annotations:
+    # 아까 만든 NAD 이름과 정확히 일치
+    k8s.v1.cni.cncf.io/networks: vlan-220-test
+spec:
+  # [조건] weka-ready 라벨이 있는 노드
+  nodeSelector:
+    weka-ready: "true"
+  containers:
+  - name: tools
+    # 네트워크 도구 모음 이미지 (iperf3 포함됨)
+    image: praqma/network-multitool
+    imagePullPolicy: IfNotPresent
+    command: ["/bin/sh", "-c", "sleep infinity"]
+    resources:
+      requests:
+        cpu: "4"
+        memory: "2Gi"

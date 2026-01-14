@@ -3,3 +3,4 @@ kind: Kustomization
 
 resources:
 - rook-ceph-dashboard-lb.yaml
+- multus-nad220.yaml
