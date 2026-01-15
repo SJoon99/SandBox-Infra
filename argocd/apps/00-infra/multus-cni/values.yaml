@@ -231,8 +231,8 @@ daemonConfig: |-
     "logLevel": "debug",
     "logToStderr": true,
     "metricsPort": 17020,
-    "cniConfigDir": "/host/etc/cni/net.d",
-    "multusAutoconfigDir": "/etc/cni/net.d", 
+    "cniConfigDir": "/etc/cni/net.d",
+    "multusAutoconfigDir": "/etc/cni/net.d",
     "multusConfigFile": "auto",
     "socketDir": "/run/multus/"
   }
