@@ -1,5 +1,5 @@
 apiVersion: k8s.cni.cncf.io/v1
-kind: NetworkAttachmentDefinitionn # CNI 표준을 따르는 커스텀 리소스, 어떤 네트워크를 어떤 방식으로 추가할지 정의
+kind: NetworkAttachmentDefinition # CNI 표준을 따르는 커스텀 리소스, 어떤 네트워크를 어떤 방식으로 추가할지 정의
 metadata:
   name: vlan-220-test
   # [중요] 이 NAD를 사용할 Pod이 위치할 네임스페이스와 동일해야 함
