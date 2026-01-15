@@ -21,6 +21,21 @@ spec:
        }
     }
 --- 
+apiVersion: k8s.cni.cncf.io/v1
+kind: NetworkAttachmentDefinition
+metadata:
+  name: cilium
+  namespace: kube-system # 에러 로그에서 찾고 있는 그 위치
+spec:
+  config: |-
+    {
+      "cniVersion": "0.3.1",
+      "name": "cilium",
+      "type": "cilium-cni",
+      "enable-debug": false,
+      "log-file": "/var/run/cilium/cilium-cni.log"
+    }
+---
 # Multus CNI 데몬셋이 작동하기 위한 권한 설정
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole # 모든 네임스페이스에서 작동

@@ -219,18 +219,9 @@ cniConfig: |-
     "capabilities": {
       "portMappings": true
     },
-    "delegates": [
-      {
-        "cniVersion": "0.3.1",
-        "name": "cilium",
-        "plugins": [
-          {
-            "type": "cilium-cni"
-          }
-        ]
-      }
-    ],
-    "kubeconfig": "/etc/cni/net.d/multus.d/multus.kubeconfig"
+    "clusterNetwork": "kube-system/cilium",  # <--- [중요] 네임스페이스/이름 형식으로 작성
+    "logLevel": "debug",
+    "logToStderr": true
   }
 
 daemonConfig: |-
