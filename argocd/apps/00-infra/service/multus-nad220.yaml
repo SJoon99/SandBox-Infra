@@ -25,7 +25,7 @@ apiVersion: k8s.cni.cncf.io/v1
 kind: NetworkAttachmentDefinition
 metadata:
   name: cilium
-  namespace: kube-system # 에러 로그에서 찾고 있는 그 위치
+  namespace: kube-system
 spec:
   config: |-
     {

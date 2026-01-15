@@ -211,6 +211,7 @@ containerSecurityContext:
 ## Additionally -- you should ensure that the name "70-multus.conf" is the alphabetically first name in the
 ## /etc/cni/net.d/ directory on each node, otherwise, it will not be used by the Kubelet.
 ##
+# Helm values.yaml
 cniConfig: |-
   {
     "name": "multus-cni-network",
@@ -219,7 +220,7 @@ cniConfig: |-
     "capabilities": {
       "portMappings": true
     },
-    "clusterNetwork": "kube-system/cilium",  # <--- [중요] 네임스페이스/이름 형식으로 작성
+    "clusterNetwork": "kube-system/cilium", 
     "logLevel": "debug",
     "logToStderr": true
   }
@@ -233,7 +234,6 @@ daemonConfig: |-
     "metricsPort": 17020,
     "cniConfigDir": "/host/etc/cni/net.d",
     "multusAutoconfigDir": "/host/etc/cni/net.d",
-    "multusConfigFile": "auto",
     "socketDir": "/host/run/multus/"
   }
 ## @param configurationConfigMap ConfigMap with the Multus cni configuration files. The value is evaluated as a template.
