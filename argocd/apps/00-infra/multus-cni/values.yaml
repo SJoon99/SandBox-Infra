@@ -231,7 +231,7 @@ daemonConfig: |-
     "logLevel": "debug",
     "logToStderr": true,
     "metricsPort": 17020,
-    "cniConfigDir": "/host/etc/cni/net.d",    # 컨테이너 입장에서 호스트의 쓰기 경로
+    "cniConfigDir": "/host/etc/cni/net.d",    
     "multusAutoconfigDir": "/host/etc/cni/net.d",
     "multusConfigFile": "auto", 
     "socketDir": "/host/run/multus/"
