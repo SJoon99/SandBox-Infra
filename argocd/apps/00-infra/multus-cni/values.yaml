@@ -220,7 +220,7 @@ cniConfig: |-
     "capabilities": {
       "portMappings": true
     },
-    "clusterNetwork": "weka/cilium",
+    "clusterNetwork": "cilium",
     "kubeconfig": "/etc/cni/net.d/multus.d/multus.kubeconfig", 
     "logLevel": "debug",
     "logToStderr": true

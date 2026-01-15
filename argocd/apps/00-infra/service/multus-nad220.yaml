@@ -25,7 +25,7 @@ apiVersion: k8s.cni.cncf.io/v1
 kind: NetworkAttachmentDefinition
 metadata:
   name: cilium
-  namespace: weka
+  namespace: kube-system
 spec:
   config: |-
     {
