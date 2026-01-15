@@ -231,10 +231,10 @@ daemonConfig: |-
     "logLevel": "debug",
     "logToStderr": true,
     "metricsPort": 17020,
-    "cniConfigDir": "/host/etc/cni/net.d",
-    "multusAutoconfigDir": "/host/etc/cni/net.d",
-    "multusConfigFile": "/etc/cni/net.d/00-multus.conf", 
-    "socketDir": "/host/run/multus/"
+    "cniConfigDir": "/etc/cni/net.d",
+    "multusAutoconfigDir": "/etc/cni/net.d",
+    "multusConfigFile": "auto",
+    "socketDir": "/run/multus/"
   }
 
 ## @param configurationConfigMap ConfigMap with the Multus cni configuration files. The value is evaluated as a template.
