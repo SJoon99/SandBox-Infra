@@ -13,10 +13,10 @@ spec:
   containers:
   - name: tools
     # 네트워크 도구 모음 이미지 (iperf3 포함됨)
-    image: praqma/network-multitool
+    image: networkstatic/iperf3
     imagePullPolicy: IfNotPresent
     command: ["/bin/sh", "-c", "sleep infinity"]
     resources:
       requests:
-        cpu: "4"
-        memory: "2Gi"
+        cpu: "6"
+        memory: "4Gi"
