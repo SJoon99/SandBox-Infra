@@ -162,7 +162,7 @@ serviceAccount:
 rbac:
   ## @param rbac.create Specify whether RBAC resources should be created and used
   ##
-  create: true
+  create: false
   ## @param rbac.rules Custom RBAC rules
   ## Example:
   ## rules:
@@ -213,7 +213,6 @@ containerSecurityContext:
 ##
 cniConfig: |-
   {
-    "cniVersion": "0.3.1",
     "name": "multus-cni-network",
     "type": "multus",
     "capabilities": {
@@ -222,20 +221,22 @@ cniConfig: |-
     "delegates": [
       {
         "cniVersion": "0.3.1",
-        "name": "cilium-primary",
+        "name": "default-cni-network",
         "plugins": [
           {
-            "type": "cilium-cni",
-            "confDir": "/etc/cilium/net.d",
-            "clusterName": "",
-            "enableDebug": false
-          },
-          {
-            "type": "portmap",
-            "capabilities": {
-              "portMappings": true
+            "type": "flannel",
+            "name": "flannel.1",
+              "delegate": {
+                "isDefaultGateway": true,
+                "hairpinMode": true
+              }
+            },
+            {
+              "type": "portmap",
+              "capabilities": {
+                "portMappings": true
+              }
             }
-          }
         ]
       }
     ],
@@ -250,8 +251,8 @@ daemonConfig: |-
     "logToStderr": true,
     "metricsPort": 17020,
     "multusAutoconfigDir": "/host/etc/cni/net.d",
-    "multusConfigFile": "/host/etc/cni/net.d/00-multus.conf",
-    "socketDir": "/host/run/multus"
+    "multusConfigFile": "auto",
+    "socketDir": "/host/run/multus/"
   }
 
 ## @param configurationConfigMap ConfigMap with the Multus cni configuration files. The value is evaluated as a template.
