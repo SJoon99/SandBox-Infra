@@ -213,33 +213,15 @@ containerSecurityContext:
 ##
 cniConfig: |-
   {
-    "cniVersion": "0.3.1",
     "name": "multus-cni-network",
-    "type": "multus",
+    "type": "multus-shim",
+    "cniVersion": "0.3.1",
     "capabilities": {
       "portMappings": true
     },
-    "delegates": [
-      {
-        "cniVersion": "0.3.1",
-        "name": "cilium-primary",
-        "plugins": [
-          {
-            "type": "cilium-cni",
-            "confDir": "/etc/cilium/net.d",
-            "clusterName": "",
-            "enableDebug": false
-          },
-          {
-            "type": "portmap",
-            "capabilities": {
-              "portMappings": true
-            }
-          }
-        ]
-      }
-    ],
-    "kubeconfig": "/etc/cni/net.d/multus.d/multus.kubeconfig"
+    "clusterNetwork": "/etc/cni/net.d/05-cilium.conflist",
+    "logLevel": "debug",
+    "logToStderr": true
   }
 
 daemonConfig: |-
@@ -249,9 +231,10 @@ daemonConfig: |-
     "logLevel": "debug",
     "logToStderr": true,
     "metricsPort": 17020,
-    "multusAutoconfigDir": "/host/etc/cni/net.d",
-    "multusConfigFile": "/host/etc/cni/net.d/05-cilium.conflist",
-    "socketDir": "/host/run/multus"
+    "cniConfigDir": "/etc/cni/net.d",
+    "multusAutoconfigDir": "/etc/cni/net.d",
+    "multusConfigFile": "auto",
+    "socketDir": "/run/multus/"
   }
 ## @param configurationConfigMap ConfigMap with the Multus cni configuration files. The value is evaluated as a template.
 ##
