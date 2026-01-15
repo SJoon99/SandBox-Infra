@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Pod
 metadata:
   name: iperf-client-pod
-  namespace: default
+  namespace: weka
   annotations:
     # 아까 만든 NAD 이름과 정확히 일치
     k8s.v1.cni.cncf.io/networks: vlan-220-test

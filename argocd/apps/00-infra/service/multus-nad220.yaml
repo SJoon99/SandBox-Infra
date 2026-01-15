@@ -3,7 +3,7 @@ kind: NetworkAttachmentDefinition # CNI 표준을 따르는 커스텀 리소스,
 metadata:
   name: vlan-220-test
   # [중요] 이 NAD를 사용할 Pod이 위치할 네임스페이스와 동일해야 함
-  namespace: default 
+  namespace: weka
 spec:
   config: |
     {
@@ -25,7 +25,7 @@ apiVersion: k8s.cni.cncf.io/v1
 kind: NetworkAttachmentDefinition
 metadata:
   name: cilium
-  namespace: kube-system
+  namespace: weka
 spec:
   config: |-
     {
@@ -67,4 +67,4 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: multus-cni
-  namespace: kube-system
+  namespace: weka

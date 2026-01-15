@@ -62,3 +62,9 @@ metadata:
   labels:
     type: llm
 ---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: weka
+  labels:
+    type: storage

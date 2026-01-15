@@ -220,7 +220,7 @@ cniConfig: |-
     "capabilities": {
       "portMappings": true
     },
-    "clusterNetwork": "kube-system/cilium", 
+    "clusterNetwork": "weka/cilium", 
     "logLevel": "debug",
     "logToStderr": true
   }
