@@ -212,16 +212,7 @@ containerSecurityContext:
 ## /etc/cni/net.d/ directory on each node, otherwise, it will not be used by the Kubelet.
 ##
 # Helm values.yaml
-cniConfig: |-
-  {
-    "name": "multus-cni-network",
-    "type": "multus",
-    "capabilities": {
-      "portMappings": true
-    },
-    "delegates": [],
-    "kubeconfig": "/etc/cni/net.d/multus.d/multus.kubeconfig"
-  }
+cniConfig: "" 
 
 daemonConfig: |-
   {
