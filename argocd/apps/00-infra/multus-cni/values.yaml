@@ -222,7 +222,6 @@ cniConfig: |-
     "kubeconfig": "/etc/cni/net.d/multus.d/multus.kubeconfig"
   }
 
-# daemon-config를 CNI 설정으로 사용
 daemonConfig: |-
   {
     "cniVersion": "0.3.1",
@@ -236,10 +235,8 @@ daemonConfig: |-
     "logToStderr": true,
     "confDir": "/host/etc/cni/net.d",
     "cniConfigDir": "/host/etc/cni/net.d",
-    "socketDir": "/host/run/multus/",
-    "multusConfigFile": "skip"
+    "socketDir": "/host/run/multus/"
   }
-
 
 ## @param configurationConfigMap ConfigMap with the Multus cni configuration files. The value is evaluated as a template.
 ##
