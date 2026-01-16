@@ -262,7 +262,7 @@ applications:
 
   multus-cni:
     enabled: true
-    namespace: weka
+    namespace: kube-system
     syncWave: "400"
     source:
       chart: multus-cni
