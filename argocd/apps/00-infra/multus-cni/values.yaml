@@ -218,7 +218,7 @@ cniConfig: |-
     "name": "multus-cni-network",
     "type": "multus",
     "capabilities": { "portMappings": true },
-    "clusterNetwork": "/hostroot/etc/cni/net.d/05-cilium.conflist",
+    "clusterNetwork": "/etc/cni/net.d/05-cilium.conflist",
     "kubeconfig": "/etc/cni/net.d/multus.d/multus.kubeconfig"
   }
 
@@ -226,20 +226,14 @@ daemonConfig: |-
   {
     "cniVersion": "0.3.1",
     "chrootDir": "/hostroot",
-
     "binDir": "/opt/cni/bin",
-
     "logLevel": "debug",
     "logToStderr": true,
-    "metricsPort": 17020,
-
     "confDir": "/host/etc/cni/net.d",
     "cniConfigDir": "/host/etc/cni/net.d",
-
     "multusAutoconfigDir": "/host/etc/cni/net.d",
     "multusConfigFile": "auto",
     "multusMasterCNI": "05-cilium.conflist",
-
     "socketDir": "/host/run/multus/"
   }
 
