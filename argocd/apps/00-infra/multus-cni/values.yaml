@@ -115,7 +115,7 @@ hostCNINetDir: /etc/cni/net.d
 ## @param CNIMountPath Path inside the container to mount the CNI dirs
 ## ref: https://github.com/bitnami/containers/tree/main/bitnami/multus-cni#configuration
 ##
-CNIMountPath: /host
+CNIMountPath: /
 
 ## @param command Override default container command (useful when using custom images)
 ##
@@ -214,13 +214,9 @@ containerSecurityContext:
 # Helm values.yaml
 cniConfig: "" 
 
-hostCNIBinDir: /opt/cni/bin
-hostCNINetDir: /etc/cni/net.d
-CNIMountPath: /host
-
 daemonConfig: |-
   {
-    "chrootDir": "/hostroot",
+    "chrootDir": "",
     "cniVersion": "0.3.1",
     "logLevel": "debug",
     "logToStderr": true,
