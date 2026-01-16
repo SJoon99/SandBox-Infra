@@ -214,26 +214,24 @@ containerSecurityContext:
 # Helm values.yaml
 cniConfig: |-
   {
-    "cniVersion": "0.3.1",
     "name": "multus-cni-network",
     "type": "multus",
-    "capabilities": { "portMappings": true },
-    "clusterNetwork": "/etc/cni/net.d/05-cilium.conflist",
+    "capabilities": {
+      "portMappings": true
+    },
+    "delegates": [],
     "kubeconfig": "/etc/cni/net.d/multus.d/multus.kubeconfig"
   }
 
 daemonConfig: |-
   {
-    "cniVersion": "0.3.1",
     "chrootDir": "/hostroot",
-    "binDir": "/opt/cni/bin",
+    "cniVersion": "0.3.1",
     "logLevel": "debug",
     "logToStderr": true,
-    "confDir": "/host/etc/cni/net.d",
-    "cniConfigDir": "/host/etc/cni/net.d",
-    "multusAutoconfigDir": "/host/etc/cni/net.d",
-    "multusConfigFile": "/etc/cni/net.d/multus.d/cni-conf.json",
-    "socketDir": "/host/run/multus/"
+    "multusAutoconfigDir": "/etc/cni/net.d", 
+    "multusConfigFile": "auto",
+    "socketDir": "/run/multus/"
   }
 
 
