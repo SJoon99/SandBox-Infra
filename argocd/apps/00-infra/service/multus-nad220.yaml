@@ -11,6 +11,7 @@ spec:
       "type": "macvlan",
       "master": "enp94s0f1np1",
       "mode": "bridge",
+      "mtu": 9000,
       "ipam": {
         "type": "host-local",
         "subnet": "10.50.0.0/24",
