@@ -222,18 +222,22 @@ cniConfig: |-
     "kubeconfig": "/etc/cni/net.d/multus.d/multus.kubeconfig"
   }
 
+# daemon-config를 CNI 설정으로 사용
 daemonConfig: |-
   {
     "cniVersion": "0.3.1",
-    "chrootDir": "/hostroot",
+    "name": "multus-cni-network",
+    "type": "multus-shim",
+    "clusterNetwork": "/etc/cni/net.d/05-cilium.conflist",
+    "kubeconfig": "/etc/cni/net.d/multus.d/multus.kubeconfig",
     "binDir": "/opt/cni/bin",
+    "chrootDir": "/hostroot",
     "logLevel": "debug",
     "logToStderr": true,
     "confDir": "/host/etc/cni/net.d",
     "cniConfigDir": "/host/etc/cni/net.d",
-    "multusAutoconfigDir": "/host/etc/cni/net.d",
-    "multusConfigFile": "/etc/cni/net.d/multus.d/cni-conf.json",
-    "socketDir": "/host/run/multus/"
+    "socketDir": "/host/run/multus/",
+    "multusConfigFile": "skip"
   }
 
 
