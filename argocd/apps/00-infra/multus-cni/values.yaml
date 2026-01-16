@@ -214,15 +214,21 @@ containerSecurityContext:
 # Helm values.yaml
 cniConfig: "" 
 
+hostCNIBinDir: /opt/cni/bin
+hostCNINetDir: /etc/cni/net.d
+CNIMountPath: /host
+
+# Daemon이 실제로 참조할 내부 경로들
 daemonConfig: |-
   {
     "chrootDir": "/hostroot",
     "cniVersion": "0.3.1",
     "logLevel": "debug",
     "logToStderr": true,
-    "multusAutoconfigDir": "/etc/cni/net.d", 
+    "metricsPort": 17020,
+    "multusAutoconfigDir": "/host/etc/cni/net.d", 
     "multusConfigFile": "auto",
-    "socketDir": "/run/multus/"
+    "socketDir": "/host/run/multus/"
   }
 
 
