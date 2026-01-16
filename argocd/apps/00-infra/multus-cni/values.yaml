@@ -219,6 +219,7 @@ hostCNINetDir: /etc/cni/net.d
 CNIMountPath: /host
 
 # Daemon이 실제로 참조할 내부 경로들
+
 daemonConfig: |-
   {
     "chrootDir": "/hostroot",
@@ -227,7 +228,7 @@ daemonConfig: |-
     "logToStderr": true,
     "metricsPort": 17020,
     "multusAutoconfigDir": "/etc/cni/net.d", 
-    "multusConfigFile": "00-multus.conf",
+    "multusConfigFile": "auto",            
     "socketDir": "/run/multus/"
   }
 
