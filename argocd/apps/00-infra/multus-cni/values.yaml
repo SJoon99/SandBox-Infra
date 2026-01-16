@@ -227,7 +227,7 @@ daemonConfig: |-
     "logToStderr": true,
     "metricsPort": 17020,
     "multusAutoconfigDir": "/etc/cni/net.d", 
-    "multusConfigFile": "auto",
+    "multusConfigFile": "00-multus.conf",
     "socketDir": "/run/multus/"
   }
 
