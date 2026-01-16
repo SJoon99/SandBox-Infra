@@ -345,16 +345,16 @@ extraContainers: []
 ##     defaultMode: 288
 ##     secretName: mariadb-encryption
 ##
-extraVolumes: []
-## extraVolumeMounts:
-## - name: mariadb-certs
-##   mountPath: /certs
-##   readOnly: true
-## - name: mariadb-encryption
-##   mountPath: /encryption
-##   readOnly: true
-##
-extraVolumeMounts: []
+extraVolumes:
+  - name: host-cni-bin
+    hostPath:
+      path: /opt/cni/bin  # 호스트(노드)의 실제 경로
+      type: Directory
+
+extraVolumeMounts:
+  - name: host-cni-bin
+    mountPath: /opt/cni/bin  # Multus 컨테이너 내부의 경로
+    readOnly: true           # 읽기 권한만 있으면 됨
 
 ## Multus CNI containers' resource requests and limits
 ## We usually recommend not to specify default resources and to leave this as a conscious
