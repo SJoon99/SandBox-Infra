@@ -218,7 +218,28 @@ cniConfig: |-
     "capabilities": {
       "portMappings": true
     },
-    "delegates": [],
+    "delegates": [
+      {
+        "cniVersion": "0.3.1",
+        "name": "default-cni-network",
+        "plugins": [
+          {
+            "type": "flannel",
+            "name": "flannel.1",
+              "delegate": {
+                "isDefaultGateway": true,
+                "hairpinMode": true
+              }
+            },
+            {
+              "type": "portmap",
+              "capabilities": {
+                "portMappings": true
+              }
+            }
+        ]
+      }
+    ],
     "kubeconfig": "/etc/cni/net.d/multus.d/multus.kubeconfig"
   }
 
@@ -228,9 +249,10 @@ daemonConfig: |-
     "cniVersion": "0.3.1",
     "logLevel": "debug",
     "logToStderr": true,
-    "multusAutoconfigDir": "/etc/cni/net.d", 
+    "metricsPort": 17020,
+    "multusAutoconfigDir": "/host/etc/cni/net.d",
     "multusConfigFile": "auto",
-    "socketDir": "/run/multus/"
+    "socketDir": "/host/run/multus/"
   }
 
 ## @param configurationConfigMap ConfigMap with the Multus cni configuration files. The value is evaluated as a template.
