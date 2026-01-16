@@ -232,8 +232,7 @@ daemonConfig: |-
     "confDir": "/host/etc/cni/net.d",
     "cniConfigDir": "/host/etc/cni/net.d",
     "multusAutoconfigDir": "/host/etc/cni/net.d",
-    "multusConfigFile": "auto",
-    "multusMasterCNI": "05-cilium.conflist",
+    "multusConfigFile": "/etc/cni/net.d/multus.d/cni-conf.json",
     "socketDir": "/host/run/multus/"
   }
 

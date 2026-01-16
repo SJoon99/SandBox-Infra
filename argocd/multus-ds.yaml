@@ -1,0 +1,173 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  annotations:
+    argocd.argoproj.io/tracking-id: multus-cni:apps/DaemonSet:kube-system/multus-cni-node
+    deprecated.daemonset.template.generation: "8"
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"apps/v1","kind":"DaemonSet","metadata":{"annotations":{"argocd.argoproj.io/tracking-id":"multus-cni:apps/DaemonSet:kube-system/multus-cni-node"},"labels":{"app.kubernetes.io/instance":"multus-cni","app.kubernetes.io/managed-by":"Helm","app.kubernetes.io/name":"multus-cni","helm.sh/chart":"multus-cni-0.1.4"},"name":"multus-cni-node","namespace":"kube-system"},"spec":{"selector":{"matchLabels":{"app.kubernetes.io/instance":"multus-cni","app.kubernetes.io/name":"multus-cni"}},"template":{"metadata":{"annotations":{"checksum/cni-config":"0b96293dc0c90b37d8b42178b52d8ee91c11b537bca8d9fb5717ecbc40b062d7","checksum/daemon-config":"94f8ad62b91b3313143821ed4758341c6a4ddc1adfa52b6e265381467902b1db"},"labels":{"app.kubernetes.io/instance":"multus-cni","app.kubernetes.io/name":"multus-cni"}},"spec":{"affinity":{"nodeAffinity":null,"podAffinity":null,"podAntiAffinity":null},"containers":[{"command":["/usr/src/multus-cni/bin/multus-daemon"],"env":[{"name":"KUBERNETES_NODE_NAME","valueFrom":{"fieldRef":{"fieldPath":"spec.nodeName"}}}],"image":"ghcr.io/k8snetworkplumbingwg/multus-cni:latest-thick","imagePullPolicy":"IfNotPresent","name":"kube-multus","ports":[{"containerPort":17020,"name":"metrics","protocol":"TCP"}],"resources":{"limits":{"cpu":"100m","memory":"50Mi"},"requests":{"cpu":"100m","memory":"50Mi"}},"securityContext":{"privileged":true},"volumeMounts":[{"mountPath":"/host/etc/cni/net.d","name":"cni"},{"mountPath":"/host/run","name":"host-run"},{"mountPath":"/var/lib/cni/multus","name":"host-var-lib-cni-multus"},{"mountPath":"/var/lib/kubelet","name":"host-var-lib-kubelet"},{"mountPath":"/run/k8s.cni.cncf.io","name":"host-run-k8s-cni-cncf-io"},{"mountPath":"/run/netns","mountPropagation":"HostToContainer","name":"host-run-netns"},{"mountPath":"/etc/cni/net.d/multus.d","name":"multus-daemon-config","readOnly":true},{"mountPath":"/hostroot","mountPropagation":"HostToContainer","name":"hostroot"}]}],"hostNetwork":true,"hostPID":true,"initContainers":[{"command":["cp","/usr/src/multus-cni/bin/multus-shim","/host/opt/cni/bin/multus-shim"],"image":"ghcr.io/k8snetworkplumbingwg/multus-cni:latest-thick","name":"install-multus-binary","resources":{"requests":{"cpu":"10m","memory":"15Mi"}},"securityContext":{"privileged":true},"volumeMounts":[{"mountPath":"/host/opt/cni/bin","mountPropagation":"Bidirectional","name":"cnibin"}]}],"nodeSelector":{"kubernetes.io/arch":"amd64","kubernetes.io/os":"linux"},"priorityClassName":"system-node-critical","serviceAccountName":"multus-cni","tolerations":[{"effect":"NoExecute","operator":"Exists"},{"effect":"NoSchedule","operator":"Exists"}],"volumes":[{"hostPath":{"path":"/etc/cni/net.d"},"name":"cni"},{"hostPath":{"path":"/opt/cni/bin"},"name":"cnibin"},{"hostPath":{"path":"/"},"name":"hostroot"},{"configMap":{"items":[{"key":"daemon-config.json","path":"daemon-config.json"}],"name":"multus-daemon-config"},"name":"multus-daemon-config"},{"hostPath":{"path":"/run"},"name":"host-run"},{"hostPath":{"path":"/var/lib/cni/multus"},"name":"host-var-lib-cni-multus"},{"hostPath":{"path":"/var/lib/kubelet"},"name":"host-var-lib-kubelet"},{"hostPath":{"path":"/run/k8s.cni.cncf.io"},"name":"host-run-k8s-cni-cncf-io"},{"hostPath":{"path":"/run/netns/"},"name":"host-run-netns"}]}},"updateStrategy":{"rollingUpdate":{"maxUnavailable":1},"type":"RollingUpdate"}}}
+  creationTimestamp: "2026-01-16T01:55:15Z"
+  generation: 8
+  labels:
+    app.kubernetes.io/instance: multus-cni
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: multus-cni
+    helm.sh/chart: multus-cni-0.1.4
+  name: multus-cni-node
+  namespace: kube-system
+  resourceVersion: "8862794"
+  uid: e864f42a-828d-47ea-bee4-bd404f705229
+spec:
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: multus-cni
+      app.kubernetes.io/name: multus-cni
+  template:
+    metadata:
+      annotations:
+        checksum/cni-config: 0b96293dc0c90b37d8b42178b52d8ee91c11b537bca8d9fb5717ecbc40b062d7
+        checksum/daemon-config: 94f8ad62b91b3313143821ed4758341c6a4ddc1adfa52b6e265381467902b1db
+      labels:
+        app.kubernetes.io/instance: multus-cni
+        app.kubernetes.io/name: multus-cni
+    spec:
+      affinity: {}
+      containers:
+      - command:
+        - /usr/src/multus-cni/bin/multus-daemon
+        env:
+        - name: KUBERNETES_NODE_NAME
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: spec.nodeName
+        image: ghcr.io/k8snetworkplumbingwg/multus-cni:latest-thick
+        imagePullPolicy: IfNotPresent
+        name: kube-multus
+        ports:
+        - containerPort: 17020
+          name: metrics
+          protocol: TCP
+        resources:
+          limits:
+            cpu: 100m
+            memory: 50Mi
+          requests:
+            cpu: 100m
+            memory: 50Mi
+        securityContext:
+          privileged: true
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /host/etc/cni/net.d
+          name: cni
+        - mountPath: /host/run
+          name: host-run
+        - mountPath: /var/lib/cni/multus
+          name: host-var-lib-cni-multus
+        - mountPath: /var/lib/kubelet
+          name: host-var-lib-kubelet
+        - mountPath: /run/k8s.cni.cncf.io
+          name: host-run-k8s-cni-cncf-io
+        - mountPath: /run/netns
+          mountPropagation: HostToContainer
+          name: host-run-netns
+        - mountPath: /etc/cni/net.d/multus.d
+          name: multus-daemon-config
+          readOnly: true
+        - mountPath: /hostroot
+          mountPropagation: HostToContainer
+          name: hostroot
+      dnsPolicy: ClusterFirst
+      hostNetwork: true
+      hostPID: true
+      initContainers:
+      - command:
+        - cp
+        - /usr/src/multus-cni/bin/multus-shim
+        - /host/opt/cni/bin/multus-shim
+        image: ghcr.io/k8snetworkplumbingwg/multus-cni:latest-thick
+        imagePullPolicy: IfNotPresent
+        name: install-multus-binary
+        resources:
+          requests:
+            cpu: 10m
+            memory: 15Mi
+        securityContext:
+          privileged: true
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /host/opt/cni/bin
+          mountPropagation: Bidirectional
+          name: cnibin
+      nodeSelector:
+        kubernetes.io/arch: amd64
+        kubernetes.io/os: linux
+      priorityClassName: system-node-critical
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      serviceAccount: multus-cni
+      serviceAccountName: multus-cni
+      terminationGracePeriodSeconds: 30
+      tolerations:
+      - effect: NoExecute
+        operator: Exists
+      - effect: NoSchedule
+        operator: Exists
+      volumes:
+      - hostPath:
+          path: /etc/cni/net.d
+          type: ""
+        name: cni
+      - hostPath:
+          path: /opt/cni/bin
+          type: ""
+        name: cnibin
+      - hostPath:
+          path: /
+          type: ""
+        name: hostroot
+      - configMap:
+          defaultMode: 420
+          items:
+          - key: daemon-config.json
+            path: daemon-config.json
+          name: multus-daemon-config
+        name: multus-daemon-config
+      - hostPath:
+          path: /run
+          type: ""
+        name: host-run
+      - hostPath:
+          path: /var/lib/cni/multus
+          type: ""
+        name: host-var-lib-cni-multus
+      - hostPath:
+          path: /var/lib/kubelet
+          type: ""
+        name: host-var-lib-kubelet
+      - hostPath:
+          path: /run/k8s.cni.cncf.io
+          type: ""
+        name: host-run-k8s-cni-cncf-io
+      - hostPath:
+          path: /run/netns/
+          type: ""
+        name: host-run-netns
+  updateStrategy:
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
+    type: RollingUpdate
+status:
+  currentNumberScheduled: 5
+  desiredNumberScheduled: 5
+  numberAvailable: 5
+  numberMisscheduled: 0
+  numberReady: 5
+  observedGeneration: 8
+  updatedNumberScheduled: 5
