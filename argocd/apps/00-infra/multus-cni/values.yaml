@@ -52,13 +52,13 @@ commonAnnotations: {}
 clusterDomain: cluster.local
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
-extraDeploy: 
+extraDeploy:
+  # [권한 정의] 클러스터 전체 범위의 권한
   - apiVersion: rbac.authorization.k8s.io/v1
-    kind: ClusterRole # 모든 네임스페이스에서 작동
+    kind: ClusterRole
     metadata:
-      name: multus-cni-role
+      name: multus-cni-cluster-role
     rules:
-    # Multus가 Pod의 네트워크 설정을 읽고 쓸 수 있도록 허용
       - apiGroups: [""]
         resources: ["pods", "pods/status"]
         verbs: ["get", "list", "watch"]
@@ -68,22 +68,20 @@ extraDeploy:
       - apiGroups: [""]
         resources: ["events"]
         verbs: ["create", "patch", "update"]
-    # 정의한 ClusterRole을 Multus CNI 서비스 어카운트에 바인딩
-    # 쿠버네티스는 Role(권한 정의)과 Binding(권한 부여)을 분리
-    # 그게 ServiceAccount로? (추가 공부)
+
+  # [권한 연결] 정의한 권한을 kube-system의 multus-cni 계정에 연결
   - apiVersion: rbac.authorization.k8s.io/v1
     kind: ClusterRoleBinding
     metadata:
-      name: multus-cni-binding
+      name: multus-cni-cluster-binding
     roleRef:
       apiGroup: rbac.authorization.k8s.io
       kind: ClusterRole
-      name: multus-cni-role
+      name: multus-cni-cluster-role
     subjects:
-    - kind: ServiceAccount
-      name: multus-cni
-      namespace: kube-system
-
+      - kind: ServiceAccount
+        name: multus-cni
+        namespace: kube-system
 
 ## Enable diagnostic mode in the deployment
 ##
