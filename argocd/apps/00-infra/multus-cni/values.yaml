@@ -175,7 +175,18 @@ rbac:
   ##       - get
   ##       - list
   ##
-  rules: []
+  rules:
+    - apiGroups: [""]
+      resources: ["pods", "pods/status"]
+      verbs: ["get", "list", "watch"]
+    # 2. NetworkAttachmentDefinition CRD를 읽기 위한 권한 (네트워크 설정 조회)
+    - apiGroups: ["k8s.cni.cncf.io"]
+      resources: ["network-attachment-definitions"]
+      verbs: ["get", "list", "watch"]
+    # 3. 이벤트 생성을 위한 권한 (에러 발생 시 이벤트 기록)
+    - apiGroups: [""]
+      resources: ["events"]
+      verbs: ["create", "patch", "update"]
 
 ## @param containerPorts.http Istio Gateway HTTP container port
 ##
@@ -290,9 +301,9 @@ affinity: {}
 ## ref: https://kubernetes.io/docs/user-guide/node-selection/
 ##
 ## nodeSelector: {}
+# DTN 전용 노드임을 추가 
 nodeSelector:
-  kubernetes.io/arch: amd64
-  kubernetes.io/os: linux
+  dtn: "true"
 ## @param tolerations Tolerations for pod assignment
 ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##

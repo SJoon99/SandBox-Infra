@@ -8,7 +8,7 @@ spec:
     {
       "cniVersion": "0.3.1",
       "name": "vlan-220-test",
-      "type": "ipvlan",
+      "type": "ipvlan", 
       "master": "enp94s0f1np1",
       "mode": "l2",
       "mtu": 9000,
@@ -20,17 +20,11 @@ spec:
         "gateway": "10.50.0.1"
       }
     }
-
-# {
-# "type": "tuning",
-# "sysctl": {
-# "net.core.rmem_max": "16777216",
-# "net.core.wmem_max": "16777216",
-# "net.ipv4.tcp_rmem": "4096 87380 16777216",
-# "net.ipv4.tcp_wmem": "4096 65536 16777216",
-# "net.core.netdev_max_backlog": "30000"
-# }
+# macvlan, ipvalan, sriov 등 다양한 CNI 플러그인 사용 가능 
+# ipvlan과 macvaln의 성능 차이는 매우 미미함
 ---
+# Helm value 에서 명시 
+
 # # Multus CNI 데몬셋이 작동하기 위한 권한 설정
 # apiVersion: rbac.authorization.k8s.io/v1
 # kind: ClusterRole # 모든 네임스페이스에서 작동
