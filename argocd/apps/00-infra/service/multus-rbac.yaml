@@ -7,7 +7,7 @@ rules:
 # Multus가 Pod의 네트워크 설정을 읽고 쓸 수 있도록 허용
   - apiGroups: [""]
     resources: ["pods", "pods/status"]
-    verbs: ["get", "list", "watch"]
+    verbs: ["get", "list", "watch", "update", "patch"]
   - apiGroups: ["k8s.cni.cncf.io"]
     resources: ["network-attachment-definitions"]
     verbs: ["get", "list", "watch"]
