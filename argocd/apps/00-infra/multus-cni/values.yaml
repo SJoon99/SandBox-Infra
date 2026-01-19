@@ -52,37 +52,7 @@ commonAnnotations: {}
 clusterDomain: cluster.local
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
-extraDeploy:
-  # [권한 정의] 클러스터 전체 범위의 권한
-  - apiVersion: rbac.authorization.k8s.io/v1
-    kind: ClusterRole
-    metadata:
-      name: multus-cni-cluster-role
-    rules:
-      - apiGroups: [""]
-        resources: ["pods", "pods/status"]
-        verbs: ["get", "list", "watch"]
-      - apiGroups: ["k8s.cni.cncf.io"]
-        resources: ["network-attachment-definitions"]
-        verbs: ["get", "list", "watch"]
-      - apiGroups: [""]
-        resources: ["events"]
-        verbs: ["create", "patch", "update"]
-
-  # [권한 연결] 정의한 권한을 kube-system의 multus-cni 계정에 연결
-  - apiVersion: rbac.authorization.k8s.io/v1
-    kind: ClusterRoleBinding
-    metadata:
-      name: multus-cni-cluster-binding
-    roleRef:
-      apiGroup: rbac.authorization.k8s.io
-      kind: ClusterRole
-      name: multus-cni-cluster-role
-    subjects:
-      - kind: ServiceAccount
-        name: multus-cni
-        namespace: kube-system
-
+extraDeploy: []
 ## Enable diagnostic mode in the deployment
 ##
 diagnosticMode:
@@ -179,7 +149,7 @@ serviceAccount:
   ## @param serviceAccount.name Name of the created ServiceAccount
   ## If not set and create is true, a name is generated using the fullname template
   ##
-  name: "multus-cni"
+  name: ""
   ## @param serviceAccount.automountServiceAccountToken Auto-mount the service account token in the pod
   ##
   automountServiceAccountToken: true
@@ -204,19 +174,7 @@ rbac:
   ##       - get
   ##       - list
   ##
-  # rules:
-  #   - apiGroups: [""]
-  #     resources: ["pods", "pods/status"]
-  #     verbs: ["get", "list", "watch"]
-  #   # 2. NetworkAttachmentDefinition CRD를 읽기 위한 권한 (네트워크 설정 조회)
-  #   - apiGroups: ["k8s.cni.cncf.io"]
-  #     resources: ["network-attachment-definitions"]
-  #     verbs: ["get", "list", "watch"]
-  #   # 3. 이벤트 생성을 위한 권한 (에러 발생 시 이벤트 기록)
-  #   - apiGroups: [""]
-  #     resources: ["events"]
-  #     verbs: ["create", "patch", "update"]
-
+  rules: []
 ## @param containerPorts.http Istio Gateway HTTP container port
 ##
 containerPorts:

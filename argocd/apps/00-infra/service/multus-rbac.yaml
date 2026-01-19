@@ -1,0 +1,32 @@
+## Multus CNI 데몬셋이 작동하기 위한 권한 설정
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole # 모든 네임스페이스에서 작동
+metadata:
+  name: multus-cni-role
+rules:
+# Multus가 Pod의 네트워크 설정을 읽고 쓸 수 있도록 허용
+  - apiGroups: [""]
+    resources: ["pods", "pods/status"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: ["k8s.cni.cncf.io"]
+    resources: ["network-attachment-definitions"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: [""]
+    resources: ["events"]
+    verbs: ["create", "patch", "update"]
+---
+# 정의한 ClusterRole을 Multus CNI 서비스 어카운트에 바인딩
+# 쿠버네티스는 Role(권한 정의)과 Binding(권한 부여)을 분리
+# 그게 ServiceAccount로? (추가 공부)
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: multus-cni-binding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: multus-cni-role
+subjects:
+- kind: ServiceAccount
+  name: multus-cni
+  namespace: kube-system
