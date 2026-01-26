@@ -8,7 +8,7 @@ spec:
     {
       "cniVersion": "0.3.1",
       "name": "vlan-220-test",
-      "type": "ipvlan", 
+      "type": "host-device", 
       "master": "enp94s0f1np1",
       "mode": "l2",
       "mtu": 9000,
