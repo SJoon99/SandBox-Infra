@@ -10,6 +10,7 @@ spec:
   # [조건] weka-ready 라벨이 있는 노드
   nodeSelector:
     weka-ready: "true"
+  # hostNetwork: true
   containers:
   - name: tools
     # 네트워크 도구 모음 이미지 (iperf3 포함됨)
