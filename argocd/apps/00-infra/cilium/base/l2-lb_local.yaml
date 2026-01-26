@@ -14,7 +14,4 @@ metadata:
 spec:
   loadBalancerIPs: true
   externalIPs: true
-  interfaces:
-  - ^en.*
-  - ^eth.*
   nodeSelector: {}
