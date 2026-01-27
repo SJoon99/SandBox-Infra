@@ -13,19 +13,30 @@ applications:
     syncWave: "-1"
     source:
       path: argocd/apps/03-platform/rucio/config
+
   rucio-server:
     enabled: true
     namespace: rucio
     syncWave: "0"
     source:
-      path: argocd/apps/03-platform/rucio/rucio-server/values.yaml
+      chart: rucio-server
+      repoURL: https://rucio.github.io/helm-charts
+      targetRevision: 39.0.0
+      helm:
+        valueFiles:
+          - argocd/apps/03-platform/rucio/rucio-server/values.yaml
 
   rucio-daemons:
     enabled: true
     namespace: rucio
     syncWave: "1"
     source:
-      path: argocd/apps/03-platform/rucio/rucio-daemons/values.yaml
+      chart: rucio-daemons
+      repoURL: https://rucio.github.io/helm-charts
+      targetRevision: 39.0.0
+      helm:
+        valueFiles:
+          - argocd/apps/03-platform/rucio/rucio-daemons/values.yaml
 
   # rucio-probes:
   #   enabled: true
