@@ -277,4 +277,4 @@ applications:
     namespace: rucio
     syncWave: "1"
     source:
-      path: argocd/apps/00-infra/rucio
+      path: argocd/apps/03-platform/rucio
