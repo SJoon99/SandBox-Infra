@@ -595,11 +595,11 @@ config:
     # set_metadata: ""
 
   conveyor:
-    scheme: "root,https"
-    transfertool: "fts3"
-    ftshosts: "https://fts3-pilot.cern.ch:8446"
-    cacert: "/opt/certs/CERN-bundle.pem"
-    usercert: "/opt/proxy/x509up"
+    # scheme: "root,https"
+    # transfertool: "fts3"
+    # ftshosts: "https://fts3-pilot.cern.ch:8446"
+    # cacert: "/opt/certs/CERN-bundle.pem"
+    # usercert: "/opt/proxy/x509up"
     # cache_time: ""
     # user_deterministic_id: ""
     # poll_timeout: ""
