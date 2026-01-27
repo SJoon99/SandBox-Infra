@@ -1,0 +1,81 @@
+{{- range $name, $app := .Values.applications }}
+  {{- if $app.enabled }}
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: {{ $name }}
+  namespace: {{ $.Values.argo.namespace }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "{{ $app.syncWave | default "0" }}"
+spec:
+  project: {{ $.Values.argo.project }}
+
+  {{- if $app.source.chart }}
+  # CASE 1: Helm 차트를 사용하는 경우
+  sources:
+    - repoURL: {{ $app.source.repoURL }}
+      chart: {{ $app.source.chart }}
+      targetRevision: {{ $app.source.targetRevision }}
+      helm:
+        releaseName: {{ $name }}
+        {{- if $app.source.helm.parameters }}
+        parameters:
+        {{- toYaml $app.source.helm.parameters | nindent 8 }}
+        {{- end }}
+        {{- if $app.source.helm.valueFiles }}
+        valueFiles:
+        {{- range $path := $app.source.helm.valueFiles }}
+        - $values/{{ $path }}
+        {{- end }}
+        {{- end }}
+    - repoURL: {{ $.Values.argo.sourceRepo.url }}
+      targetRevision: {{ $.Values.argo.sourceRepo.branch }}
+      ref: values
+
+  {{- else if $app.source.path }}
+  # CASE 2: Git 경로를 사용하는 경우
+  source:
+    repoURL: {{ $.Values.argo.sourceRepo.url }}
+    path: {{ $app.source.path }}
+    targetRevision: {{ $.Values.argo.sourceRepo.branch }}
+    {{- if $app.source.kustomize }}
+    kustomize:
+{{ toYaml $app.source.kustomize | indent 6 }}
+    {{- end }}
+  {{- end }}
+
+  destination:
+    server: {{ $.Values.argo.server }}
+    namespace: {{ $app.namespace }}
+
+  {{- if $app.ignoreDifferences }}
+  ignoreDifferences:
+  {{- toYaml $app.ignoreDifferences | nindent 4 }}
+  {{- end }}
+
+  syncPolicy:
+    {{- $prune := true }}
+    {{- $selfHeal := true }}
+    {{- if $app.syncPolicy }}
+      {{- if hasKey $app.syncPolicy "automated" }}
+        {{- if hasKey $app.syncPolicy.automated "prune" }}
+          {{- $prune = $app.syncPolicy.automated.prune }}
+        {{- end }}
+        {{- if hasKey $app.syncPolicy.automated "selfHeal" }}
+          {{- $selfHeal = $app.syncPolicy.automated.selfHeal }}
+        {{- end }}
+      {{- end }}
+    {{- end }}
+    automated:
+      prune: {{ $prune }}
+      selfHeal: {{ $selfHeal }}
+    syncOptions:
+      - CreateNamespace=true
+      {{- if $app.syncOptions }}
+      {{- range $opt := $app.syncOptions }}
+      - {{ $opt }}
+      {{- end }}
+      {{- end }}
+  {{- end }}
+{{- end }}

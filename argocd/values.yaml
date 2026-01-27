@@ -271,3 +271,10 @@ applications:
       helm:
         valueFiles:
           - argocd/apps/00-infra/multus-cni/values.yaml
+  
+  rucio:
+    enabled: true
+    namespace: rucio
+    syncWave: "1"
+    source:
+      path: argocd/apps/00-infra/rucio

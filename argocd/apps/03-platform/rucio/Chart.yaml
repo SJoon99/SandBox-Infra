@@ -1,0 +1,4 @@
+apiVersion: v2
+name: rucio
+description: Rucio sub-apps managed by ArgoCD
+version: 0.1.0

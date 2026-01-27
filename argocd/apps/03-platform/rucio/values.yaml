@@ -1,0 +1,42 @@
+argo:
+  namespace: argocd
+  project: default
+  server: https://kubernetes.default.svc
+  sourceRepo:
+    url: https://github.com/SJoon99/SandBox-Infra.git
+    branch: main
+
+applications:
+  rucio-config:
+    enabled: true
+    namespace: rucio
+    syncWave: "-1"
+    source:
+      path: argocd/apps/03-platform/rucio/config
+  rucio-server:
+    enabled: true
+    namespace: rucio
+    syncWave: "0"
+    source:
+      path: argocd/apps/03-platform/rucio/rucio-server/values.yaml
+
+  rucio-daemons:
+    enabled: true
+    namespace: rucio
+    syncWave: "1"
+    source:
+      path: argocd/apps/03-platform/rucio/rucio-daemons/values.yaml
+
+  # rucio-probes:
+  #   enabled: true
+  #   namespace: rucio
+  #   syncWave: "2"
+  #   source:
+  #     path: argocd/apps/03-platform/rucio/rucio-probes/values.yaml
+  
+  # rucio-webui:
+  #   enabled: true
+  #   namespace: rucio
+  #   syncWave: "3"
+  #   source:   
+  #     path: argocd/apps/03-platform/rucio/rucio-webui/values.yaml

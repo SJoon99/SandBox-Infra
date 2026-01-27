@@ -1,0 +1,212 @@
+# Default values for rucio webui.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# replicaCount gives the number of server pods to run
+replicaCount: 1
+
+strategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxSurge: 1
+    maxUnavailable: 1
+
+minReadySeconds: 5
+
+image:
+  repository: rucio/rucio-webui
+  tag: release-33.0.0
+  pullPolicy: Always
+
+imagePullSecrets: []
+# - name: docker-regcreds
+
+imageRegistry: ""
+# imageRegistry: registry.cern.ch/docker.io
+
+# Additional annotations to be added to the deployment
+# Example usage:
+# deploymentAnnotations:
+#   reloader.stakater.com/auto: "true"
+#   foo: "bar"
+deploymentAnnotations: {}
+
+useSSL: true
+
+hostname: null
+
+tlsSecretName: null
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 80
+  protocol: TCP
+  name: http
+  annotations:
+    {}
+    # loadbalancer.openstack.org/network-id: "<id>"
+    # service.beta.kubernetes.io/openstack-internal-load-balancer: "true"
+    # loadbalancer.openstack.org/cascade-delete: "false"
+  loadBalancerIP: null
+  loadBalancerClass: null
+  externalTrafficPolicy: null
+  allocateLoadBalancerNodePorts: true
+  useExternalDNS: false
+
+useDeprecatedImplicitSecrets: false
+
+policyPackages:
+  enabled: false
+  # Make sure the trailing slash is present
+  mountPath: /opt/policy_packages/
+  # Use underscores instead of hyphens for module names
+  # (e.g. atlas_rucio_policy_package instead of atlas-rucio-policy-package)
+  packages: []
+    # example: install from an index (default is PyPI)
+    # - moduleName: vo_1_policy_package
+    #   requirement: vo_1_policy_package==1.4.0
+    #   version: 1.4.0
+    # example: install from a git repository
+    # - moduleName: vo_2_policy_package
+    #   requirement: git+https://github.com/vo-2/vo-2-policy-package@v0.1.0
+    #   version: 0.1.0
+  pvc:
+    # Set true to create a PVC for the policy packages; leave false if providing it separately.
+    createPvc: false
+    name: policy-package-volume
+    # Whether to prepend the release name to the PVC name provided.
+    prependReleaseName: false
+  resources:
+    requests:
+      # Storage required by the policy packages - resize if needed
+      storage: 100Mi
+  storageClass:
+    name:
+
+ingress:
+  enabled: false
+  # ingressClassName: traefik
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+  path: /
+  hosts: []
+  tls:
+    - secretName: rucio-webui.tls-secret
+
+secretMounts: []
+# - volumeName: gcssecret
+#   secretName: gcssecret
+#   mountPath: /opt/rucio/etc/gcs_rucio.json
+#   subPath: gcs_rucio.json
+
+config:
+  ## values used to configure apache, sets environment variables in the webui container that begin with RUCIO_HTTPD_
+  httpd:
+    # server_admin: "webmaster@localhost"
+    mpm_mode: "event"
+    start_servers: "1"
+    min_spare_threads: "1"
+    max_spare_threads: "20"
+    threads_per_child: "5"
+    max_clients: "20"
+    max_requests_per_child: "8192"
+    timeout: 300
+    min_spare_servers: "1"
+    max_spare_servers: "5"
+    server_limit: "10"
+    keep_alive: "On"
+    keep_alive_timeout: "5"
+    max_keep_alive_requests: "128"
+    threads_limit: "128"
+    max_request_workers: "1280"
+    max_connections_per_child: "2048"
+
+  ## Rucio WebUI specific configuration for apache
+  webui:
+    # hostname of the rucio server, include http:// or https://
+    rucio_host: "rucio-server"
+    # hostname of the rucio-auth server, include http:// or https://
+    rucio_auth_host: "rucio-server"
+    # hostname of the webui (without http:// or https://, just the hostname, no port or scheme required)
+    hostname: "webui-host"
+    project_url: "https://rucio.cern.ch"
+    # if your DID schema in your policy uses special characters like + or /, set this to true
+    params_encoding_enabled: "False"
+    # if you want to disable userpass authentication, set this to False
+    enable_userpass_login: "True"
+    # configures the placeholder scope and name in the DIDs list page (e.g., scope:name, scope:*)
+    list_dids_initial_pattern: ""
+    # if you want to add your own custom logo to the webui's login page, set this to the url of the logo
+    community_logo_url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxnHbkErtMHdMn2FXvsMrkyk55SPeqh4bkB8X4uvAQE2HHNmFznf46Zkr96kN_5EbmFfc&usqp=CAU"
+    # to associate a custom Activity with the rules created with the webui, set this to the name of the activity
+    rule_activity: "User Subscriptions"
+    multivo_enabled: "False"
+    # A csv string of vos containing their short names. For example: "def,atl,cms"
+    vo_list: "def"
+    vo_default: "def"
+    oidc_enabled: "False"
+    # A csv string of names of supported oidc providers that will be configured in the webui. For example: "cern,indico"
+    oidc_providers: ""
+
+  oidc_providers:
+    cern:
+      client_id: ""
+      client_secret: ""
+      authorization_url: ""
+      token_url: ""
+      refresh_token_url: ""
+      userinfo_url: ""
+      redirect_url: ""
+
+  vo:
+    def:
+      name: "default"
+      oidc_enabled: "False"
+      oidc_providers: ""
+    # Example of a second VO
+    # atl:
+    #   name: "atlas"
+    #   oidc_enabled: "False"
+    #   oidc_providers: ""
+
+  logs:
+    exposeHttpdLogs: true
+    exposeWebuiLogs: true
+
+# additional environment variables to set in the webui container as hardcoded key value pairs
+optionalConfig: {}
+#  MY_ENV: "my_value"
+
+# hostPathMounts is a list of hostPath mounts to be mounted in the webui container
+hostPathMounts: []
+# - mountPath: /opt/rucio/etc/aliases.conf
+#   hostPath: /etc/rucio/aliases.conf
+#   type: DirectoryOrCreate
+
+# additional volumes to be mounted in the webui container from config maps, secrets, etc.
+additionalEnvs: []
+# - name: MY_ENV
+#   value: "my_value"
+#   valueFrom:
+#     secretKeyRef:
+#       name: my-secret
+#       key: my-key
+
+persistentVolumes: {}
+
+resources:
+  # limits:
+  #  cpu: 100m
+  #  memory: 128Mi
+  # requests:
+  #  cpu: 100m
+  #  memory: 128Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
