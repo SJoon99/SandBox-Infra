@@ -21,3 +21,6 @@ spec:
       requests:
         cpu: "6"
         memory: "10Gi"
+      limits:
+        cpu: "6"
+        memory: "10Gi"
