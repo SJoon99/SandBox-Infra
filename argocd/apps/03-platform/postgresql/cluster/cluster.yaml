@@ -32,3 +32,27 @@ spec:
   # Monitoring 설정
   monitoring:
     enablePodMonitor: false
+---
+# Nessie DB Cluster
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: nessie-db
+  namespace: lakehouse
+spec:
+  instances: 1 # Sandbox 환경이므로 1개로 시작 (필요 시 2~3개로 증설 가능)
+  imageName: ghcr.io/cloudnative-pg/postgresql:16
+  
+  storage:
+    size: 100Gi # Nessie 메타데이터용
+    storageClass: rook-ceph-block-hot 
+    
+  bootstrap:
+    initdb:
+      database: nessie
+      owner: nessie
+      secret:
+        name: nessie-db-secret
+
+  monitoring:
+    enablePodMonitor: false
