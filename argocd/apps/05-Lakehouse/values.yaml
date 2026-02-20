@@ -7,7 +7,7 @@ argo:
     branch: main
 
 applications:
-  lakehouse:
+  object-storage:
     enabled: true
     namespace: lakehouse
     syncWave: "1"
