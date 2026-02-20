@@ -1,0 +1,42 @@
+argo:
+  namespace: argocd
+  project: default
+  server: https://kubernetes.default.svc
+  sourceRepo:
+    url: https://github.com/SJoon99/SandBox-Infra.git
+    branch: main
+
+applications:
+  lakehouse:
+    enabled: true
+    namespace: lakehouse
+    syncWave: "1"
+    source:
+      path: argocd/apps/05-Lakehouse/objectstorage
+    syncOptions:
+      - CreateNamespace=true
+
+  # nessie:
+  #   enabled: true
+  #   namespace: nessie
+  #   syncWave: "2"
+  #   source:
+
+  # trino:
+  #   enabled: true
+  #   namespace: trino
+  #   syncWave: "3"
+  #   source:
+
+  # spark:
+  #   enabled: true
+  #   namespace: spark
+  #   syncWave: "4"
+  #   source:
+  
+  # superset:
+  #   enabled: true
+  #   namespace: superset
+  #   syncWave: "5"
+  #   source:
+  
