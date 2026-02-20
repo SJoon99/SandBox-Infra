@@ -42,7 +42,8 @@ metadata:
 spec:
   instances: 1 # Sandbox 환경이므로 1개로 시작 (필요 시 2~3개로 증설 가능)
   imageName: ghcr.io/cloudnative-pg/postgresql:16
-  
+  nodeSelector:
+    kubernetes.io/hostname: "sandbox-3"
   storage:
     size: 100Gi # Nessie 메타데이터용
     storageClass: rook-ceph-block-hot 
