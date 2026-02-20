@@ -275,6 +275,15 @@ applications:
   rucio:
     enabled: true
     namespace: rucio
-    syncWave: "1"
+    syncWave: "500"
     source:
       path: argocd/apps/03-platform/rucio
+
+  lakehouse:
+    enabled: true
+    namespace: lakehouse
+    syncWave: "501"
+    source:
+      path: argocd/apps/05-Lakehouse
+    syncOptions:
+      - CreateNamespace=true
