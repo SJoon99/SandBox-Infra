@@ -28,11 +28,17 @@ applications:
         valueFiles:
           - argocd/apps/05-Lakehouse/nessie/values.yaml
         
-  # trino:
-  #   enabled: true
-  #   namespace: trino
-  #   syncWave: "3"
-  #   source:
+  trino:
+    enabled: true
+    namespace: lakehouse
+    syncWave: "3"
+    source:
+      chart: trino
+      repoURL: https://trinodb.github.io/charts
+      targetRevision: 1.42.0
+      helm:
+        valueFiles: 
+          - argocd/apps/05-Lakehouse/trino/values.yaml
 
   # spark:
   #   enabled: true
