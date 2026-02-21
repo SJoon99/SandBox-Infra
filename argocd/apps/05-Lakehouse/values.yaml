@@ -16,12 +16,18 @@ applications:
     syncOptions:
       - CreateNamespace=true
 
-  # nessie:
-  #   enabled: true
-  #   namespace: nessie
-  #   syncWave: "2"
-  #   source:
-
+  nessie:
+    enabled: true
+    namespace: lakehouse
+    syncWave: "2"
+    source:
+      chart: nessie
+      repoURL: https://charts.projectnessie.org
+      targetRevision: 0.107.2
+      helm:
+        valueFiles:
+          - argocd/apps/05-Lakehouse/nessie/values.yaml
+        
   # trino:
   #   enabled: true
   #   namespace: trino
