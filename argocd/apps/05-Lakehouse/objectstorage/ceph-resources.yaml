@@ -22,5 +22,5 @@ metadata:
   name: lakehouse-bucket
   namespace: lakehouse 
 spec:
-  generateBucketName: lakehouse
+  bucketName: lakehouse
   storageClassName: ceph-bucket 
