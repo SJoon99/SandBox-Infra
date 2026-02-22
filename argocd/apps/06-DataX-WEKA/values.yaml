@@ -15,6 +15,18 @@ applications:
       path: argocd/apps/06-DataX-WEKA/storage-config
     syncOptions:
       - CreateNamespace=true
+  
+  filestash:
+    enabled: true
+    namespace: filestash
+    syncWave: "2"
+    source:
+      chart: filestash
+      repoURL: https://sebagarayco.github.io/helm-filestash
+      targetRevision: 0.2.0
+      helm:
+        valueFiles:
+          - argocd/apps/06-DataX-WEKA/filestash/values.yaml
 
   # nessie:
   #   enabled: true
