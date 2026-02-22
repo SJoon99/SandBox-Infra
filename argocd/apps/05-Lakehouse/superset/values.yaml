@@ -329,7 +329,7 @@ supersetNode:
   startupProbe:
       httpGet:
         path: /health
-        port: 8088             # http 대신 명시적으로 8088 포트 지정
+        port: 80       # http 대신 명시적으로 8088 포트 지정
       initialDelaySeconds: 30  # pip install 할 시간을 30초 
       timeoutSeconds: 5        # 응답 대기 시간을 1초 -> 5초
       failureThreshold: 60
@@ -338,7 +338,7 @@ supersetNode:
   livenessProbe:
     httpGet:
       path: /health
-      port: 8088             # 8088로 변경
+      port: 80             # 8088로 변경
     initialDelaySeconds: 30
     timeoutSeconds: 5        # 1초 -> 5초로 변경
     failureThreshold: 3
@@ -347,7 +347,7 @@ supersetNode:
   readinessProbe:
     httpGet:
       path: /health
-      port: 8088             # 8088로 변경
+      port: 80             # 8088로 변경
     initialDelaySeconds: 30
     timeoutSeconds: 5        # 1초 -> 5초로 변경
     failureThreshold: 3
