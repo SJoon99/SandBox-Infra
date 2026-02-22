@@ -40,11 +40,17 @@ applications:
         valueFiles: 
           - argocd/apps/05-Lakehouse/trino/values.yaml
 
-  # spark:
-  #   enabled: true
-  #   namespace: spark
-  #   syncWave: "4"
-  #   source:
+  spark:
+    enabled: true
+    namespace: lakehouse
+    syncWave: "4"
+    source:
+      chart: spark
+      repoURL: https://charts.bitnami.com/bitnami
+      targetRevision: 10.0.3
+      helm:
+        valueFiles:
+          - argocd/apps/05-Lakehouse/spark/values.yaml
   
   # superset:
   #   enabled: true
