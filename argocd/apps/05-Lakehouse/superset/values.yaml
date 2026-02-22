@@ -54,8 +54,8 @@ serviceAccount:
 bootstrapScript: |
   #!/bin/bash
   if [ ! -f ~/bootstrap ]; then echo "Running Superset with uid {{ .Values.runAsUser }}" > ~/bootstrap; fi
-  # Trino 연결용 파이썬 라이브러리 자동 설치
-  pip install sqlalchemy-trino
+  # Trino 연결용 파이썬 라이브러리 자동 설치 + PostgreSQL 연결용 라이브러리 설치
+  pip install sqlalchemy-trino psycopg2-binary
 
 # -- The name of the secret which we will use to generate a superset_config.py file
 # Note: this secret must have the key superset_config.py in it and can include other files as well
