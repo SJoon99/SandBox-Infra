@@ -1,0 +1,26 @@
+# Ceph Object Store User for Lakehouse
+apiVersion: ceph.rook.io/v1
+kind: CephObjectStoreUser
+metadata:
+  name: filestash
+  namespace: rook-ceph
+spec:
+  store: ceph-objectstore
+  displayName: "filestash"
+  # system 유저 권한이 필요하다면 아래 설정 유지
+  capabilities:
+    user: "*"
+    bucket: "*"
+    metadata: "*"
+    usage: "read"
+    zone: "*"
+--- 
+# Bucket claim for Lakehouse
+apiVersion: objectbucket.io/v1alpha1
+kind: ObjectBucketClaim
+metadata:
+  name: filestash-bucket
+  namespace: filestash 
+spec:
+  bucketName: filestash
+  storageClassName: ceph-bucket 

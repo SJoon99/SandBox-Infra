@@ -1,0 +1,66 @@
+argo:
+  namespace: argocd
+  project: default
+  server: https://kubernetes.default.svc
+  sourceRepo:
+    url: https://github.com/SJoon99/SandBox-Infra.git
+    branch: main
+
+applications:
+  filestash-object-storage:
+    enabled: true
+    namespace: filestash
+    syncWave: "1"
+    source:
+      path: argocd/apps/06-DataX-WEKA/storage-config
+    syncOptions:
+      - CreateNamespace=true
+
+  # nessie:
+  #   enabled: true
+  #   namespace: lakehouse
+  #   syncWave: "2"
+  #   source:
+  #     chart: nessie
+  #     repoURL: https://charts.projectnessie.org
+  #     targetRevision: 0.107.2
+  #     helm:
+  #       valueFiles:
+  #         - argocd/apps/05-Lakehouse/nessie/values.yaml
+        
+  # trino:
+  #   enabled: true
+  #   namespace: lakehouse
+  #   syncWave: "3"
+  #   source:
+  #     chart: trino
+  #     repoURL: https://trinodb.github.io/charts
+  #     targetRevision: 1.42.0
+  #     helm:
+  #       valueFiles: 
+  #         - argocd/apps/05-Lakehouse/trino/values.yaml
+
+  # spark:
+  #   enabled: true
+  #   namespace: lakehouse
+  #   syncWave: "4"
+  #   source:
+  #     chart: spark
+  #     repoURL: https://charts.bitnami.com/bitnami
+  #     targetRevision: 10.0.3
+  #     helm:
+  #       valueFiles:
+  #         - argocd/apps/05-Lakehouse/spark/values.yaml
+  
+  # superset:
+  #   enabled: true
+  #   namespace: lakehouse
+  #   syncWave: "5"
+  #   source:
+  #     chart: superset
+  #     repoURL: https://apache.github.io/superset
+  #     targetRevision: 0.15.2
+  #     helm:
+  #       valueFiles:
+  #         - argocd/apps/05-Lakehouse/superset/values.yaml
+  

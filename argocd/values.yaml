@@ -287,3 +287,12 @@ applications:
       path: argocd/apps/05-Lakehouse
     syncOptions:
       - CreateNamespace=true
+
+  datax-weka:
+    enabled: true
+    namespace: filestash    
+    syncWave: "502"
+    source:
+      path: argocd/apps/06-DataX-WEKA
+    syncOptions:
+      - CreateNamespace=true

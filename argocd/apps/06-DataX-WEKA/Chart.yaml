@@ -1,0 +1,4 @@
+apiVersion: v2
+name: datax-weka
+description: A Helm chart for DataX-WEKA application
+version: 0.1.0
