@@ -845,6 +845,9 @@ redis:
   ##
   ## Set to false if bringing your own redis.
   enabled: true
+  image:
+    registry: public.ecr.aws       # AWS 공용 저장소로 우회
+    repository: bitnami/redis
   ##
   ## Set architecture to standalone/replication
   architecture: standalone
