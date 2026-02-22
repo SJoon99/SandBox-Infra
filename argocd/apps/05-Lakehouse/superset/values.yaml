@@ -54,9 +54,8 @@ serviceAccount:
 bootstrapScript: |
   #!/bin/bash
   if [ ! -f ~/bootstrap ]; then echo "Running Superset with uid {{ .Values.runAsUser }}" > ~/bootstrap; fi
-  
-  # 시스템 pip를 사용하여 패키지 설치 (위 PYTHONPATH가 이 경로를 바라보게)
-  pip install --user sqlalchemy-trino psycopg2-binary
+
+  pip install --target /app/.venv/lib/python3.10/site-packages sqlalchemy-trino psycopg2-binary
 
 # -- The name of the secret which we will use to generate a superset_config.py file
 # Note: this secret must have the key superset_config.py in it and can include other files as well
@@ -69,9 +68,7 @@ envFromSecret: '{{ template "superset.fullname" . }}-env'
 envFromSecrets: []
 
 # -- Extra environment variables that will be passed into pods
-extraEnv:
-  # 시스템 파이썬에 설치된 패키지 경로를 Superset 앱에게 알려줌
-  PYTHONPATH: "/usr/local/lib/python3.10/site-packages:/app/pythonpath"
+extraEnv: []
   # Different gunicorn settings, refer to the gunicorn documentation
   # https://docs.gunicorn.org/en/stable/settings.html#
   # These variables are used as Flags at the gunicorn startup
