@@ -119,13 +119,12 @@ diagnosticMode:
 ## @param image.debug Enable image debug mode
 ##
 image: 
-  registry: docker.io
+  # docker.io 대신 제한이 없는 AWS 공용 레지스트리를 사용
+  registry: public.ecr.aws
   repository: bitnami/spark
-  tag: "3.5" # 호환성 이슈 때문에 3.5.1 버전 (iceberg 0.107.2와 호환되는 버전) 사용
+  # 3.5 버전 중 가장 안정적이고 확실한 태그
+  tag: 3.5.3-debian-12-r1
   digest: ""
-  ## Specify a imagePullPolicy
-  ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
-  ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
