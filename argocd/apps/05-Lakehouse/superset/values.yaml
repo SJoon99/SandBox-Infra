@@ -791,7 +791,10 @@ postgresql:
   ## Use the PostgreSQL chart dependency.
   ## Set to false if bringing your own PostgreSQL.
   enabled: true
-
+  image:
+    registry: public.ecr.aws
+    repository: bitnami/postgresql
+    tag: "14.17.0-debian-12-r3"
   ## Authentication parameters
   auth:
     ## The name of an existing secret that contains the postgres password.
@@ -802,10 +805,6 @@ postgresql:
     password: superset
     ## PostgreSQL name for a custom database to create
     database: superset
-
-  image:
-    tag: "14.17.0-debian-12-r3"
-
   ## PostgreSQL Primary parameters
   primary:
     resources:
