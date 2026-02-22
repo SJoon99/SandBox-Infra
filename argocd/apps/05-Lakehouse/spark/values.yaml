@@ -68,6 +68,7 @@ extraDeploy:
       name: spark-lakehouse-conf
     data:
       # Spark 기본 설정 파일 (spark-defaults.conf) 내용을 정의
+      # 마지막 3줄을 해야 spark-sql 사용 가능
       spark-defaults.conf: |
         spark.jars.packages                 org.apache.iceberg:iceberg-spark-runtime-3.5_2.12:1.4.3,org.projectnessie.nessie-integrations:nessie-spark-extensions-3.5_2.12:0.77.1,org.apache.hadoop:hadoop-aws:3.3.4,com.amazonaws:aws-java-sdk-bundle:1.12.262
         spark.sql.extensions                org.apache.iceberg.spark.extensions.IcebergSparkSessionExtensions,org.projectnessie.spark.extensions.NessieSparkSessionExtensions
@@ -82,8 +83,10 @@ extraDeploy:
         spark.hadoop.fs.s3a.impl            org.apache.hadoop.fs.s3a.S3AFileSystem
         spark.hadoop.fs.s3a.connection.ssl.enabled false
         spark.hadoop.fs.s3a.aws.credentials.provider com.amazonaws.auth.DefaultAWSCredentialsProviderChain
+        
         spark.jars.ivy                        /tmp/.ivy2
         spark.driver.extraJavaOptions         -Dderby.system.home=/tmp/derby
+        spark.hadoop.javax.jdo.option.ConnectionURL jdbc:derby:;databaseName=/tmp/metastore_db;create=true
 
 initScripts: {}
 ## @param initScriptsCM ConfigMap with the init scripts. Evaluated as a template.
