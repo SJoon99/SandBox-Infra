@@ -52,9 +52,15 @@ applications:
         valueFiles:
           - argocd/apps/05-Lakehouse/spark/values.yaml
   
-  # superset:
-  #   enabled: true
-  #   namespace: superset
-  #   syncWave: "5"
-  #   source:
+  superset:
+    enabled: true
+    namespace: lakehouse
+    syncWave: "5"
+    source:
+      chart: superset
+      repoURL: https://apache.github.io/superset
+      targetRevision: 0.15.2
+      helm:
+        valueFiles:
+          - argocd/apps/05-Lakehouse/superset/values.yaml
   
