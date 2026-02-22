@@ -121,7 +121,7 @@ diagnosticMode:
 image: 
   registry: docker.io
   repository: bitnami/spark
-  tag: 3.5.1-debian-12-r0 # 호환성 이슈 때문에 3.5.1 버전 (iceberg 0.107.2와 호환되는 버전) 사용
+  tag: "3.5" # 호환성 이슈 때문에 3.5.1 버전 (iceberg 0.107.2와 호환되는 버전) 사용
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -289,10 +289,15 @@ master:
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## Note: master.podAffinityPreset, master.podAntiAffinityPreset, and master.nodeAffinityPreset will be ignored when it's set
   ##
-  affinity: {}
-  ## @param master.nodeSelector Spark master node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
-  ##
+  affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - key: kubernetes.io/hostname
+                  operator: NotIn
+                  values:
+                    - titan-v-server
   nodeSelector: {}
   ## @param master.tolerations Spark master tolerations for pod assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
@@ -666,9 +671,15 @@ worker:
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## Note: worker.podAffinityPreset, worker.podAntiAffinityPreset, and worker.nodeAffinityPreset will be ignored when it's set
   ##
-  affinity: {}
-  ## @param worker.nodeSelector Spark worker node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
+  affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - key: kubernetes.io/hostname
+                  operator: NotIn
+                  values:
+                    - titan-v-server  # 워커도 동일하게 설정
   ##
   nodeSelector: {}
   ## @param worker.tolerations Spark worker tolerations for pod assignment
