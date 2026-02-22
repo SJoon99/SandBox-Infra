@@ -82,6 +82,8 @@ extraDeploy:
         spark.hadoop.fs.s3a.impl            org.apache.hadoop.fs.s3a.S3AFileSystem
         spark.hadoop.fs.s3a.connection.ssl.enabled false
         spark.hadoop.fs.s3a.aws.credentials.provider com.amazonaws.auth.DefaultAWSCredentialsProviderChain
+        spark.jars.ivy                        /tmp/.ivy2
+        spark.driver.extraJavaOptions         -Dderby.system.home=/tmp/derby
 
 initScripts: {}
 ## @param initScriptsCM ConfigMap with the init scripts. Evaluated as a template.
