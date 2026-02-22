@@ -832,6 +832,16 @@ postgresql:
     service:
       ports:
         postgresql: "5432"
+    # -- Affinity to be added to postgresql deployment   
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - key: kubernetes.io/hostname
+                  operator: NotIn
+                  values:
+                    - titan-v-server
 
 # -- Configuration values for the Redis dependency.
 # ref: https://github.com/bitnami/charts/blob/master/bitnami/redis
