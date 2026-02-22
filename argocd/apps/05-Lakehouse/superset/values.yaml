@@ -53,9 +53,17 @@ serviceAccount:
 # @default -- see `values.yaml`
 bootstrapScript: |
   #!/bin/bash
+  # 1. 초기 부팅 로그 기록
   if [ ! -f ~/bootstrap ]; then echo "Running Superset with uid {{ .Values.runAsUser }}" > ~/bootstrap; fi
-  # Trino 연결용 파이썬 라이브러리 자동 설치 + PostgreSQL 연결용 라이브러리 설치
-  /app/.venv/bin/pip install sqlalchemy-trino psycopg2-binary
+
+  # 2. 가상환경 활성화를 시도하고, 안되더라도 시스템 pip를 통해 설치를 강제합니다.
+  # 가상환경 내부에 설치하기 위해 python -m pip 방식을 사용합니다.
+  /app/.venv/bin/python3 -m pip install sqlalchemy-trino psycopg2-binary || \
+  pip install sqlalchemy-trino psycopg2-binary
+
+  # 3. 설치 확인 로그 (문제가 생기면 로그에서 바로 볼 수 있게)
+  echo "Installed packages:"
+  pip list | grep -E "trino|psycopg2"
 
 # -- The name of the secret which we will use to generate a superset_config.py file
 # Note: this secret must have the key superset_config.py in it and can include other files as well
@@ -144,9 +152,12 @@ extraVolumeMounts: []
 # -- A dictionary of overrides to append at the end of superset_config.py - the name does not matter
 # WARNING: the order is not guaranteed
 # Files can be passed as helm --set-file configOverrides.my-override=my-file.py
-configOverrides: 
+configOverrides:
   secret: |
     SECRET_KEY = 'LAKEHOUSE_SUPER_SECRET_KEY_SANDBOX'
+    # 5.0.0에서 권장되는 추가 보안 설정
+    SQLALCHEMY_DATABASE_URI = 'postgresql://superset:superset@superset-postgresql:5432/superset'
+    TALISMAN_ENABLED = False # 테스트 환경에서 HTTPS 관련 이슈 방지
   # extend_timeout: |
   #    # Extend timeout to allow long running queries.
   #    SUPERSET_WEBSERVER_TIMEOUT = ...
