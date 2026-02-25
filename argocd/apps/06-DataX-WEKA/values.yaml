@@ -37,63 +37,15 @@ applications:
         valueFiles:
           - argocd/apps/06-DataX-WEKA/filestash/values.yaml
 
-  # nextcloud:
-  #   enabled: true
-  #   namespace: nextcloud 
-  #   syncWave: "3"
-  #   source:
-  #     chart: nextcloud
-  #     repoURL: https://nextcloud.github.io/helm/
-  #     targetRevision: 8.9.1
-  #     helm:
-  #       valueFiles:
-  #         - argocd/apps/06-DataX-WEKA/nextcloud/values.yaml
+  nextcloud:
+    enabled: true
+    namespace: nextcloud 
+    syncWave: "3"
+    source:
+      chart: nextcloud
+      repoURL: https://nextcloud.github.io/helm/
+      targetRevision: 8.9.1
+      helm:
+        valueFiles:
+          - argocd/apps/06-DataX-WEKA/nextcloud/values.yaml
 
-  # nessie:
-  #   enabled: true
-  #   namespace: lakehouse
-  #   syncWave: "2"
-  #   source:
-  #     chart: nessie
-  #     repoURL: https://charts.projectnessie.org
-  #     targetRevision: 0.107.2
-  #     helm:
-  #       valueFiles:
-  #         - argocd/apps/05-Lakehouse/nessie/values.yaml
-        
-  # trino:
-  #   enabled: true
-  #   namespace: lakehouse
-  #   syncWave: "3"
-  #   source:
-  #     chart: trino
-  #     repoURL: https://trinodb.github.io/charts
-  #     targetRevision: 1.42.0
-  #     helm:
-  #       valueFiles: 
-  #         - argocd/apps/05-Lakehouse/trino/values.yaml
-
-  # spark:
-  #   enabled: true
-  #   namespace: lakehouse
-  #   syncWave: "4"
-  #   source:
-  #     chart: spark
-  #     repoURL: https://charts.bitnami.com/bitnami
-  #     targetRevision: 10.0.3
-  #     helm:
-  #       valueFiles:
-  #         - argocd/apps/05-Lakehouse/spark/values.yaml
-  
-  # superset:
-  #   enabled: true
-  #   namespace: lakehouse
-  #   syncWave: "5"
-  #   source:
-  #     chart: superset
-  #     repoURL: https://apache.github.io/superset
-  #     targetRevision: 0.15.2
-  #     helm:
-  #       valueFiles:
-  #         - argocd/apps/05-Lakehouse/superset/values.yaml
-  
