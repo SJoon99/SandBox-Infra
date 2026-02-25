@@ -12,7 +12,16 @@ applications:
     namespace: filestash
     syncWave: "1"
     source:
-      path: argocd/apps/06-DataX-WEKA/storage-config
+      path: argocd/apps/06-DataX-WEKA/storage-config/ceph-obc-filestash.yaml
+    syncOptions:
+      - CreateNamespace=true
+  
+  nextcloud-object-storage:
+    enabled: true
+    namespace: nextcloud
+    syncWave: "1"
+    source:
+      path: argocd/apps/06-DataX-WEKA/storage-config/ceph-obc-nextcloud.yaml
     syncOptions:
       - CreateNamespace=true
   
