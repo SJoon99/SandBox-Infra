@@ -12,7 +12,7 @@ applications:
     namespace: filestash
     syncWave: "1"
     source:
-      path: argocd/apps/06-DataX-WEKA/storage-config/ceph-obc-filestash.yaml
+      path: argocd/apps/06-DataX-WEKA/storage-config/filestatsh
     syncOptions:
       - CreateNamespace=true
   
@@ -21,7 +21,7 @@ applications:
     namespace: nextcloud
     syncWave: "1"
     source:
-      path: argocd/apps/06-DataX-WEKA/storage-config/ceph-obc-nextcloud.yaml
+      path: argocd/apps/06-DataX-WEKA/storage-config/nextcloud
     syncOptions:
       - CreateNamespace=true
   
