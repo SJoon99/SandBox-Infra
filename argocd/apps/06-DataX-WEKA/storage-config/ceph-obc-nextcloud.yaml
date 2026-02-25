@@ -1,0 +1,25 @@
+# Ceph Object Store User for Lakehouse
+apiVersion: ceph.rook.io/v1
+kind: CephObjectStoreUser
+metadata:
+  name: nextcloud
+  namespace: rook-ceph
+spec:
+  store: ceph-objectstore
+  displayName: "nextcloud"
+  capabilities:
+    user: "*"
+    bucket: "*"
+    metadata: "*"
+    usage: "read"
+    zone: "*"
+--- 
+# Bucket claim for Lakehouse
+apiVersion: objectbucket.io/v1alpha1
+kind: ObjectBucketClaim
+metadata:
+  name: nextcloud-bucket
+  namespace: nextcloud 
+spec:
+  bucketName: nextcloud
+  storageClassName: ceph-bucket 
