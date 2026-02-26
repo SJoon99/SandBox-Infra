@@ -162,7 +162,7 @@ applications:
     source:
       chart: cloudflare-tunnel-remote
       repoURL: https://cloudflare.github.io/helm-charts
-      targetRevision: 0.3.2
+      targetRevision: 0.1.2
       helm:
         valueFiles:
           - argocd/apps/00-infra/cloudflare/tunnel/values.yaml
