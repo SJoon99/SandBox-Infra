@@ -228,6 +228,19 @@ applications:
   #     helm:
   #       valueFiles:
   #         - argocd/apps/03-platform/intelligent-agent/openwebui/values.yaml
+
+  # keycloak:
+  #   enabled: true
+  #   namespace: keycloak
+  #   syncWave: "3"
+  #   source:
+  #     repoURL: registry-1.docker.io/bitnamicharts
+  #     chart: keycloak
+  #     targetRevision: 25.2.0
+  #     helm:
+  #       valueFiles:
+  #         - argocd/apps/03-platform/keycloak/values.yaml
+
   
   prometheus:
     enabled: true

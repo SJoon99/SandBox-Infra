@@ -64,3 +64,23 @@ spec:
 
   monitoring:
     enablePodMonitor: false
+
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: keycloak-db-cluster
+  namespace: postgresql
+spec:
+  instances: 1 # 테스트용이면 1개
+  imageName: ghcr.io/cloudnative-pg/postgresql:16
+  storage:
+    size: 100Gi
+    storageClass: rook-ceph-block-hot 
+
+  bootstrap:
+    initdb:
+      database: keycloak_db
+      user: keycloak_user
+      secret:
+        name: keycloak-db-secret
