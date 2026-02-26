@@ -75,14 +75,14 @@ spec:
   instances: 1 # 테스트용이면 1개
   imageName: ghcr.io/cloudnative-pg/postgresql:16
   affinity:
-  nodeAffinity:
-    requiredDuringSchedulingIgnoredDuringExecution:
-      nodeSelectorTerms:
-        - matchExpressions:
-            - key: kubernetes.io/hostname
-              operator: In
-              values:
-                - sandbox-3
+      nodeAffinity: 
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - key: kubernetes.io/hostname
+                  operator: In
+                  values:
+                    - sandbox-3
   storage:
     size: 100Gi
     storageClass: rook-ceph-block-hot 
