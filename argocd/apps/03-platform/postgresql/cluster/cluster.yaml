@@ -86,10 +86,9 @@ spec:
   storage:
     size: 100Gi
     storageClass: rook-ceph-block-hot 
-
   bootstrap:
     initdb:
       database: keycloak_db
-      user: keycloak_user
+      owner: keycloak_user
       secret:
         name: keycloak-db-secret
