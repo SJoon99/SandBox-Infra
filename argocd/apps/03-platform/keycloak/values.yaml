@@ -462,7 +462,15 @@ nodeAffinityPreset:
 ## @param affinity Affinity for pod assignment
 ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 ##
-affinity: {}
+affinity:
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - sandbox-2
 ## @param nodeSelector Node labels for pod assignment
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
 ##
@@ -539,7 +547,7 @@ sidecars: []
 service:
   ## @param service.type Kubernetes service type
   ##
-  type: loadbalancer
+  type: Loadbalancer
   ## @param service.http.enabled Enable http port on service
   ##
   http:
@@ -1284,7 +1292,7 @@ postgresql:
 ## @param externalDatabase.extraParams Additional JDBC connection parameters appended to the JDBC URL (KC_DB_URL).
 ##
 externalDatabase:
-  host: "postgresql-cluster.postgresql.svc.cluster.local"
+  host: "keycloak-db-cluster-rw.postgresql.svc.cluster.local"
   port: 5432
   user: keycloak_user
   database: "keycloak_db"
