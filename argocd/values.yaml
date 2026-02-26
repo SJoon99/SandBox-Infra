@@ -146,6 +146,28 @@ applications:
   #       valueFiles:
   #         - argocd/apps/03-platform/harbor/values.yaml
 
+  cloudflare-sercet:
+    enabled: true
+    namespace: cloudflare
+    syncWave: "30"
+    source:
+      path: argocd/apps/00-infra/cloudflare/secret
+    syncOptions:
+      - CreateNamespace=true
+
+  cloudflare-tunnel:
+    enabled: true
+    namespace: cloudflare
+    syncWave: "31"
+    source:
+      chart: cloudflare-tunnel-remote
+      repoURL: https://cloudflare.github.io/helm-charts
+      targetRevision: 0.3.2
+      helm:
+        valueFiles:
+          - argocd/apps/00-infra/cloudflare/tunnel/values.yaml
+
+
   postgresql-operator:
     enabled: true
     namespace: postgresql
