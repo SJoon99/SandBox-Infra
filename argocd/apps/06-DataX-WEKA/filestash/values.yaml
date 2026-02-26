@@ -17,8 +17,9 @@ fullnameOverride: ""
 # Environment variables passed to filestash
 env:
   - name: APPLICATION_URL
-    # 일단 빈 값
-    value: ""
+    value: "http://10.34.25.6:8334"
+  - name: INIT_ADMIN_PASSWORD
+    value: "test1234"
 
 serviceAccount:
   # Specifies whether a service account should be created
