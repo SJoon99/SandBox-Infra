@@ -240,6 +240,8 @@ applications:
       helm:
         valueFiles:
           - argocd/apps/03-platform/keycloak/values.yaml
+    syncOptions:
+      - CreateNamespace=true
 
   
   prometheus:
