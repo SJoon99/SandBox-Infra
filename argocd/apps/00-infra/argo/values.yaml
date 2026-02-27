@@ -42,7 +42,7 @@ crds:
 global:
   # -- Default domain used by all components
   ## Used for ingresses, certificates, SSO, notifications, etc.
-  domain: argocd.example.com
+  domain: argocd.jjooniex.org
 
   # -- Runtime class name for all components
   runtimeClassName: ""
@@ -1999,7 +1999,8 @@ server:
   imagePullSecrets: []
 
   # -- Additional command line arguments to pass to Argo CD server
-  extraArgs: []
+  extraArgs:
+    - --insecure
 
   # -- Environment variables to pass to Argo CD server
   env: []
