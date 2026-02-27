@@ -118,11 +118,11 @@ lifecycle: {}
 #   preStopCommand: []
 
 phpClientHttpsFix:
-  enabled: false
+  enabled: true
   protocol: https
 
 nextcloud:
-  host: nextcloud.kube.home
+  host: nextcloud.jjooniex.org
   username: admin
   password: changeme
   ## Use an existing secret
@@ -306,12 +306,17 @@ nextcloud:
   ##
   ## Extra environment variables
   extraEnv:
-  #  - name: SOME_SECRET_ENV
-  #    valueFrom:
-  #      secretKeyRef:
-  #        name: nextcloud
-  #        key: secret_key
-
+    # 모든 프록시를 신뢰하도록 설정 (홈랩 환경에서 가장 간편함)
+    - name: TRUSTED_PROXIES
+      value: "0.0.0.0/0"
+    # 도메인과 프로토콜을 고정하여 내부 IP 노출 방지
+    - name: OVERWRITEHOST
+      value: "nextcloud.jjooniex.org"
+    - name: OVERWRITEPROTOCOL
+      value: "https"
+    - name: OVERWRITECLIURL
+      value: "https"
+      
   # Extra init containers that runs before pods start.
   extraInitContainers: []
   #  - name: do-something
