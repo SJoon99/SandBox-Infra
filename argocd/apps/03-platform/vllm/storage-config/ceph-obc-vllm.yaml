@@ -1,0 +1,25 @@
+apiVersion: ceph.rook.io/v1
+kind: CephObjectStoreUser
+metadata:
+  name: vllm
+  namespace: rook-ceph
+spec:
+  store: ceph-objectstore
+  displayName: "vllm"
+  # system 유저 권한이 필요하다면 아래 설정 유지
+  capabilities:
+    user: "*"
+    bucket: "*"
+    metadata: "*"
+    usage: "read"
+    zone: "*"
+--- 
+# Bucket claim for Lakehouse
+apiVersion: objectbucket.io/v1alpha1
+kind: ObjectBucketClaim
+metadata:
+  name: vllm-bucket
+  namespace: vllm 
+spec:
+  bucketName: vllm
+  storageClassName: ceph-bucket 

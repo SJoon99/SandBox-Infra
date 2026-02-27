@@ -251,10 +251,31 @@ applications:
   #       valueFiles:
   #         - argocd/apps/03-platform/intelligent-agent/openwebui/values.yaml
 
+  vllm-config:
+    enabled: true
+    namespace: vllm
+    syncWave: "125"
+    source:
+      path: argocd/apps/03-platform/vllm/storage-config
+    syncOptions:
+      - CreateNamespace=true
+  
+  # vllm:
+  #   enabled: true
+  #   namespace: vllm
+  #   syncWave: "130"
+  #   source:
+  #     repoURL: https://github.com/vllm-project/vllm.git
+  #     targetRevision: main
+  #     path: examples/online-serving/chart-helm
+  #     helm:
+  #       valueFiles:
+  #         - argocd/apps/03-platform/vllm/values.yaml
+
   keycloak:
     enabled: true
     namespace: keycloak
-    syncWave: "3"
+    syncWave: "90"
     source:
       repoURL: registry-1.docker.io/bitnamicharts
       chart: keycloak
@@ -265,7 +286,6 @@ applications:
     syncOptions:
       - CreateNamespace=true
 
-  
   prometheus:
     enabled: true
     namespace: prometheus
