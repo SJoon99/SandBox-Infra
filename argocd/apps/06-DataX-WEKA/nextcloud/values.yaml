@@ -860,7 +860,15 @@ tolerations: []
 # -- Nextcloud pod topologySpreadConstraints
 topologySpreadConstraints: []
 
-affinity: {}
+affinity:
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - sandbox-2
 
 dnsConfig: {}
 # Custom dns config for Nextcloud containers.
