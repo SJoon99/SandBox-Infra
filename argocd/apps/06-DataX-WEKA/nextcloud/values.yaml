@@ -314,6 +314,10 @@ nextcloud:
       value: "https"
     - name: OVERWRITECLIURL
       value: "https://nextcloud.jjooniex.org"
+    - name: NEXTCLOUD_TRUSTED_DOMAINS
+      value: "nextcloud.jjooniex.org"
+    - name: DEFAULT_PHONE_REGION
+      value: "KR"
 
   # Extra init containers that runs before pods start.
   extraInitContainers: []
