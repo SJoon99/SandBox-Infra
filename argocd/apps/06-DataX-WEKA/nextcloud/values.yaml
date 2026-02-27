@@ -313,7 +313,7 @@ nextcloud:
     - name: OVERWRITEPROTOCOL
       value: "https"
     - name: OVERWRITECLIURL
-      value: "https"
+      value: "https://nextcloud.jjooniex.org"
 
   # Extra init containers that runs before pods start.
   extraInitContainers: []
