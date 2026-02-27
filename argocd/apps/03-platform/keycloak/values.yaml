@@ -252,7 +252,22 @@ args: []
 ##   - name: FOO
 ##     value: "bar"
 ##
-extraEnvVars: []
+extraEnvVars:
+  # 1. Keycloak이 외부에서 불릴 도메인 주소 
+  - name: KC_HOSTNAME
+    value: "keycloak.jjooniex.org"
+    
+  # 2. Cloudflare Tunnel(프록시) 뒤에 있음을 명시 (매우 중요)
+  - name: KC_PROXY
+    value: "edge"
+    
+  # 3. 터널 내부 통신이 HTTP이므로 허용 설정
+  - name: KC_HTTP_ENABLED
+    value: "true"
+
+  # 4. 호스트네임 검사 완화 (운영 단계가 아닐 때 유용)
+  - name: KC_HOSTNAME_STRICT
+    value: "false"
 ## @param extraEnvVarsCM Name of existing ConfigMap containing extra env vars
 ##
 extraEnvVarsCM: ""
