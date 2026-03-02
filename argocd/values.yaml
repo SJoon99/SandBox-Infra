@@ -260,17 +260,17 @@ applications:
     syncOptions:
       - CreateNamespace=true
   
-  # vllm:
-  #   enabled: true
-  #   namespace: vllm
-  #   syncWave: "130"
-  #   source:
-  #     repoURL: https://github.com/vllm-project/vllm.git
-  #     targetRevision: main
-  #     path: examples/online-serving/chart-helm
-  #     helm:
-  #       valueFiles:
-  #         - argocd/apps/03-platform/vllm/values.yaml
+  vllm:
+    enabled: true
+    namespace: vllm
+    syncWave: "130"
+    source:
+      repoURL: https://github.com/vllm-project/vllm.git
+      targetRevision: main
+      path: examples/online-serving/chart-helm
+      helm:
+        valueFiles:
+          - argocd/apps/03-platform/vllm/values.yaml
 
   keycloak:
     enabled: true
