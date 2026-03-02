@@ -267,7 +267,7 @@ applications:
     source:
       repoURL: https://github.com/vllm-project/vllm.git
       targetRevision: main
-      path: examples/online-serving/chart-helm
+      path: examples/online_serving/chart-helm
       helm:
         valueFiles:
           - argocd/apps/03-platform/vllm/values.yaml
