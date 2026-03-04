@@ -128,9 +128,15 @@ websocket:
     # @section -- Websocket configuration
     tolerations: []
     # @section -- Websocket configuration
-    affinity: {}
-    # -- Redis container security context (certain specs are not allowed on a pod level), if readOnlyRootFilesystem is true, an emtpyDir will be mounted on the redis container
-    # @section -- Websocket configuration
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - key: kubernetes.io/hostname
+                  operator: In
+                  values:
+                    - sandbox-2
     containerSecurityContext: {}
       # readOnlyRootFilesystem: true
       # runAsNonRoot: true
