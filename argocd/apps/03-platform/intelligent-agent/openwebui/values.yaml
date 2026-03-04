@@ -402,7 +402,16 @@ nodeSelector: {}
 tolerations: []
 
 # -- Affinity for pod assignment
-affinity: {}
+affinity:
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - sandbox-2
+
 
 # -- Topology Spread Constraints for pod assignment
 topologySpreadConstraints: []
