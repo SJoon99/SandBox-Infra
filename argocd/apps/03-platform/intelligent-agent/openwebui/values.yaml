@@ -440,7 +440,7 @@ enableOpenaiApi: true
 
 # -- OpenAI base API URL to use. Defaults to the Pipelines service endpoint when Pipelines are enabled, and "https://api.openai.com/v1" if Pipelines are not enabled and this value is blank
 # @section -- OpenAI API configuration
-openaiBaseApiUrl: "https://api.openai.com/v1"
+openaiBaseApiUrl: "http://10.40.40.40:8000/v1"
 
 # -- OpenAI base API URLs to use. Overwrites the value in openaiBaseApiUrl if set
 # @section -- OpenAI API configuration
@@ -450,7 +450,7 @@ openaiBaseApiUrls: []
 
 # -- OpenAI API key to use. Default API key value for Pipelines if `openaiBaseApiUrl` is blank. Should be updated in a production deployment, or be changed to the required API key if not using Pipelines
 # @section -- OpenAI API configuration
-openaiApiKey: "0p3n-w3bu!"
+openaiApiKey: "vllm-none"
 
 # -- List of OpenAI API keys for each OpenAI base API URLs to use. The number of keys must match the number of URLs in `openaiBaseApiUrls` and respect the same order. If `pipelines.enabled` is true, it needs one more key (so the list length should be openaiBaseApiUrls length + 1) and the first key will be used for Pipelines.
 # @section -- OpenAI API configuration

@@ -239,17 +239,19 @@ applications:
   #       valueFiles:
   #         - argocd/apps/03-platform/intelligent-agent/ollama/values-gpu2.yaml 
 
-  # openwebui:
-  #   enabled: true
-  #   namespace: ollama
-  #   syncWave: "120"
-  #   source:
-  #     chart: open-webui
-  #     repoURL: https://helm.openwebui.com/
-  #     targetRevision: 8.14.0
-  #     helm:
-  #       valueFiles:
-  #         - argocd/apps/03-platform/intelligent-agent/openwebui/values.yaml
+  openwebui:
+    enabled: true
+    namespace: openwebui
+    syncWave: "120"
+    source:
+      chart: open-webui
+      repoURL: https://helm.openwebui.com/
+      targetRevision: 8.14.0
+      helm:
+        valueFiles:
+          - argocd/apps/03-platform/intelligent-agent/openwebui/values.yaml
+    syncOptions:
+      - CreateNamespace=true
 
   vllm-config:
     enabled: true
