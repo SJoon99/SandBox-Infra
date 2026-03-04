@@ -38,11 +38,19 @@ ollamaUrls:
 ollamaUrlsFromExtraEnv: false
 
 pipelines:
-  # -- Automatically install Pipelines chart to extend Open WebUI functionality using Pipelines: https://github.com/open-webui/pipelines
-  # @section -- External Tools configuration
+  # -- Automatically install Pipelines chart
   enabled: true
-  # -- This section can be used to pass required environment variables to your pipelines (e.g. Langfuse hostname)
-  # @section -- External Tools configuration
+  # -- Pipeline Pod를 특정 노드에 배치하기 위한 설정 추가
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: In
+                values:
+                  - sandbox-2
+  # -- 기존 설정 유지
   extraEnvVars: []
 
 tika:
@@ -128,15 +136,7 @@ websocket:
     # @section -- Websocket configuration
     tolerations: []
     # @section -- Websocket configuration
-    affinity:
-      nodeAffinity:
-        requiredDuringSchedulingIgnoredDuringExecution:
-          nodeSelectorTerms:
-            - matchExpressions:
-                - key: kubernetes.io/hostname
-                  operator: In
-                  values:
-                    - sandbox-2
+    
     containerSecurityContext: {}
       # readOnlyRootFilesystem: true
       # runAsNonRoot: true
