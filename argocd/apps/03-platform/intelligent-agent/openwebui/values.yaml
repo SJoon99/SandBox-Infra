@@ -50,7 +50,6 @@ pipelines:
                 operator: In
                 values:
                   - sandbox-2
-  # -- 기존 설정 유지
   extraEnvVars: []
 
 tika:

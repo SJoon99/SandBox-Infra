@@ -534,6 +534,30 @@ cephBlockPools:
         csi.storage.k8s.io/node-stage-secret-namespace: "{{ .Release.Namespace }}"
         csi.storage.k8s.io/fstype: ext4
 
+  # -------------------------------------------------------------------
+  # 3. RGW Hot Storage (SSD, objectstore dedicated)
+  # -------------------------------------------------------------------
+  - name: rgw-hot-pool-ssd
+    spec:
+      failureDomain: host
+      replicated:
+        size: 2
+      deviceClass: ssd
+    storageClass:
+      enabled: false # RBD와 분리된 RGW 전용 풀은 RBD 스토리지 클래스로 노출하지 않음
+
+  # -------------------------------------------------------------------
+  # 4. RGW Cold Storage (HDD, objectstore dedicated)
+  # -------------------------------------------------------------------
+  - name: rgw-cold-pool-hdd
+    spec:
+      failureDomain: host
+      replicated:
+        size: 2
+      deviceClass: hdd
+    storageClass:
+      enabled: false
+
 # -- A list of CephFileSystem configurations to deploy
 # @default -- See [below](#ceph-file-systems)
 cephFileSystems:
@@ -634,6 +658,21 @@ cephObjectStores:
         deviceClass: hdd
         parameters:
           bulk: "true"
+      # 실제 오브젝트 데이터 저장 풀을 SSD/HDD 2개로 분리
+      # - 기본(STANDARD): rgw-hot-pool-ssd
+      # - 저비용(STANDARD_IA): rgw-cold-pool-hdd
+      # S3 업로드 시 x-amz-storage-class: STANDARD_IA 로 HDD 풀 선택 가능
+      sharedPools: # 공유 풀 설정, 오브젝트 스토어가 여러 풀을 사용할 때 어떤 풀을 선택할지 정의
+        dataPoolName: rgw-hot-pool-ssd # 기본 데이터 풀
+        metadataPoolName: rgw-hot-pool-ssd
+        poolPlacements: # 풀별 배치 설정, 각 풀에 대한 배치 설정을 정의
+          - name: default
+            default: true
+            dataPoolName: rgw-hot-pool-ssd # 기본 데이터 풀
+            metadataPoolName: rgw-hot-pool-ssd 
+            storageClasses:  # sharedPools의 스토리지 클래스는 일반저인 스토리지 클래스는 아님
+              - name: STANDARD_IA # S3 업로드 시 x-amz-storage-class: STANDARD_IA 로 HDD 풀 선택 가능
+                dataPoolName: rgw-cold-pool-hdd # 저비용 데이터 풀
       preservePoolsOnDelete: true
       gateway:
         port: 80
