@@ -544,7 +544,7 @@ cephBlockPools:
         size: 2
       deviceClass: ssd
     storageClass:
-      enabled: false # RBD와 분리된 RGW 전용 풀은 RBD 스토리지 클래스로 노출하지 않음
+      enabled: false # RBD와 분리된 RGW 전용 풀은 RBD 스토리지 클래스로 노출하지 않음, 근간은 RBD 이미지가 아니라 Rados Pool임 
 
   # -------------------------------------------------------------------
   # 4. RGW Cold Storage (HDD, objectstore dedicated)

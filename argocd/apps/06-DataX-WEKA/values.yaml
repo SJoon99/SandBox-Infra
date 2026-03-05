@@ -24,6 +24,24 @@ applications:
       path: argocd/apps/06-DataX-WEKA/storage-config/nextcloud
     syncOptions:
       - CreateNamespace=true
+
+  ocis-object-storage:
+    enabled: true
+    namespace: ocis
+    syncWave: "1"
+    source: 
+      path: argocd/apps/06-DataX-WEKA/storage-config/ocis
+    syncOptions:
+      - CreateNamespace=true
+
+  pydio-object-storage:
+    enabled: true 
+    namespace: pydio
+    syncWave: "1"
+    source:
+      path: argocd/apps/06-DataX-WEKA/storage-config/pydio
+    syncOptions:
+      - CreateNamespace=true
   
   filestash:
     enabled: true
@@ -48,4 +66,28 @@ applications:
       helm:
         valueFiles:
           - argocd/apps/06-DataX-WEKA/nextcloud/values.yaml
+  
+  # ocis:
+  #   enabled: true
+  #   namespace: ocis
+  #   syncWave: "4"
+  #   source:
+  #     chart: ocis
+  #     repoURL: https://github.com/owncloud/ocis-charts/tree/main/charts/ocis
+  #     targetRevision: 0.7.0
+  #     helm:
+  #       valueFiles:
+  #         - argocd/apps/06-DataX-WEKA/ocis/values.yaml
+  
+  pydio:
+    enabled: true
+    namespace: pydio
+    syncWave: "5"
+    source:
+      chart: cells
+      repoURL: https://download.pydio.com/pub/charts/helm
+      targetRevision: 0.1.3
+      helm:
+        valueFiles:
+          - argocd/apps/06-DataX-WEKA/pydio/values.yaml
 
