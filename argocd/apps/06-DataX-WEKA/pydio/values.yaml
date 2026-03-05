@@ -324,8 +324,14 @@ vault:
         "helm.sh/hook": "pre-install",
         "helm.sh/hook-weight": "-5"
       }
-      failurePolicy: Fail
-      namespaceSelector: {}
+      # Prevent install deadlock when injector service is not yet ready.
+      failurePolicy: Ignore
+      namespaceSelector:
+        matchExpressions:
+          - key: kubernetes.io/metadata.name
+            operator: In
+            values:
+              - pydio
       # objectSelector: |
       #   matchExpressions:
       #     - key: app.kubernetes.io/name

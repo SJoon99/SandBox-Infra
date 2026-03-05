@@ -67,17 +67,17 @@ applications:
         valueFiles:
           - argocd/apps/06-DataX-WEKA/nextcloud/values.yaml
   
-  # ocis:
-  #   enabled: true
-  #   namespace: ocis
-  #   syncWave: "4"
-  #   source:
-  #     chart: ocis
-  #     repoURL: https://github.com/owncloud/ocis-charts/tree/main/charts/ocis
-  #     targetRevision: 0.7.0
-  #     helm:
-  #       valueFiles:
-  #         - argocd/apps/06-DataX-WEKA/ocis/values.yaml
+  ocis:
+    enabled: true
+    namespace: ocis
+    syncWave: "4"
+    source:
+      repoURL: https://github.com/owncloud/ocis-charts.git
+      targetRevision: main
+      path: charts/ocis
+      helm:
+        valueFiles:
+          - argocd/apps/06-DataX-WEKA/ocis/values.yaml
   
   pydio:
     enabled: true
@@ -90,4 +90,3 @@ applications:
       helm:
         valueFiles:
           - argocd/apps/06-DataX-WEKA/pydio/values.yaml
-
