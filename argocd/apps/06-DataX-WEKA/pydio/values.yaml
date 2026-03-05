@@ -32,9 +32,11 @@ podSecurityContext: {}
 securityContext: {}
 
 service:
-  type: NodePort
+  type: LoadBalancer
   port: 8080
   discoveryPort: 8002
+  annotations:
+    io.cilium/lb-ipam-pool: "lb-pool-local"
   binds:
     # Set values here if you want to bind the port elsewhere
   reverseproxyurl:
@@ -215,7 +217,15 @@ nodeSelector: {}
 
 tolerations: []
 
-affinity: {}
+affinity:
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: NotIn
+              values:
+                - titan-v-server
 
 #------------------------------
 # Dependency settings
@@ -277,8 +287,20 @@ etcd:
     enabled: true
 
 minio:
+  # Keep enabled so the Cells init container injects MINIO_ROOT_USER/MINIO_ROOT_PASSWORD.
+  # We override the actual endpoint to Ceph RGW by creating an alias Service named `pydio-minio`.
   enabled: true
+  fullnameOverride: pydio-minio-internal
+  auth:
+    existingSecret: pydio-minio
+    rootUserSecretKey: root-user
+    rootPasswordSecretKey: root-password
+  service:
+    ports:
+      api: 80
   defaultBuckets: "thumbnails pydiods1 personal versions cellsdata binaries"
+  persistence:
+    enabled: false
 
   volumePermissions:
     enabled: true
