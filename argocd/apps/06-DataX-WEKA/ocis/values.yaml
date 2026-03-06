@@ -1995,23 +1995,24 @@ priorityClassName:
 # @schema
 # Include arbitrary resources, eg. config maps or a cert-manager issuer (see example below)
 # -- Extra resources to be included.
-extraResources: []
-#  - |
-#    apiVersion: cert-manager.io/v1alpha2
-#    kind: Issuer
-#    metadata:
-#      name: ocis-certificate-issuer
-#      namespace: ocis
-#    spec:
-#      acme:
-#        server: https://acme-v02.api.letsencrypt.org/directory
-#        email: test@example.com
-#        privateKeySecretRef:
-#          name: ocis-certificate-issuer
-#        solvers:
-#        - http01:
-#            ingress:
-#              class: nginx
+extraResources:
+  - |
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: ocis-lb-internal
+      namespace: ocis
+      annotations:
+        io.cilium/lb-ipam-pool: "lb-pool-local"
+    spec:
+      type: LoadBalancer
+      ports:
+        - name: https
+          port: 443
+          targetPort: 9200 # oCIS proxy 서비스의 기본 포트
+          protocol: TCP
+      selector:
+        app: proxy # oCIS의 입구인 proxy 포드를 가리킴
 
 # per-service configuration.
 services:
@@ -5868,11 +5869,6 @@ monitoring:
 
 # Kubernetes service related settings.
 service:
-  # -- Service type for externally exposing the entry service.
-  type: LoadBalancer
-  # -- Service annotations.
-  annotations:
-    io.cilium/lb-ipam-pool: "lb-pool-local"
   appProtocol:
     # @schema
     # type: string
