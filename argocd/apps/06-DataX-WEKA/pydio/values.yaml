@@ -293,7 +293,11 @@ etcd:
 minio:
   enabled: false
   defaultBuckets: "thumbnails pydiods1 personal versions cellsdata binaries"
-
+  service:
+    type: ClusterIP
+    ports:
+      api: 9000
+      console: 9001
   volumePermissions:
     enabled: true
 
