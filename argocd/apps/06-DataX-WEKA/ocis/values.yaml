@@ -300,7 +300,7 @@ deploymentStrategy:
 # required: true
 # @schema
 # -- Domain where oCIS is reachable for the outside world
-externalDomain:
+externalDomain: "ocis.jjooniex.org"
 
 # Insecure options.
 # These are useful for some limited environments like CI or on a test cluster.
