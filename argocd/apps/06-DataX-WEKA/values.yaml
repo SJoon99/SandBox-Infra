@@ -74,7 +74,7 @@ applications:
     source:
       repoURL: ghcr.io/sjoon99/charts
       chart: ocis
-      targetRevision: 0.7.0
+      targetRevision: 0.7.1
       helm:
         valueFiles:
           - argocd/apps/06-DataX-WEKA/ocis/values.yaml
