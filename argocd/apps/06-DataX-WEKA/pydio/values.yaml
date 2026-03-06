@@ -21,10 +21,6 @@ serviceAccount:
   name: "app"
 
 podAnnotations: {
-  "vault.hashicorp.com/agent-inject": "true",
-  "vault.hashicorp.com/role": "app",
-  "vault.hashicorp.com/agent-init-first": "true",
-  "vault.hashicorp.com/agent-inject-token": "true"
 }
 
 podSecurityContext: {}
@@ -266,11 +262,9 @@ nats:
 etcd:
   enabled: true
   commonAnnotations: {
-    "helm.sh/hook": "pre-install",
-    "helm.sh/hook-weight": "-2"
   }
   preUpgradeJob:
-    enabled: true
+    enabled: false
     podAnnotations:
       vault.hashicorp.com/agent-inject: "false"  
   auth:
@@ -308,8 +302,9 @@ mongodb:
   volumePermissions:
     enabled: true
 
+# 임시방편
 vault:
-  enabled: true
+  enabled: false
   injector:
     annotations: {
       "helm.sh/hook": "pre-install",
