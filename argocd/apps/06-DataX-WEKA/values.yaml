@@ -72,9 +72,9 @@ applications:
     namespace: ocis
     syncWave: "4"
     source:
-      repoURL: https://github.com/owncloud/ocis-charts.git
-      targetRevision: main
-      path: charts/ocis
+      repoURL: ghcr.io/sjoon99/charts
+      chart: ocis
+      targetRevision: 0.7.0
       helm:
         valueFiles:
           - argocd/apps/06-DataX-WEKA/ocis/values.yaml
