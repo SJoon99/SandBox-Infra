@@ -2007,8 +2007,8 @@ extraResources:
     spec:
       type: LoadBalancer
       ports:
-        - name: https
-          port: 443
+        - name: http
+          port: 80
           targetPort: 9200 # oCIS proxy 서비스의 기본 포트
           protocol: TCP
       selector:
@@ -4867,7 +4867,7 @@ services:
       # @schema
       # -- Persistent volume access modes. Needs to be `[ReadWriteMany]` when having more than one replica for this service.
       accessModes:
-        - ReadWriteMany
+        - ReadWriteOnce
       # @schema
       # type: string
       # required: true
