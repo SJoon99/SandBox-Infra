@@ -15,6 +15,11 @@ nameOverride: ""
 fullnameOverride: ""
 clusterDomain: cluster.local
 
+global:
+  imageRegistry: public.ecr.aws
+  security:
+    allowInsecureImages: true
+
 serviceAccount:
   create: true
   annotations: {}
