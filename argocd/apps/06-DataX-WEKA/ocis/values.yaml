@@ -124,17 +124,9 @@ tracing:
 
 # HTTP settings for oCIS services.
 http:
-  # CORS settings for oCIS services.
   cors:
-    # @schema
-    # type: array
-    # items:
-    #   type: string
-    #   required: true
-    # @schema
-    # -- allow_origins is a list of origins a cross-domain request can be executed from.
-    # If the special "*" value is present in the list, all origins will be allowed.
-    allow_origins: []
+    allow_origins:
+      - "https://ocis.jjooniex.org"
   # CSP settings for oCIS services.
   csp:
     directives:
