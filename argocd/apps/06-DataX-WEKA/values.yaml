@@ -79,14 +79,14 @@ applications:
         valueFiles:
           - argocd/apps/06-DataX-WEKA/ocis/values.yaml
   
-  # pydio:
-  #   enabled: true
-  #   namespace: pydio
-  #   syncWave: "5"
-  #   source:
-  #     chart: cells
-  #     repoURL: https://download.pydio.com/pub/charts/helm
-  #     targetRevision: 0.1.3
-  #     helm:
-  #       valueFiles:
-  #         - argocd/apps/06-DataX-WEKA/pydio/values.yaml
+  pydio:
+    enabled: true
+    namespace: pydio
+    syncWave: "5"
+    source:
+      chart: cells
+      repoURL: https://download.pydio.com/pub/charts/helm
+      targetRevision: 0.1.3
+      helm:
+        valueFiles:
+          - argocd/apps/06-DataX-WEKA/pydio/values.yaml
