@@ -216,16 +216,7 @@ nodeSelector: {}
 
 tolerations: []
 
-affinity:
-  nodeAffinity:
-    requiredDuringSchedulingIgnoredDuringExecution:
-      nodeSelectorTerms:
-        - matchExpressions:
-            - key: kubernetes.io/hostname
-              operator: NotIn
-              values:
-                - titan-v-server
-
+affinity: {}
 #------------------------------
 # Dependency settings
 #------------------------------
