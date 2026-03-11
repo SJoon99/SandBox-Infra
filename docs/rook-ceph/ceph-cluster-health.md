@@ -1,294 +1,189 @@
-# Ceph 상태 점검 보고서
+# Ceph 클러스터 상태 메모
 
-작성일: 2026-03-11
-대상: `rook-ceph` 클러스터
+- 작성일: 2026-03-11
+- 대상: `rook-ceph`
+- 클러스터 ID: `31d21ce2-d155-4c3e-8801-b14943c8b73d`
 
-## 1. 요약
-
-현재 Ceph 클러스터는 `HEALTH_WARN` 상태이며, 단순 경고 수준이 아니라 실제 데이터 중복도가 크게 저하된 상태입니다.
-
-핵심 문제는 용량 부족이 아닙니다. 전체 사용량은 낮지만, SSD 기반 풀들이 요구하는 복제 배치 조건을 현재 클러스터 토폴로지가 만족하지 못하고 있어 많은 PG가 장기간 `undersized`, `degraded` 상태로 남아 있습니다.
-
-가장 중요한 원인은 SSD OSD가 사실상 `sandbox-4` 한 호스트에만 정상적으로 남아 있고, `tempnode-bf3`의 SSD OSD 2개가 내려가 있다는 점입니다.
-
-## 2. 주요 증상
-
-### 2.1 Ceph health 저하
-
-`ceph status` 기준:
+## 현재 상태
 
 - `HEALTH_WARN`
-- `364388/729921 objects degraded (49.922%)`
-- `70 pgs degraded`
-- `83 pgs undersized`
-- `82 pgs not deep-scrubbed in time`
-- `82 pgs not scrubbed in time`
-
-즉, 전체 오브젝트의 약 절반이 의도한 복제 수를 만족하지 못하고 있습니다.
-
-### 2.2 OSD 일부 미동작
-
-`ceph status` 기준:
-
-- 전체 OSD: `36`
-- 동작 중 OSD: `34 up`
-- 클러스터 포함 OSD: `34 in`
-
-현재 OSD 2개가 정상 서비스에 참여하지 못하고 있습니다.
-
-### 2.3 Rook CephCluster 비정상 수렴
-
-`kubectl get cephcluster -n rook-ceph -o wide` 기준:
-
-- `PHASE: Progressing`
-- `HEALTH: HEALTH_WARN`
-- `MESSAGE: failed to start ceph osds ... aborting OSD provisioning after waiting more than 20 minutes`
-
-`kubectl describe cephcluster rook-ceph -n rook-ceph` 기준:
-
-- `State: Error`
-- OSD provisioning 관련 `ReconcileFailed` 이벤트가 반복 발생
-
-즉, Rook 오퍼레이터도 현재 스토리지 상태를 정상적으로 수렴시키지 못하고 있습니다.
-
-### 2.4 일부 Ceph 데몬 probe 이상
-
-최근 이벤트 기준:
-
-- `rook-ceph-mgr-b` startup probe 오류
-- `rook-ceph-mds-ceph-filesystem-hot-a` liveness probe 오류
-- RGW readiness probe timeout 발생
-
-이 항목은 현재 중복도 저하의 직접 원인으로 보이지는 않지만, 운영 안정성이 좋지 않다는 신호입니다.
-
-## 3. 확인한 근거
-
-### 3.1 Ceph 서비스 자체는 살아 있음
-
-`ceph status` 기준:
-
-- MON: 3개 quorum 정상
-- MGR: active 1, standby 1
-- MDS: active 1, standby 1
-- RGW: active 1
-
-즉, 클러스터가 완전히 죽은 상태는 아니고 "살아 있으나 건강하지 않은 상태"입니다.
-
-### 3.2 OSD 토폴로지
-
-`ceph osd tree` 기준:
-
-- `sandbox-1`: HDD OSD만 존재
-- `sandbox-2`: HDD OSD만 존재
-- `sandbox-4`: 다수의 SSD OSD 정상 동작
-- `tempnode-bf3`: SSD OSD `osd.2`, `osd.4` 가 `down`
-
-핵심:
-
-- `osd.2` on `tempnode-bf3`: `down`
-- `osd.4` on `tempnode-bf3`: `down`
-
-즉, SSD 계층에서 정상 호스트가 사실상 `sandbox-4` 하나만 남아 있습니다.
-
-### 3.3 Pool 설정
-
-`ceph osd pool ls detail` 기준으로 다음 SSD 관련 풀들이 복제수 `size 2`를 사용 중입니다.
-
-- `ceph-objectstore.rgw.control`
-- `ceph-objectstore.rgw.meta`
-- `ceph-objectstore.rgw.log`
-- `ceph-objectstore.rgw.buckets.index`
-- `ceph-objectstore.rgw.buckets.non-ec`
-- `hot-pool-ssd`
-- `ceph-filesystem-hot-metadata`
-- `ceph-filesystem-hot-hot-data`
-- `rgw-hot-pool-ssd`
-
-### 3.4 CRUSH rule
-
-`ceph osd crush rule dump` 기준으로 SSD 관련 풀들은 공통적으로 아래 구조를 사용합니다.
-
-- `take default~ssd`
-- `chooseleaf ... type host`
-
-즉, 복제본을 단순히 다른 OSD에 두는 것이 아니라 "서로 다른 host"에 두도록 설계되어 있습니다.
-
-### 3.5 PG 상세 상태
-
-`ceph health detail` 및 `ceph pg dump_stuck undersized` 기준:
-
-- 다수의 PG가 약 9주 동안 `stuck undersized`
-- 상태는 주로 `active+undersized+degraded`
-- acting set이 `[8]`, `[5]`, `[26]` 처럼 단일 OSD만 잡히는 케이스 다수 확인
-
-이것은 Ceph가 두 번째 복제본을 배치할 다른 SSD host를 찾지 못하고 있다는 의미입니다.
-
-## 4. 원인 분석
-
-### 4.1 주원인
-
-현재 SSD 기반 풀은 host 단위로 최소 2개의 복제 배치를 요구하지만, 실제 정상 SSD host는 1개뿐입니다.
-
-구체적으로:
-
-- SSD 풀의 replica 설정은 `size 2`
-- CRUSH rule은 host 분산을 강제
-- 현재 정상 SSD OSD는 대부분 `sandbox-4`에 집중
-- `tempnode-bf3`의 SSD OSD 2개는 down 상태
-
-결과:
-
-- Ceph는 SSD 풀의 복제 수를 만족하지 못함
-- PG가 `undersized` 상태로 장기 고착
-- 데이터 중복도 저하
-- scrub, deep-scrub도 정상적으로 돌지 못함
-
-### 4.2 부가 원인 또는 운영 리스크
-
-#### 4.2.1 OSD provisioning 반복 실패
-
-Rook는 현재도 OSD 준비/반영 작업을 반복 시도하다 실패하고 있습니다.
-
-메시지:
-
-- `aborting OSD provisioning after waiting more than 20 minutes`
-
-즉, 단순히 과거 장애 흔적이 아니라 현재도 수렴에 실패하고 있습니다.
-
-#### 4.2.2 Object Store 설정 충돌 이력
-
-최근 이벤트에서 아래 오류가 확인됐습니다.
-
-- `object store dataPool and sharedPools.dataPool=rgw-hot-pool-ssd are mutually exclusive`
-
-이 오류는 이후 reconcile 성공 이벤트가 있었으므로 현재 지속 장애의 직접 원인은 아닐 수 있습니다. 다만 최근 오브젝트스토어 설정 변경 중 충돌이 있었던 것으로 보이며, 별도 검토가 필요합니다.
-
-#### 4.2.3 컨테이너 런타임 exec 관련 probe 오류
-
-`mgr`, `mds` probe 오류 메시지에 아래 내용이 보였습니다.
-
-- `possible container breakout detected`
-
-이건 Ceph 데이터 배치 문제와는 별개로, 노드 런타임 또는 exec 환경 이슈 가능성을 의미합니다.
-
-## 5. 영향 범위
-
-### 5.1 데이터 안정성
-
-- 현재 데이터가 전부 접근 불가능한 상태는 아님
-- 하지만 의도된 복제 수준이 유지되지 않고 있음
-- 추가 장애가 발생하면 실제 서비스 장애나 데이터 손실 위험이 커짐
-
-### 5.2 특히 영향 가능성이 높은 영역
-
-다음 SSD 기반 리소스를 사용하는 영역이 우선 위험합니다.
-
-- RGW / Object Storage 관련 메타데이터 및 hot 경로
-- CephFS hot metadata / hot data 풀
-- `hot-pool-ssd` 기반 PVC 또는 워크로드
-
-### 5.3 운영상 주의점
-
-현재 상태에서는 `sandbox-4` 의존도가 매우 높습니다.
-
-즉시 피해야 할 작업:
-
-- `sandbox-4` 재부팅
-- `sandbox-4` drain
-- `sandbox-4` 디스크/OSD 관련 파괴적 변경
-
-## 6. 해결 방안
-
-### 6.1 최우선 조치
-
-가장 먼저 `tempnode-bf3`의 SSD OSD 2개가 왜 내려갔는지 확인해야 합니다.
-
-확인 대상:
-
-- 노드 자체 상태
-- 디스크 인식 여부
-- OSD prepare job 로그
-- OSD pod 로그
-- 해당 노드가 계속 스토리지 노드로 유지될 대상인지 여부
-
-이 항목이 가장 중요합니다.
-
-### 6.2 권장 해결 방향
-
-#### 방안 A. 두 번째 SSD host 복구
-
-가장 바람직한 방법입니다.
-
-- `tempnode-bf3` 복구 또는
-- 다른 SSD 노드 추가
-
-장점:
-
-- 현재 CRUSH/replica 정책 유지 가능
-- 데이터 중복도 정상 회복 가능
-- 구조적 일관성 유지
-
-#### 방안 B. SSD pool 정책 재설계
-
-만약 실제로 SSD host를 1개만 운영할 계획이라면, 현재 정책은 물리 현실과 맞지 않습니다.
-
-가능한 조치:
-
-- SSD 관련 pool의 replica 수 축소
-- host 단위 CRUSH 배치 정책 완화
-
-주의:
-
-이 방법은 장애를 해결한다기보다, 낮은 중복도를 정책으로 인정하는 것입니다. 운영 리스크가 커서 예외적 선택으로 봐야 합니다.
-
-### 6.3 추가 점검 필요 항목
-
-#### 6.3.1 OSD provisioning 실패 원인 분석
-
-다음 확인 필요:
-
-- `rook-ceph-operator` 로그
-- `rook-ceph-osd-prepare-*` job 로그
-- device discovery 결과
-- `CephCluster`의 storage node 정의
-
-#### 6.3.2 최근 object store 설정 변경 검토
-
-`dataPool` / `sharedPools.dataPool` 충돌이 있었으므로 관련 manifest나 values 변경 이력을 다시 확인해야 합니다.
-
-#### 6.3.3 Probe 오류 원인 점검
-
-다음 확인 필요:
-
-- container runtime 상태
-- 특정 노드에만 발생하는지 여부
-- kubelet / runtime exec 오류 여부
-
-## 7. 권장 확인 명령어
-
-```bash
-kubectl get cephcluster -n rook-ceph -o wide
-kubectl describe cephcluster rook-ceph -n rook-ceph
-kubectl get pods -n rook-ceph -o wide
-kubectl get events -n rook-ceph --sort-by=.lastTimestamp
-kubectl exec -n rook-ceph deploy/rook-ceph-tools -- ceph status
-kubectl exec -n rook-ceph deploy/rook-ceph-tools -- ceph health detail
-kubectl exec -n rook-ceph deploy/rook-ceph-tools -- ceph osd tree
-kubectl exec -n rook-ceph deploy/rook-ceph-tools -- ceph osd pool ls detail
-kubectl exec -n rook-ceph deploy/rook-ceph-tools -- ceph osd crush rule dump
-kubectl exec -n rook-ceph deploy/rook-ceph-tools -- ceph pg dump_stuck undersized --format json
-```
-
-## 8. 결론
-
-현재 Ceph 문제의 본질은 "용량 부족"이 아니라 "복제 배치 구조와 실제 SSD host 상태 불일치"입니다.
-
-SSD 풀들은 host 단위 복제 2개를 요구하지만, 정상 SSD host가 사실상 1개뿐이므로 대량의 PG가 장기간 `undersized/degraded` 상태로 남아 있습니다.
-
-따라서 가장 우선해야 할 일은:
-
-1. `tempnode-bf3`의 SSD OSD 복구 여부 확인
-2. 복구가 어렵다면 두 번째 SSD host 확보
-3. 그것도 불가능하면 SSD pool 정책을 현재 토폴로지에 맞게 재설계
-
-그 전까지는 클러스터를 정상 상태로 보기 어렵고, 특히 `sandbox-4`에 대한 운영 작업은 매우 신중해야 합니다.
+- `36 osds: 36 up / 36 in`
+- `mon quorum: c,d,e`
+- `mgr: a active, b standby`
+- `mds: 1 active, 1 standby`
+- `rgw: 1 active`
+- `362497/730423 objects degraded (49.628%)`
+- `48 pgs degraded`
+- `52 pgs undersized`
+- `55 pgs not deep-scrubbed in time`
+- `55 pgs not scrubbed in time`
+- `recovery 진행 중`
+- `recovery: 117 MiB/s, 30 objects/s`
+
+## 핵심 판단
+
+- 클러스터 자체 down 상태 아님
+- monitor, mgr, mds, rgw 정상 복귀 상태
+- OSD 수량 기준 정상 복귀 상태
+- 데이터 중복도 저하 문제는 아직 남은 상태
+- 기존 장기 undersized PG와 신규 backfill/recovery 동시 진행 상태
+
+## 장애 배경
+
+- SSD pool 다수
+- replica `size 2`
+- CRUSH rule `chooseleaf type host`
+- host 단위 분산 전제
+- 한동안 `sandbox-4` 중심 단일 SSD host 의존 상태
+- `tempnode-bf3`의 `osd.2`, `osd.4` 이탈 상태
+- 결과: SSD 계층 PG `undersized`, `degraded` 장기 고착
+
+## 이번 점검에서 확인한 문제 축
+
+### 1. `tempnode-bf3` OSD 미복귀
+
+- 과거 수동 제외 이력
+- node taint 존재
+- `doca=dedicated:NoSchedule`
+- `gpu=dedicated:NoSchedule`
+- 초기 상태에서 Rook placement 불일치
+- `role=storage-node` 라벨 부재
+- toleration 부재
+
+### 2. `sandbox-4` Ceph pod 기동 실패
+
+- `mon.e`, 다수 OSD pod `Init/Pending`
+- 공통 이벤트: `FailedCreatePodSandBox`
+- 원인: `multus-shim` 호출 실패
+- `multus-cni-node` OOMKilled 반복
+- 이후 `multus-shim` 바이너리 교체 중 `Text file busy`
+
+### 3. `tempnode-bf3` 기존 OSD 메타데이터 문제
+
+- prepare 단계 자체는 성공
+- `osd.2 -> /dev/sdb`
+- `osd.4 -> /dev/sdc`
+- deployment 생성 이후 `expand-bluefs` init crash
+- `BlueStore::expand_devices()` assert
+- `not all labels read properly`
+- `osd init failed: (5) Input/output error`
+
+## 진행한 조치
+
+### A. Rook placement / toleration 정리
+
+- `tempnode-bf3`에 `role=storage-node` 라벨 반영
+- `rook-ceph-cluster` values 수정
+- `placement.all` toleration 추가
+- `placement.osd` toleration 추가
+- `placement.prepareosd` toleration 추가
+- 추가 항목
+- `doca`
+- `gpu`
+- 결과
+- `tempnode-bf3` 대상 prepare job 생성 가능 상태
+
+### B. Multus 복구
+
+- `multus-cni-node` OOM 원인 확인
+- multus values 조정
+- `logLevel: debug -> info`
+- resources 상향
+- 실패 중인 multus pod 재기동
+- `sandbox-4` multus 정상화
+- 결과
+- `mon.e` 복구
+- `sandbox-4` OSD 다수 복구
+- Ceph pod sandbox 생성 문제 해소
+
+### C. `osd.2`, `osd.4` 복구 시도
+
+- prepare job 재실행
+- raw device 인식 확인
+- `osd.2` / `osd.4` deployment 생성 확인
+- `expand-bluefs` 단계 crash 확인
+- 임시로 `expand-bluefs` init 제거 테스트
+- OSD 본체 컨테이너까지 진입 확인
+- 최종적으로 object store mount 실패 확인
+- 판단
+- 기존 BlueStore 메타데이터 복구보다 재생성 쪽이 현실적
+
+### D. `osd.2`, `osd.4` 폐기 및 재생성 준비
+
+- `ceph osd purge 2 --yes-i-really-mean-it`
+- `ceph osd purge 4 --yes-i-really-mean-it`
+- `rook-ceph-osd-2`, `rook-ceph-osd-4` deployment 삭제
+- `tempnode-bf3`에서 디스크 정리
+- `sgdisk --zap-all`
+- `wipefs -af`
+- `blkdiscard`
+- OSD host path 정리
+- 추가 확인
+- `ceph-volume raw list /host/dev/sdb -> {}`
+- `ceph-volume raw list /host/dev/sdc -> {}`
+- 의미
+- 현재 디스크 raw metadata 제거 상태
+
+### E. operator 재기동
+
+- `rook-ceph-operator` pod 재시작
+- 전체 reconcile 재유도
+- 결과
+- cluster reconcile 재개
+- `tempnode-bf3` host 재편입
+- 현재 `ceph osd tree` 기준 `osd.2`, `osd.4` 복귀 상태
+
+## 현재 결과
+
+- `tempnode-bf3` 아래 SSD OSD 2개 복귀
+- `osd.2 up`
+- `osd.4 up`
+- 전체 OSD `36 up / 36 in`
+- `sandbox-4` 단일 host 의존 완화
+- host 단위 SSD replica 배치 조건 일부 회복
+- degraded/undersized PG 즉시 전부 해소 상태는 아님
+- recovery/backfill 진행 중
+
+## 아직 남은 문제
+
+- `PG_DEGRADED` 잔존
+- `PG undersized` 잔존
+- scrub / deep-scrub 지연 잔존
+- 일부 PG
+- 수 주 단위 장기 stuck 이력
+- 일부 PG
+- 최근 remapped/backfill 상태
+
+## 현재 해석
+
+- 구조적 대형 장애 구간은 벗어난 상태
+- `tempnode-bf3` OSD 복귀로 토폴로지 정상화 방향
+- 기존 장기 누적 문제 + 재복구 직후 backfill 영향으로 `HEALTH_WARN` 유지 상태
+- 단기적으로 recovery 숫자 변동 가능
+- 일정 시간 경과 후 `undersized`, `degraded` 수치 추가 감소 기대
+
+## 운영상 주의
+
+- recovery 완료 전 불필요한 OSD 재시작 지양
+- `sandbox-4`, `tempnode-bf3` 재부팅 지양
+- 추가 disk wipe / purge 작업 중지
+- operator가 다시 `osd.2`, `osd.4` 교체 대상으로 보지 않는지 관찰 필요
+
+## 다음 확인 포인트
+
+- `ceph status`
+- `ceph health detail`
+- `ceph osd tree`
+- `ceph pg stat`
+- `ceph pg dump_stuck undersized`
+- `kubectl get pods -n rook-ceph -o wide`
+- `kubectl logs -n rook-ceph deploy/rook-ceph-operator`
+
+## 다음 목표 상태
+
+- `36 up / 36 in` 유지
+- `tempnode-bf3` OSD 안정 유지
+- `degraded` PG 추가 감소
+- `undersized` PG 추가 감소
+- scrub / deep-scrub 경고 감소
+- 최종적으로 `HEALTH_OK` 또는 최소 `HEALTH_WARN` 경고 항목 대폭 축소
