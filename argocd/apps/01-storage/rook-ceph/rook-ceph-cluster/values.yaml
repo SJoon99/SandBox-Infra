@@ -645,19 +645,6 @@ cephObjectStores:
   - name: ceph-objectstore
     # see https://github.com/rook/rook/blob/master/Documentation/CRDs/Object-Storage/ceph-object-store-crd.md#object-store-settings for available configuration
     spec:
-      metadataPool:
-        failureDomain: host
-        replicated:
-          size: 2
-        deviceClass: ssd
-      dataPool:
-        failureDomain: host
-        erasureCoded:
-          dataChunks: 2
-          codingChunks: 1
-        deviceClass: hdd
-        parameters:
-          bulk: "true"
       # 실제 오브젝트 데이터 저장 풀을 SSD/HDD 2개로 분리
       # - 기본(STANDARD): rgw-hot-pool-ssd
       # - 저비용(STANDARD_IA): rgw-cold-pool-hdd
