@@ -268,6 +268,54 @@ cephClusterSpec:
       tolerations:
       - key: storage-node
         operator: Exists
+      - key: doca
+        operator: Equal
+        value: dedicated
+        effect: NoSchedule
+      - key: gpu
+        operator: Equal
+        value: dedicated
+        effect: NoSchedule
+    osd:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+              - key: role
+                operator: In
+                values:
+                - storage-node
+      tolerations:
+      - key: storage-node
+        operator: Exists
+      - key: doca
+        operator: Equal
+        value: dedicated
+        effect: NoSchedule
+      - key: gpu
+        operator: Equal
+        value: dedicated
+        effect: NoSchedule
+    prepareosd:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+              - key: role
+                operator: In
+                values:
+                - storage-node
+      tolerations:
+      - key: storage-node
+        operator: Exists
+      - key: doca
+        operator: Equal
+        value: dedicated
+        effect: NoSchedule
+      - key: gpu
+        operator: Equal
+        value: dedicated
+        effect: NoSchedule
   #   # The above placement information can also be specified for mon, osd, and mgr components
   #   mon:
   #   # Monitor deployments may contain an anti-affinity rule for avoiding monitor
