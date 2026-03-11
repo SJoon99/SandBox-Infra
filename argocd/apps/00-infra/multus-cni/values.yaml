@@ -217,7 +217,7 @@ daemonConfig: |-
   {
     "chrootDir": "",
     "cniVersion": "0.3.1",
-    "logLevel": "debug",
+    "logLevel": "info",
     "logToStderr": true,
     "metricsPort": 17020, 
     "multusAutoconfigDir": "/etc/cni/net.d",    
@@ -368,15 +368,15 @@ resources:
   ##    cpu: 0.5
   ##    memory: 256Mi
   limits:
-    cpu: "100m"
-    memory: "50Mi"
+    cpu: "500m"
+    memory: "512Mi"
   ## Examples:
   ## requests:
   ##    cpu: 0.5
   ##    memory: 256Mi
   requests:
-    cpu: "100m"
-    memory: "50Mi"
+    cpu: "200m"
+    memory: "256Mi"
 ## Multus CNI containers' liveness probe
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
 ## @param livenessProbe.enabled Turn on and off liveness probe
