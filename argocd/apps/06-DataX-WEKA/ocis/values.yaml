@@ -1754,28 +1754,6 @@ secretRefs:
   # If not filled in, will attempt to use values in `.storageusers.storageBackend.s3.driverConfig.s3ng` instead.
   s3CredentialsSecretRef: ocis-bucket
 
-# 스토리지 드라이버 설정 추가
-storageusers:
-  storageBackend:
-    type: s3ng
-    driverConfig:
-      s3ng:
-        endpoint: http://rook-ceph-rgw-ceph-objectstore.rook-ceph.svc:80
-        region: us-east-1
-        bucket: ocis
-  # @schema
-  # type: [string, null]
-  # required: false
-  # @schema
-  # -- Reference to an existing service account secret (see ref:Secrets#secrets)
-  serviceAccountSecretRef:
-  # @schema
-  # type: [string, null]
-  # required: false
-  # @schema
-  # -- The secret to secure the global notifications endpoint. Only system admins and users knowing that secret can call the global notifications POST/DELETE endpoints.
-  globalNotificationsSecretRef:
-
 # Custom CA chain
 # If a custom CA chain is needed for the communcation in between services or with external services like S3 or notification services.
 # The secret needs to be manually created.
@@ -4611,34 +4589,6 @@ services:
           # @schema
           # -- Maximum number of concurrent go-routines. Higher values can potentially get work done faster but will also cause more load on the system.
           maxConcurrency: 100
-          # The S3NG driver needs an existing S3 bucket with following permissions:
-          # {
-          #     "Version": "2012-10-17",
-          #     "Statement": [
-          #         {
-          #             "Sid": "ListBucket",
-          #             "Effect": "Allow",
-          #             "Action": [
-          #                 "s3:ListBucket"
-          #             ],
-          #             "Resource": [
-          #                 "arn:aws:s3:::bucket-name"
-          #             ]
-          #         },
-          #         {
-          #             "Sid": "ActionsInBucketContext",
-          #             "Effect": "Allow",
-          #             "Action": [
-          #                 "s3:*Object",
-          #                 "s3:*MultipartUpload",
-          #                 "s3:ListMultipartUploadParts"
-          #             ],
-          #             "Resource": [
-          #                 "arn:aws:s3:::bucket-name/*"
-          #             ]
-          #         }
-          #     ]
-          # }
           # @schema
           # type: [string, null]
           # required: false
@@ -4650,7 +4600,7 @@ services:
           # required: true
           # @schema
           # -- S3 region to use for the S3NG driver. Only used if driver is set to "s3ng".
-          region: default
+          region: us-east-1
           # @schema
           # type: [string, null]
           # required: false
