@@ -1,0 +1,23 @@
+apiVersion: objectbucket.io/v1alpha1
+kind: ObjectBucketClaim
+metadata:
+  annotations:
+    argocd.argoproj.io/tracking-id: ocis-object-storage:objectbucket.io/ObjectBucketClaim:ocis/ocis-bucket
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"objectbucket.io/v1alpha1","kind":"ObjectBucketClaim","metadata":{"annotations":{"argocd.argoproj.io/tracking-id":"ocis-object-storage:objectbucket.io/ObjectBucketClaim:ocis/ocis-bucket"},"name":"ocis-bucket","namespace":"ocis"},"spec":{"bucketName":"ocis","storageClassName":"ceph-bucket"}}
+  creationTimestamp: "2026-03-05T05:21:22Z"
+  finalizers:
+  - objectbucket.io/finalizer
+  generation: 2
+  labels:
+    bucket-provisioner: rook-ceph.ceph.rook.io-bucket
+  name: ocis-bucket
+  namespace: ocis
+  resourceVersion: "31914957"
+  uid: cff50190-9d96-423b-873e-19a6d39ac860
+spec:
+  bucketName: ocis
+  objectBucketName: obc-ocis-ocis-bucket
+  storageClassName: ceph-bucket
+status:
+  phase: Bound

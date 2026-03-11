@@ -1677,7 +1677,7 @@ secretRefs:
   # required: false
   # @schema
   # -- Reference to an existing JWT secret (see ref:Secrets#secrets).
-  jwtSecretRef:
+  jwtSecretRef: jwt-secret
   # @schema
   # type: [string, null]
   # required: false
@@ -1727,7 +1727,7 @@ secretRefs:
   # required: false
   # @schema
   # -- Reference to an existing storage-system JWT secret (see ref:Secrets#secrets)
-  storagesystemJwtSecretRef:
+  storagesystemJwtSecretRef: storage-system-jwt-secret
   # @schema
   # type: [string, null]
   # required: false
