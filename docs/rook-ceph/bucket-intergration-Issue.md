@@ -20,10 +20,27 @@
 - **원인**: RWO 볼륨 환경에서 `RollingUpdate` 전략 사용으로 인한 자원 충돌
 - **조치**: 배포 전략을 `Recreate`로 변경하여 볼륨 완전 해제 후 기동 유도
 
-### [Issue 03] 오브젝트 스토어 수렴 실패
-- **현상**: OBC(ObjectBucketClaim)를 통한 유저/버킷 생성 안 됨
-- **원인**: `CephObjectStore` 내 `dataPool`과 `sharedPools` 중복 정의 (상호 배타적 설정)
-- **조치**: 중복 `dataPool` 제거 및 계층화(SSD/HDD) 지원 `sharedPools` 설정으로 단일화
+### [Issue 03] 오브젝트 스토어 수렴 실패 (설정 충돌)
+- **현상**: OBC(ObjectBucketClaim)를 생성해도 실제 RGW 유저/버킷이 생성되지 않음
+- **원인**: `CephObjectStore` 설정 내 `dataPool`과 `sharedPools`가 동시 정의됨 (상호 배타적 설정)
+- **설정 비교**:
+  - **AS-IS (오류)**:
+    ```yaml
+    spec:
+      metadataPool: { ... }
+      dataPool: { erasureCoded: ... } # <--- 오류 원인: sharedPools와 함께 사용 불가
+      sharedPools:
+        dataPoolName: rgw-hot-pool-ssd
+    ```
+  - **TO-BE (정상)**:
+    ```yaml
+    spec:
+      sharedPools: # <--- 계층화(SSD/HDD) 지원을 위해 sharedPools만 정의
+        dataPoolName: rgw-hot-pool-ssd
+        metadataPoolName: rgw-hot-pool-ssd
+        # storageClasses 설정을 통해 STANDARD_IA(HDD) 풀 매핑 가능
+    ```
+- **조치**: 중복 `dataPool` 제거 및 `sharedPools` 설정으로 단일화하여 오퍼레이터 정상화
 
 ### [Issue 04] RGW 유저/키 불일치
 - **현상**: 파드에 주입된 S3 Key로 RGW 접속 실패 (403 Forbidden)
@@ -46,3 +63,17 @@
 - **S3 연결성**: `mc` (MinIO Client)를 통한 `ocis` 버킷 읽기/쓰기 성공
 - **데이터 현황**: RGW `ceph-objectstore` 존 내 객체 121개 존재 확인
 - **웹 서비스**: 신규 관리자 비밀번호 기반 로그인 및 UI 정상 작동 확인
+
+## 5. 향후 버킷 연동 가이드라인 (Best Practices)
+
+신규 서비스(Pydio, Nextcloud 등)를 S3에 연동할 때는 다음 절차를 권장함.
+
+1. **표준 리소스 배포**: `CephObjectStoreUser`와 `ObjectBucketClaim` 조합의 YAML 패턴 유지 (인프라 표준 방식)
+2. **K8s Secret 생성 확인**: OBC 배포 후 해당 네임스페이스에 Secret이 자동으로 생성되었는지 모니터링
+3. **RGW 실제 동기화 여부 검증 (필수)**:
+   - 명령: `radosgw-admin user list --rgw-zone=ceph-objectstore`
+   - **주의**: Ceph 건강 상태(`ceph health detail`)가 `Degraded`인 경우, 오퍼레이터가 신규 유저 생성을 지연시킬 수 있음
+4. **수동 동기화 대응**:
+   - 5분 이상 동기화가 지연될 경우, `ObjectBucket` Secret에서 추출한 키값을 사용하여 `radosgw-admin user create`로 수동 생성 및 권한 부여
+5. **어플리케이션 전역 재시작**:
+   - 인증 키(JWT 등)가 포함된 설정 변경 시, 일부 파드만 재시작하면 인증 파편화가 발생하므로 `kubectl rollout restart deployment -n <ns>`를 통해 전체 서비스를 동기화함
