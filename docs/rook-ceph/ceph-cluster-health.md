@@ -187,3 +187,115 @@
 - `undersized` PG 추가 감소
 - scrub / deep-scrub 경고 감소
 - 최종적으로 `HEALTH_OK` 또는 최소 `HEALTH_WARN` 경고 항목 대폭 축소
+
+## 2026-03-12 추가 점검
+
+### 1. 현재 확인한 핵심 상태
+
+- 기준 시각: `2026-03-12 UTC`
+- `ceph status`
+- `36 osds up / 36 in`
+- `19 pools`, `99 pgs`
+- `HEALTH_WARN` 유지
+- 남은 경고
+- `26 pgs degraded`
+- `31 pgs undersized`
+- `14 active+clean+remapped`
+- `30 pgs not scrubbed in time`
+- `30 pgs not deep-scrubbed in time`
+- 추가 경고
+- `mon.e` clock skew 약 `0.059s`
+
+### 2. RGW / sharedPools 재확인 결과
+
+- `CephObjectStore ceph-objectstore` 선언은 이미 `sharedPools` 기준으로 적용되어 있음
+- 실제 운영 realm/zone도 `ceph-objectstore` 사용 중
+- `bucket list`, `user list`, `ObjectBucketClaim`, `CephObjectStoreUser` 모두 정상 확인
+- bucket placement
+- `STANDARD -> rgw-hot-pool-ssd`
+- `STANDARD_IA -> rgw-cold-pool-hdd`
+- 따라서 이번 시점의 주 장애 원인은 `sharedPools` 미적용이 아님
+- `default.rgw.*`, `ceph-objectstore.rgw.*` 일부 잔여 풀은 legacy 흔적으로 보이며, 현재 운영 경로의 직접 원인으로 판단하지 않음
+
+### 3. Rook disruption 상태 추가 확인
+
+- 초기 추적 시 `tempnode-bf3`가 문제처럼 보였으나, 추가 확인 결과 실제 stale drain state는 `sandbox-4`로 확인됨
+- 근거
+- `rook-ceph-pdbstatemap`에 `draining-failure-domain: sandbox-4` 저장
+- `sandbox-4` 노드는 실제로 `Ready`
+- cordon 상태 아님
+- 해당 stale state 때문에 `clusterdisruption-controller`가 반복적으로
+- `Draining Failure Domain: "sandbox-4"`
+- `OSD ... is not ok-to-stop`
+- 로그를 계속 남기며 OSD reconcile을 지연시키는 상태였음
+
+### 4. 2026-03-12 수행한 조치
+
+- live cluster에서 `rook-ceph-pdbstatemap`의 drain 상태 초기화
+- 비운 값
+- `draining-failure-domain`
+- `draining-failure-domain-duration`
+- `set-no-out`
+
+### 5. 조치 직후 확인된 결과
+
+- Rook operator 로그에서 아래 전환 확인
+- `all PGs are active+clean. Restoring default OSD pdb settings`
+- 임시 host PDB 삭제
+- 기본 PDB `rook-ceph-osd` 복구
+- 실제 PDB 상태도 임시 host PDB 제거 후 `rook-ceph-osd`만 남는 것으로 확인
+- 의미
+- 적어도 stale drain / PDB 루프는 해소됨
+- `sandbox-4`를 계속 drain 중인 failure domain으로 잘못 붙잡고 있던 상태는 정리됨
+
+### 6. 조치 후에도 남아 있는 상태
+
+- `ceph status` 자체는 즉시 정상화되지 않음
+- 여전히 `26 pgs degraded`, `31 pgs undersized` 유지
+- `CephCluster` 상태도 여전히
+- `Processing OSD 34 on node "sandbox-4"`
+- `Phase=Progressing`
+- `State=Creating`
+- 즉
+- `stale drain state`는 보조 문제였고
+- 실제 본체 문제는 장기 누적된 `undersized/degraded PG` 상태가 아직 남아 있다는 뜻
+
+### 7. 현재 해석
+
+- `sharedPools`는 정상
+- `tempnode-bf3`는 현재 `Ready`, `unschedulable=false`, OSD `2`, `4`도 `up/in`
+- 현재 남은 경고의 중심은 SSD 계열 2-host 구조에서 한동안 발생한 복제 저하 PG의 장기 잔존 상태
+- `size: 2`, `failureDomain: host` 자체는 현재 의도한 설정과 일치하지만, SSD host가 정확히 2개뿐이라 둘 중 하나가 흔들리면 바로 `undersized`가 발생함
+- 이번 점검으로 확인된 것은
+- 잘못 남아 있던 drain 보호 상태는 정리 가능
+- 그러나 장기 `undersized` PG는 별도로 추적해야 함
+
+### 8. 앞으로 어떻게 할지
+
+- 1단계
+- `ceph status`
+- `ceph health detail`
+- `kubectl get cephcluster rook-ceph -n rook-ceph`
+- 위 3가지를 기준으로 `Processing OSD 34`가 끝나는지 먼저 관찰
+- 2단계
+- `mon.e` clock skew 해소
+- NTP/chrony 동기화 확인
+- 이는 주원인은 아니지만 health noise를 줄이는 데 필요
+- 3단계
+- 남은 `undersized` PG를 pool 단위로 분해해서
+- 어떤 pool이 아직도 회복을 못 하는지 확인
+- 특히 `hot-pool-ssd`, `ceph-filesystem-hot-*`, `rgw-hot-pool-ssd` 계열 우선 확인
+- 4단계
+- recovery가 더 진행되지 않고 동일 PG가 계속 고정되면
+- 해당 pool의 CRUSH 배치와 acting set을 기준으로 개별 원인을 다시 확인
+- 이때는 `PG -> pool -> OSD -> host` 순서로 추적
+
+### 9. 현 시점 운영 권고
+
+- 지금은 추가 purge / wipe / OSD 재생성 작업을 바로 반복하지 않는 것이 맞음
+- 먼저 stale drain 루프 해소 후 Ceph가 스스로 얼마나 회복하는지 봐야 함
+- 즉시 권장하는 운영 순서
+- `Processing OSD 34` 종료 여부 확인
+- `mon.e` 시간 동기화 확인
+- 10~30분 간격으로 `ceph status` 재확인
+- 그래도 `undersized` PG가 그대로 고정이면, 그때 pool/PG 기준 심화 분석으로 이동

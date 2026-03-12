@@ -523,7 +523,7 @@ cephBlockPools:
   # -------------------------------------------------------------------
   - name: hot-pool-ssd
     spec:
-      failureDomain: host
+      failureDomain: osd
       replicated:
         size: 2
       # 자동으로 감지된 SSD 디스크만 사용하도록 강제
@@ -587,7 +587,7 @@ cephBlockPools:
   # -------------------------------------------------------------------
   - name: rgw-hot-pool-ssd
     spec:
-      failureDomain: host
+      failureDomain: osd
       replicated:
         size: 2
       deviceClass: ssd
@@ -614,11 +614,12 @@ cephFileSystems:
     spec:
       metadataPool:
         deviceClass: ssd
+        failureDomain: osd
         replicated:
           size: 2
       dataPools:
         - name: hot-data
-          failureDomain: host
+          failureDomain: osd
           replicated:
             size: 2
           deviceClass: ssd
