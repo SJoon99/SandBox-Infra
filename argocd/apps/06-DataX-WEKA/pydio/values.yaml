@@ -41,13 +41,14 @@ service:
   customconfigs: {
     "defaults/license/data": "FAKE",
     "frontend/plugin/core.pydio/APPLICATION_TITLE": "Ceph S3 Storage Portal",
+    "defaults/external/url": "http://10.34.25.11:8080",
     
     # --- Ceph S3 연동 핵심 설정 ---
     "defaults/storage/main/driver": "s3",
     "defaults/storage/main/s3/endpoint": "http://rook-ceph-rgw-ceph-objectstore.rook-ceph.svc",
     "defaults/storage/main/s3/bucket": "pydio",
-    "defaults/storage/main/s3/access_key": "OU7T1MWPEJ1ERF0ULP0O",
-    "defaults/storage/main/s3/secret_key": "Akyx4A9IoAkQ4rReqgBMOlprhqIRJuDPvlk9EGW3",
+    "defaults/storage/main/s3/access_key": "ZRFIKMAX1WIM5IOY1XLN",
+    "defaults/storage/main/s3/secret_key": "IAQAh3emNJ8c5RX6dnAe2I6muodBTxb5W9EZBpcL",
     "defaults/storage/main/s3/region": "us-east-1", # Ceph 기본값
     "defaults/storage/main/s3/use_ssl": "false"
   }
