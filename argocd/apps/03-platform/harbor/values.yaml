@@ -124,7 +124,7 @@ expose:
 # the IP address of k8s node
 #
 # If Harbor is deployed behind the proxy, set it as the URL of proxy
-externalURL: http://10.34.25.12
+externalURL: http://10.34.25.12:80
 
 # The persistence is enabled by default and a default StorageClass
 # is needed in the k8s cluster to provision volumes dynamically.
@@ -780,7 +780,7 @@ registry:
   # Key within the existing secret for the registry service secret
   existingSecretKey: REGISTRY_HTTP_SECRET
   # If true, the registry returns relative URLs in Location headers. The client is responsible for resolving the correct URL.
-  relativeurls: false
+  relativeurls: true
   credentials:
     username: "harbor_registry_user"
     password: "change-me-db-password"
