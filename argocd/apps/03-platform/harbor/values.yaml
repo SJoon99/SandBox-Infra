@@ -124,7 +124,7 @@ expose:
 # the IP address of k8s node
 #
 # If Harbor is deployed behind the proxy, set it as the URL of proxy
-externalURL: http://10.34.25.12:80
+externalURL: http://10.34.25.12
 
 # The persistence is enabled by default and a default StorageClass
 # is needed in the k8s cluster to provision volumes dynamically.
@@ -785,7 +785,7 @@ registry:
     username: "harbor_registry_user"
     password: "change-me-db-password"
     # If using existingSecret, the key must be REGISTRY_PASSWD and REGISTRY_HTPASSWD
-    existingSecret: "harbor-registry-secret"
+    existingSecret: ""
     # Login and password in htpasswd string format. Excludes `registry.credentials.username`  and `registry.credentials.password`. May come in handy when integrating with tools like argocd or flux. This allows the same line to be generated each time the template is rendered, instead of the `htpasswd` function from helm, which generates different lines each time because of the salt.
     # htpasswdString: $apr1$XLefHzeG$Xl4.s00sMSCCcMyJljSZb0 # example string
     htpasswdString: ""
