@@ -41,7 +41,7 @@ service:
   customconfigs: {
     "defaults/license/data": "FAKE",
     "frontend/plugin/core.pydio/APPLICATION_TITLE": "Ceph S3 Storage Portal",
-    "defaults/external/url": "http://10.34.25.11:8080",
+    "defaults/external/url": "https://pydio.jjooniex.org",
     
     # --- Ceph S3 연동 핵심 설정 ---
     "defaults/storage/main/driver": "s3",
