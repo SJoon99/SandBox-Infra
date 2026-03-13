@@ -15,6 +15,10 @@ nameOverride: ""
 fullnameOverride: ""
 clusterDomain: cluster.local
 
+env:
+  - name: CELLS_EXTERNAL
+    value: https://pydio.jjooniex.org
+
 global:
   imageRegistry: public.ecr.aws
   security:
