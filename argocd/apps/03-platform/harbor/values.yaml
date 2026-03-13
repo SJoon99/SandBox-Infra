@@ -630,7 +630,8 @@ core:
   secret: ""
   # Fill in the name of a kubernetes secret if you want to use your own
   # If using existingSecret, the key must be secret
-  existingSecret: ""
+  existingSecret: "harbor-secretkey"
+  existingSecretKey: secretKey
   # Fill the name of a kubernetes secret if you want to use your own
   # TLS certificate and private key for token encryption/decryption.
   # The secret must contain keys named:
@@ -718,9 +719,9 @@ jobservice:
   # Must be a string of 16 chars.
   secret: ""
   # Use an existing secret resource
-  existingSecret: ""
+  existingSecret: "harbor-secretkey"
   # Key within the existing secret for the job service secret
-  existingSecretKey: JOBSERVICE_SECRET
+  existingSecretKey: secretKey
 
 registry:
   registry:
@@ -776,9 +777,9 @@ registry:
   # Must be a string of 16 chars.
   secret: ""
   # Use an existing secret resource
-  existingSecret: ""
+  existingSecret: "harbor-secretkey"
   # Key within the existing secret for the registry service secret
-  existingSecretKey: REGISTRY_HTTP_SECRET
+  existingSecretKey: secretKey
   # If true, the registry returns relative URLs in Location headers. The client is responsible for resolving the correct URL.
   relativeurls: true
   credentials:
