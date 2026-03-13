@@ -282,10 +282,10 @@ etcd:
     client:
       secureTransport: false
       enableAuthentication: false
-      existingSecret: "etcd-client-certs"
-      certFilename: "tls.crt"
-      certKeyFilename: "tls.key"
-      caFilename: "ca.crt"
+      existingSecret: ""
+      certFilename: ""
+      certKeyFilename: ""
+      caFilename: ""
 
   volumePermissions:
     enabled: true
