@@ -84,7 +84,9 @@ applications:
     namespace: pydio
     syncWave: "5"
     source:
-      path: argocd/apps/06-DataX-WEKA/pydio/chart
+      repoURL: ghcr.io/sjoon99/charts
+      chart: cells
+      targetRevision: 0.1.4
       helm:
         valueFiles:
-          - ../values.yaml
+          - argocd/apps/06-DataX-WEKA/pydio/values.yaml
