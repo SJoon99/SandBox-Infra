@@ -51,8 +51,8 @@ service:
     "defaults/storage/main/driver": "s3",
     "defaults/storage/main/s3/endpoint": "http://rook-ceph-rgw-ceph-objectstore.rook-ceph.svc",
     "defaults/storage/main/s3/bucket": "pydio",
-    "defaults/storage/main/s3/access_key": "ZRFIKMAX1WIM5IOY1XLN",
-    "defaults/storage/main/s3/secret_key": "IAQAh3emNJ8c5RX6dnAe2I6muodBTxb5W9EZBpcL",
+    "defaults/storage/main/s3/access_key": "NLJ3T9BJRB0PM17XPGSL",
+    "defaults/storage/main/s3/secret_key": "VN6BK7qEuMi2kCbUIzQvlVDxDOJMjvAFsNZBvAAo",
     "defaults/storage/main/s3/region": "us-east-1", # Ceph 기본값
     "defaults/storage/main/s3/use_ssl": "false"
   }
@@ -63,8 +63,8 @@ install:
   datasource:
     type: S3
     endpoint: http://rook-ceph-rgw-ceph-objectstore.rook-ceph.svc
-    accessKey: ZRFIKMAX1WIM5IOY1XLN
-    secretKey: IAQAh3emNJ8c5RX6dnAe2I6muodBTxb5W9EZBpcL
+    accessKey: NLJ3T9BJRB0PM17XPGSL
+    secretKey: VN6BK7qEuMi2kCbUIzQvlVDxDOJMjvAFsNZBvAAo
     bucketDefault: pydio
     bucketPersonal: pydio
     bucketCells: pydio
