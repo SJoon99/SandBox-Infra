@@ -87,4 +87,4 @@ applications:
       path: argocd/apps/06-DataX-WEKA/pydio/chart
       helm:
         valueFiles:
-          - argocd/apps/06-DataX-WEKA/pydio/values.yaml
+          - ../values.yaml
