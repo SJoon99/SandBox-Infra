@@ -31,6 +31,10 @@ spec:
     repoURL: {{ $.Values.argo.sourceRepo.url }}
     path: {{ $app.source.path }}
     targetRevision: {{ $.Values.argo.sourceRepo.branch }}
+    {{- if $app.source.helm }}
+    helm:
+{{ toYaml $app.source.helm | indent 6 }}
+    {{- end }}
     # kustomize 키가 존재하면 렌더링하도록 추가
     {{- if $app.source.kustomize }}
     kustomize:

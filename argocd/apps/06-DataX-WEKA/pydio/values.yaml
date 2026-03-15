@@ -37,10 +37,10 @@ podSecurityContext: {}
 securityContext: {}
 
 service:
-  type: LoadBalancer
+  type: ClusterIP
   port: 8080
-  annotations:
-    io.cilium/lb-ipam-pool: "lb-pool-local"
+  reverseproxyurl: https://pydio.jjooniex.org
+  annotations: {}
   
   customconfigs: {
     "defaults/license/data": "FAKE",
@@ -56,6 +56,21 @@ service:
     "defaults/storage/main/s3/region": "us-east-1", # Ceph 기본값
     "defaults/storage/main/s3/use_ssl": "false"
   }
+
+install:
+  frontendLogin: admin
+  frontendPassword: P@ssw0rd
+  datasource:
+    type: S3
+    endpoint: http://rook-ceph-rgw-ceph-objectstore.rook-ceph.svc
+    accessKey: ZRFIKMAX1WIM5IOY1XLN
+    secretKey: IAQAh3emNJ8c5RX6dnAe2I6muodBTxb5W9EZBpcL
+    bucketDefault: pydio
+    bucketPersonal: pydio
+    bucketCells: pydio
+    bucketBinaries: pydio
+    bucketThumbs: pydio
+    bucketVersions: pydio
 
 
 ## Enable tls in front of Cells containers.
