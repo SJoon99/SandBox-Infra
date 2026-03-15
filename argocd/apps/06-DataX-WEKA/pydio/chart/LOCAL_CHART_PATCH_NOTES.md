@@ -125,3 +125,49 @@
   - install bootstrap 관련 키 이름
   - datasource 생성 방식
   - reverse proxy 처리 방식
+
+## 원격 Chart 배포 시 이슈 정리
+### 이슈 1. `helm dependency build` 실패
+- 실행 명령
+  - `helm dependency build ./argocd/apps/06-DataX-WEKA/pydio/chart`
+- 실제 에러
+  - `Error: no repository definition for https://kubernetes.github.io/ingress-nginx, https://helm.releases.hashicorp.com, https://charts.jetstack.io. Please add the missing repos via 'helm repo add'`
+- 원인
+  - `Chart.yaml` / `Chart.lock` 에 선언된 dependency repository 가 로컬 Helm repo 설정에 없어서 발생
+  - 특히 누락된 repo
+    - `https://kubernetes.github.io/ingress-nginx`
+    - `https://helm.releases.hashicorp.com`
+    - `https://charts.jetstack.io`
+  - `bitnami` repo도 환경에 따라 없을 수 있으므로 같이 추가하는 편이 안전
+
+### 이슈 1의 의미
+- 이 에러는 chart 자체가 깨졌다는 뜻은 아님
+- 현재 `chart/charts/` 아래에 dependency `.tgz` 파일이 이미 vendoring 되어 있으면
+  - `helm package` 는 바로 성공할 수 있음
+  - 실제 확인 결과 `/tmp/cells-0.1.3.tgz` 패키징 성공
+- 즉
+  - dependency 를 "다시 받아서 재구성" 하려면 `helm repo add` 가 필요
+  - 현재 vendored dependency 그대로 "패키징만" 하려면 바로 진행 가능
+
+### 필요한 Helm repo 등록 명령
+```bash
+helm repo add bitnami https://charts.bitnami.com/bitnami
+helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+helm repo add hashicorp https://helm.releases.hashicorp.com
+helm repo add jetstack https://charts.jetstack.io
+helm repo update
+```
+
+### 권장 절차
+1. dependency 를 최신 lock 기준으로 다시 맞출 필요가 있으면 `helm repo add` 후 `helm dependency build`
+2. vendored dependency 를 그대로 사용할 거면 `helm package ./argocd/apps/06-DataX-WEKA/pydio/chart`
+3. OCI registry 배포 시 `helm push` 수행
+
+### 현재 판단
+- 이번 작업에서는 `chart/charts/*.tgz` 가 이미 존재하므로
+  - 급한 목적이 "원격 chart 로 전환" 이라면 `helm package` -> `helm push` 로 먼저 진행 가능
+- 다만 장기적으로는
+  - repo 등록 후 `helm dependency build`
+  - 필요 시 `Chart.lock` 재생성 여부 검토
+  - 그 다음 package/push
+  순서가 더 재현 가능성이 높음
